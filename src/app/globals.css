@@ -1,26 +1,1650 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-brown: #1c1814;
+  --color-peach: #f5d0c5;
+  --color-light-gray: #e8e4df;
+  --color-ink: #14140f;
+  --color-brand: #f6b506;
+  --color-accent-red: #ef4444;
+  --color-accent-blue: #1d4ed8;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand: #f6b506;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Boot screen sits above CRT frame */
+.boot-screen { z-index: 10010; }
+
+/* Hide legacy top nav from nav.js — BottomNav is primary */
+body.page-index .site-nav { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   DOCUMENT — full-screen hero, then a normal scrolling page.
+   The CRT bezel/overlay stay fixed so content scrolls *inside*
+   the TV screen.
+   ═══════════════════════════════════════════════════════════ */
+/* NOTE: /assets/css/style.css is injected at runtime *after* this sheet and
+   locks html/body to 100dvh with overflow:hidden — these selectors are written
+   to outrank its bare `html` / `body` rules. */
+html:root,
+html:root > body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  background: #ffffff !important;
+  font-family: var(--font-peyda), sans-serif;
+  direction: rtl;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Overflow lives on <html> only. Putting overflow-x:hidden on <body> makes its
+   overflow-y compute to `auto`, which turns body into a scroll container —
+   position:sticky then binds to it instead of the viewport and never pins. */
+html:root {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html:root > body {
+  min-height: 100dvh;
+  overflow: visible;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Scrolling is locked while the boot sequence plays. The flag lives on <html>
+   because GalektoHome resets body.className during init. */
+html:root.boot-lock {
+  overflow-y: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ── CRT viewport clip container — fixed hero backdrop ── */
+#crtContent {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Black TV bezel mask — always on top of content */
+.page-tv-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  background: #000 !important;
+}
+
+.page-crt-bevel {
+  z-index: 10001;
+}
+
+.cursor {
+  z-index: 10003;
+}
+
+/* ── Peyda everywhere ── */
+body,
+.name-display,
+.name-char-solid,
+.name-char,
+#navIndexLabel,
+.site-nav,
+.side-text,
+.nav-link,
+.nav-left-text,
+.side-nr,
+.tv-msg,
+.tv-pct,
+.bios-line {
+  font-family: var(--font-peyda), sans-serif !important;
+}
+
+/* White site background (temporary) */
+.bg-layer {
+  background: #ffffff;
+}
+
+.bg-layer--hidden,
+body.page-index .bg-layer {
+  display: none !important;
+}
+
+.name-section {
+  display: none !important;
+}
+
+/* Page transitions — Peyda + horizontal row fill */
+#txOverlay .tx-word,
+#txOverlay .tx-words {
+  font-family: var(--font-peyda), sans-serif !important;
+  text-transform: none;
+}
+
+.portrait-section.portrait-section--video {
+  position: fixed;
+  inset: 0;
+  left: 0 !important;
+  right: 0;
+  bottom: auto !important;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  z-index: 2;
+  transform: none !important;
+  animation: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+.portrait-section--video .portrait-frame {
+  width: 100%;
+  height: 100%;
+  /* Gentle depth as the page scrolls away — GalektoHome writes the transform */
+  transform-origin: center 40%;
+}
+
+.portrait-section--video .portrait-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  background: #ffffff;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.page-index #fluidCanvas,
+body.page-index #illustrationCanvas {
+  display: none !important;
+}
+
+.portrait-video {
+  display: block;
+  pointer-events: none;
+}
+
+/* ── RTL layout fixes ── */
+[dir="rtl"] .site-nav {
+  direction: rtl;
+  left: 48px;
+  right: 48px;
+  z-index: 9500;
+}
+
+[dir="rtl"] .nav-links {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-link,
+[dir="rtl"] .nav-left-text {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+[dir="rtl"] .name-display {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .slide-group {
+  direction: rtl;
+}
+
+/* Portrait fills screen */
+.portrait-section {
+  height: 100dvh !important;
+  max-height: 100dvh;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDE RAIL — replaces the giant ۰۱ / ۰۲ numerals.
+   A vertical "station marker": index chip → stem → label → arrow.
+   ═══════════════════════════════════════════════════════════ */
+.rail {
+  pointer-events: none;
+}
+
+.rail-link {
+  --accent: #ef4444;
+  position: fixed;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+  text-decoration: none;
+  color: #14140f;
+  cursor: none;
+  opacity: 0;
+  animation: railIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--rail-delay, 2.1s) both;
+  transition: opacity 0.5s ease, scale 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rail-link--start { right: 52px; }
+.rail-link--end   { left: 52px; }
+
+@keyframes railIn {
+  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Accent bleed from the screen edge */
+.rail-link::before {
+  content: "";
+  position: absolute;
+  inset: -150px -190px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--accent) 20%, transparent),
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
+}
+
+.rail-index {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 20, 15, 0.2);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(20, 20, 15, 0.6);
+  transition:
+    background 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rail-stem {
+  display: block;
+  width: 1px;
+  height: 52px;
+  background: linear-gradient(to bottom, rgba(20, 20, 15, 0.34), rgba(20, 20, 15, 0));
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease;
+}
+
+.rail-label {
+  writing-mode: vertical-rl;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  color: rgba(20, 20, 15, 0.8);
+  transition: color 0.5s ease, letter-spacing 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rail-caption {
+  writing-mode: vertical-rl;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  color: rgba(20, 20, 15, 0.34);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+}
+
+.rail-link--start .rail-label,
+.rail-link--start .rail-caption {
+  transform: rotate(180deg);
+}
+
+.rail-arrow {
+  width: 15px;
+  height: 15px;
+  color: rgba(20, 20, 15, 0.45);
+  transition: color 0.5s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rail-link--end .rail-arrow { transform: rotate(180deg); }
+
+/* ── Active state: pointer on that half of the screen, or hover ── */
+body.cursor-left  .rail-link--start,
+body.cursor-right .rail-link--end,
+.rail-link:hover,
+.rail-link:focus-visible {
+  scale: 1.05;
+  opacity: 1;
+}
+
+body.cursor-left  .rail-link--start::before,
+body.cursor-right .rail-link--end::before,
+.rail-link:hover::before,
+.rail-link:focus-visible::before {
+  opacity: 1;
+}
+
+body.cursor-left  .rail-link--start .rail-index,
+body.cursor-right .rail-link--end .rail-index,
+.rail-link:hover .rail-index,
+.rail-link:focus-visible .rail-index {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  scale: 1.12;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+body.cursor-left  .rail-link--start .rail-stem,
+body.cursor-right .rail-link--end .rail-stem,
+.rail-link:hover .rail-stem,
+.rail-link:focus-visible .rail-stem {
+  height: 88px;
+  background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 0%, transparent));
+}
+
+body.cursor-left  .rail-link--start .rail-label,
+body.cursor-right .rail-link--end .rail-label,
+.rail-link:hover .rail-label,
+.rail-link:focus-visible .rail-label {
+  color: var(--accent);
+  letter-spacing: 0.2em;
+}
+
+body.cursor-left  .rail-link--start .rail-caption,
+body.cursor-right .rail-link--end .rail-caption,
+.rail-link:hover .rail-caption,
+.rail-link:focus-visible .rail-caption {
+  max-height: 120px;
+  opacity: 1;
+}
+
+body.cursor-left  .rail-link--start .rail-arrow,
+.rail-link--start:hover .rail-arrow {
+  color: var(--accent);
+  transform: translateX(6px);
+}
+
+body.cursor-right .rail-link--end .rail-arrow,
+.rail-link--end:hover .rail-arrow {
+  color: var(--accent);
+  transform: rotate(180deg) translateX(6px);
+}
+
+/* Recede the opposite side */
+body.cursor-left  .rail-link--end,
+body.cursor-right .rail-link--start {
+  opacity: 0.26;
+  scale: 0.96;
+}
+
+/* ── Scroll cue ── */
+.scroll-cue {
+  position: fixed;
+  left: 52px;
+  bottom: 40px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: none;
+  opacity: 0;
+  animation: railIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--rail-delay, 2.1s) + 0.25s) both;
+  transition: opacity 0.45s ease;
+}
+
+.scroll-cue-text {
+  writing-mode: vertical-rl;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: rgba(20, 20, 15, 0.45);
+  transition: color 0.4s ease;
+}
+
+.scroll-cue:hover .scroll-cue-text { color: rgba(20, 20, 15, 0.85); }
+
+.scroll-cue-track {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 46px;
+  background: rgba(20, 20, 15, 0.16);
+  overflow: hidden;
+}
+
+.scroll-cue-dot {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 16px;
+  background: rgba(20, 20, 15, 0.7);
+  animation: cueDrop 1.9s cubic-bezier(0.55, 0, 0.35, 1) infinite;
+}
+
+@keyframes cueDrop {
+  0%   { transform: translateY(-18px); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: translateY(46px);  opacity: 0; }
+}
+
+/* Hero chrome fades once the page starts scrolling */
+body.is-scrolled .rail-link,
+body.is-scrolled .scroll-cue {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .rail-link--start { right: 22px; }
+  .rail-link--end   { left: 22px; }
+  .rail-caption     { display: none; }
+  .rail-label       { font-size: 13px; }
+  .rail-index       { width: 34px; height: 34px; font-size: 12px; }
+  .rail-stem        { height: 36px; }
+  .scroll-cue       { left: 22px; bottom: 108px; }
+}
+
+@media (max-width: 560px) {
+  .scroll-cue { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-dot { animation: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOTTOM DOCK
+   Plain CSS on purpose: /assets/css/style.css ships an unlayered
+   universal reset zeroing padding, and unlayered rules outrank every
+   Tailwind utility layer — so the padding utilities collapse here.
+   ═══════════════════════════════════════════════════════════ */
+/* Chrome enter/exit — CSS instead of a JS animation library, so the page ships
+   one animation engine (GSAP) rather than two. */
+.chrome-fade {
+  opacity: 0;
+  transform: translateY(28px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.chrome-fade--top {
+  transform: translateY(-12px);
+}
+
+.chrome-fade[data-visible] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.35s,
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrome-fade,
+  .chrome-fade[data-visible] {
+    transform: none;
+    transition: opacity 0.2s ease;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 10002;
+}
+
+@media (min-width: 768px) {
+  .dock { bottom: 48px; }
+}
+
+.dock-pill {
+  position: relative;
+  display: flex;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 9999px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.dock-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Blurred puck that trails the pointer; JS drives transform */
+.dock-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  pointer-events: none;
+  transform: translate(0, 0) scale(0);
+}
+
+@media (min-width: 768px) and (pointer: fine) {
+  .dock-glow { display: block; }
+}
+
+.dock-glow-puck {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: #fff;
+  opacity: 0.5;
+  filter: blur(16px);
+}
+
+.dock-list {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding-inline: 32px;
+}
+
+.dock-link {
+  padding-inline: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: none;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dock-link:hover,
+.dock-link:focus-visible {
+  opacity: 0.5;
+}
+
+.dock-dot {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #fff;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+@media (max-width: 420px) {
+  .dock-list { padding-inline: 20px; }
+  .dock-link { padding-inline: 11px; font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-glow { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLING PAGE CONTENT
+   ═══════════════════════════════════════════════════════════ */
+/* The flow layer paints above the fixed hero but must not swallow clicks
+   aimed at the side rail sitting behind its transparent hero window. */
+.page-flow {
+  position: relative;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Transparent window onto the fixed hero video */
+.hero-spacer {
+  height: 100dvh;
+}
+
+.page-body {
+  position: relative;
+  pointer-events: auto;
+  background: #f1eee7;
+  color: #14140f;
+  box-shadow: 0 -30px 90px rgba(0, 0, 0, 0.28);
+}
+
+/* Once WebGL is live the shader paints the sheet, so the fallback fill goes */
+.page-body.has-paper {
+  background: transparent;
+}
+
+/* Holds the light sections and the pinned backdrop. The footer lives OUTSIDE
+   it so that when the sticky layer releases at the sheet's bottom edge, the
+   footer's opaque fill is already covering that band — which is what used to
+   show up as a seam. Must stay overflow:visible or sticky binds to it instead
+   of the viewport. */
+.page-sheet {
+  position: relative;
+}
+
+/* WebGL paper backdrop — sticky, never JS-positioned.
+   The compositor pins this in lockstep with the scroll; driving a fixed layer's
+   clip-path from script always trails the content by a frame or more. */
+.paper-layer {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100dvh;
+  margin-bottom: -100dvh;
+  pointer-events: none;
+}
+
+.paper-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Paper grain, over everything so the slab reads as one sheet */
+.page-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: radial-gradient(rgba(20, 20, 15, 0.055) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+.section {
+  position: relative;
+  z-index: 1;
+  padding: clamp(76px, 11vh, 132px) 0;
+}
+
+/* Sheet handle — signals the slab that slides over the hero */
+.page-body::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  translate: -50% 0;
+  width: 46px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(20, 20, 15, 0.16);
+}
+
+/* Feathered top and bottom so the tint never reads as a seam across the sheet */
+.section--tint {
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 20, 15, 0) 0%,
+    rgba(20, 20, 15, 0.05) 12%,
+    rgba(20, 20, 15, 0.05) 88%,
+    rgba(20, 20, 15, 0) 100%
+  );
+}
+
+/* ── Word-mask headline ── */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.14em;
+  margin-inline-end: 0.26em;
+}
+
+.word-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Brand gold in display type.
+   On the cream sheet #f6b506 as text is 1.58:1 — unreadable — so it becomes a
+   highlighter sweep behind ink instead, which lands at 10.2:1. The sweep grows
+   from the reading edge once the words have risen. */
+.word-inner.mark {
+  color: #14140f;
+  padding-inline: 0.08em;
+  border-radius: 4px;
+  background-image: linear-gradient(var(--brand), var(--brand));
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 0% 80%;
+  transition: background-size 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+}
+
+.js-words[data-lit] .word-inner.mark {
+  background-size: 100% 80%;
+}
+
+/* On the dark footer the same gold clears 10.2:1 as text, so it can be used
+   directly there. */
+.section--footer .word-inner.brand {
+  color: var(--brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-inner.mark { transition: none; }
+}
+
+/* ── Eyebrow ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: rgba(20, 20, 15, 0.45);
+}
+
+.eyebrow-rule {
+  display: block;
+  width: 34px;
+  height: 1px;
+  background: rgba(20, 20, 15, 0.28);
+}
+
+.section--footer {
+  background: #14140f;
+  color: #f1eee7;
+  padding-bottom: clamp(150px, 20vh, 220px);
+  text-align: center;
+}
+
+.shell {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: clamp(28px, 6vw, 96px);
+  display: flex;
+  flex-direction: column;
+}
+
+.section--footer .shell { align-items: center; }
+
+.display {
+  font-size: clamp(2rem, 5.4vw, 4rem);
+  font-weight: 900;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  margin: 0;
+  max-width: 20ch;
+}
+
+.display--center { max-width: 18ch; text-align: center; }
+
+.headline {
+  font-size: clamp(1.7rem, 3.6vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.lede {
+  margin: clamp(22px, 3vh, 34px) 0 0;
+  max-width: 56ch;
+  font-size: clamp(0.98rem, 1.35vw, 1.16rem);
+  line-height: 2.1;
+  color: rgba(20, 20, 15, 0.62);
+}
+
+/* Offset the body copy to the opposite margin for an editorial two-beat rhythm */
+@media (min-width: 900px) {
+  .lede { margin-inline-start: auto; }
+}
+
+/* ── Stats band ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(48px, 7vh, 88px) 0 0;
+  border-block: 1px solid rgba(20, 20, 15, 0.14);
+}
+
+.stat {
+  --accent: #ef4444;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(28px, 3.8vh, 44px) clamp(14px, 2vw, 30px);
+  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* hairline dividers, faded at both ends */
+.stat + .stat::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 14%;
+  bottom: 14%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(20, 20, 15, 0.16) 24%,
+    rgba(20, 20, 15, 0.16) 76%,
+    transparent
+  );
+}
+
+/* accent tick that draws across the top edge on reveal */
+.stat-rule {
+  position: absolute;
+  top: -1px;
+  inset-inline-start: clamp(14px, 2vw, 30px);
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: right center;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: clamp(2.1rem, 4.6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.stat-suffix {
+  font-size: 0.46em;
+  font-weight: 800;
+  color: var(--accent);
+  transform: translateY(-0.7em);
+}
+
+.stat-label {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  color: rgba(20, 20, 15, 0.45);
+}
+
+.stat:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.stat:hover .stat-rule {
+  width: 68px;
+}
+
+/* ── Services ── */
+.service-list {
+  list-style: none;
+  margin: clamp(34px, 5vh, 56px) 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(20, 20, 15, 0.12);
+}
+
+.service {
+  --accent: #ef4444;
+  position: relative;
+  border-bottom: 1px solid rgba(20, 20, 15, 0.12);
+}
+
+/* Accent rail that grows down the inline-start edge of the open row */
+.service::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service[data-open]::before {
+  transform: scaleY(1);
+}
+
+/* ── Row header (the button) ── */
+.service-head {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 26px);
+  width: 100%;
+  padding: clamp(22px, 3.2vh, 34px) clamp(14px, 2vw, 26px);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: none;
+  transition: padding-inline-start 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Pointer-following wash — same motif as the dock glow */
+.service-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    240px 150px at var(--mx, 50%) 50%,
+    color-mix(in srgb, var(--accent) 16%, transparent),
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.service-head:hover::before,
+.service-head:focus-visible::before {
+  opacity: 1;
+}
+
+.service-head:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+.service:hover .service-head,
+.service[data-open] .service-head {
+  padding-inline-start: clamp(22px, 2.8vw, 40px);
+}
+
+.service-index {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(20, 20, 15, 0.35);
+  transition: color 0.45s ease;
+}
+
+.service[data-open] .service-index,
+.service-head:hover .service-index {
+  color: var(--accent);
+}
+
+.service-title {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.3vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.45;
+  transition: color 0.45s ease;
+}
+
+/* Accent-tinted rather than pure accent — a heading in #ef4444 on light paper
+   is too low-contrast to read comfortably. The rail, index and toggle carry
+   the accent instead. */
+.service[data-open] .service-title {
+  color: color-mix(in srgb, var(--accent) 62%, #14140f);
+}
+
+/* ── Toggle ── */
+.service-toggle {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 20, 15, 0.18);
+  color: rgba(20, 20, 15, 0.55);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.45s ease,
+    border-color 0.45s ease,
+    color 0.45s ease;
+}
+
+.service-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.service-head:hover .service-toggle {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+}
+
+.service[data-open] .service-toggle {
+  transform: rotate(180deg);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Expanding panel ──
+   The open row is expanded in CSS too, so the default-open item still reads
+   before GSAP takes over (or if it never does). GSAP's inline height wins
+   from the first interaction onward. */
+.service-panel {
+  height: 0;
+  overflow: hidden;
+}
+
+.service[data-open] .service-panel {
+  height: auto;
+}
+
+/* Body and tags sit side by side so the open row uses the full measure
+   instead of stacking in a narrow column against an empty half. */
+.service-panel-inner {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: start;
+  gap: clamp(12px, 2vw, 34px);
+  padding: 0 clamp(14px, 2vw, 26px) clamp(26px, 3.4vh, 36px);
+}
+
+.service-body {
+  grid-column: 2;
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 2;
+  color: rgba(20, 20, 15, 0.72);
+}
+
+.service-tags {
+  grid-column: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .service-panel-inner { grid-template-columns: 56px minmax(0, 1fr); }
+  .service-tags { grid-column: 2; padding-top: 18px; }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 20, 15, 0.14);
+  background: rgba(255, 255, 255, 0.35);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: rgba(20, 20, 15, 0.66);
+  white-space: nowrap;
+  transition: border-color 0.35s ease, color 0.35s ease, background 0.35s ease;
+}
+
+.service[data-open] .tag:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Selected work ── */
+.work-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ghost-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(20, 20, 15, 0.55);
+  text-decoration: none;
+  transition: color 0.3s ease, gap 0.3s ease;
+}
+
+.ghost-link:hover { color: #14140f; gap: 14px; }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(16px, 2.4vw, 34px);
+  margin-top: clamp(34px, 5vh, 56px);
+}
+
+/* Staggered baseline — a flat row of three reads like a stock grid */
+@media (min-width: 900px) {
+  .work-card:nth-child(even) { margin-top: clamp(32px, 5vw, 68px); }
+}
+
+.work-card {
+  --accent: #ef4444;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: none;
+}
+
+.work-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 20px;
+}
+
+.work-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(20, 20, 15, 0.1);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+}
+
+.work-card:hover .work-frame {
+  transform: translateY(-8px);
+  box-shadow: 0 26px 60px rgba(20, 20, 15, 0.18);
+}
+
+/* Oversized so GSAP can drift it inside the frame without exposing edges */
+.work-thumb {
+  position: absolute;
+  inset: -14% 0;
+  display: block;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.14) 0 2px,
+      rgba(0, 0, 0, 0.03) 2px 4px
+    ),
+    radial-gradient(130% 95% at 72% 12%, var(--accent) 0%, color-mix(in srgb, var(--accent) 25%, transparent) 42%, transparent 68%),
+    linear-gradient(160deg, #fbfaf7 0%, #cfc9bd 100%);
+}
+
+/* Accent veil + "view" affordance, both revealed on hover/focus */
+.work-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--accent) 55%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+
+.work-open {
+  position: absolute;
+  inset-inline-start: 18px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #14140f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-open svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-card:hover .work-veil,
+.work-card:focus-visible .work-veil {
+  opacity: 1;
+}
+
+.work-card:hover .work-open,
+.work-card:focus-visible .work-open {
+  opacity: 1;
+  transform: none;
+}
+
+.work-card:hover .work-open svg {
+  transform: translateX(-4px);
+}
+
+.work-year {
+  position: absolute;
+  inset-inline-end: 16px;
+  top: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(20, 20, 15, 0.5);
+}
+
+.work-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.work-index {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(20, 20, 15, 0.35);
+}
+
+.work-cat {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--accent) 72%, #14140f);
+}
+
+.work-title {
+  margin-top: 8px;
+  font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  font-weight: 800;
+  transition: color 0.4s ease;
+}
+
+.work-card:hover .work-title {
+  color: color-mix(in srgb, var(--accent) 62%, #14140f);
+}
+
+/* Rule that draws in under the title on hover */
+.work-rule {
+  display: block;
+  height: 1px;
+  margin-top: 12px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-card:hover .work-rule,
+.work-card:focus-visible .work-rule {
+  transform: scaleX(1);
+}
+
+.work-scope {
+  margin-top: 12px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: rgba(20, 20, 15, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PARTNER LOGO MARQUEE
+   ═══════════════════════════════════════════════════════════ */
+.logos {
+  position: relative;
+  z-index: 1;
+  padding: clamp(56px, 8vh, 96px) 0;
+}
+
+.logos-title {
+  margin: 0 0 clamp(34px, 5vh, 56px);
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.5;
+  color: rgba(20, 20, 15, 0.9);
+}
+
+.logo-columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(16px, 3vw, 48px);
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: 0;
+  list-style: none;
+  direction: ltr;
+}
+
+/* Taller than a logo so a settled mark rests in the fully opaque middle band,
+   and only fades while travelling through the masked edges. */
+.logo-slot {
+  position: relative;
+  height: 72px;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 30%,
+    #000 70%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 30%,
+    #000 70%,
+    transparent 100%
+  );
+}
+
+.logo-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-mark.is-in {
+  animation: logoRollIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.logo-mark.is-out {
+  animation: logoRollOut 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes logoRollIn {
+  from { transform: translateY(62%); opacity: 0; filter: blur(7px); }
+  to   { transform: none;            opacity: 1; filter: blur(0);   }
+}
+
+@keyframes logoRollOut {
+  from { transform: none;             opacity: 1; filter: blur(0);   }
+  to   { transform: translateY(-62%); opacity: 0; filter: blur(7px); }
+}
+
+.logo-mark img {
+  height: 30px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.62;
+}
+
+.logo-wordmark {
+  font-size: clamp(1.05rem, 1.9vw, 1.45rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(20, 20, 15, 0.62);
+  user-select: none; /* they stand in for artwork, not selectable copy */
+}
+
+@media (max-width: 720px) {
+  .logo-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark.is-in,
+  .logo-mark.is-out { animation: none; }
+  .logo-mark.is-out { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEAM
+   ═══════════════════════════════════════════════════════════ */
+.team-note {
+  max-width: 42ch;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.95;
+  color: rgba(20, 20, 15, 0.6);
+}
+
+.team-grid {
+  list-style: none;
+  margin: clamp(34px, 5vh, 56px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 30px);
+}
+
+.member {
+  --accent: #ef4444;
+  display: flex;
+  flex-direction: column;
+}
+
+.member-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(20, 20, 15, 0.1);
+  background:
+    radial-gradient(
+      120% 90% at 70% 8%,
+      color-mix(in srgb, var(--accent) 62%, transparent),
+      transparent 64%
+    ),
+    linear-gradient(165deg, #fbfaf7 0%, #d3cdc1 100%);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+}
+
+.member:hover .member-frame {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 50px rgba(20, 20, 15, 0.16);
+}
+
+/* Monogram stands in until real portraits exist */
+.member-monogram {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(3.4rem, 7vw, 5.6rem);
+  font-weight: 900;
+  line-height: 1;
+  /* plain alpha rather than a blend mode — blend modes force the compositor
+     to read back the backdrop, and this page already runs several */
+  color: rgba(255, 255, 255, 0.5);
+  user-select: none;
+}
+
+.member-name {
+  margin: 16px 0 0;
+  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+  font-weight: 800;
+  transition: color 0.4s ease;
+}
+
+.member:hover .member-name {
+  color: color-mix(in srgb, var(--accent) 62%, #14140f);
+}
+
+.member-rule {
+  display: block;
+  height: 1px;
+  margin-top: 10px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.member:hover .member-rule {
+  transform: scaleX(1);
+}
+
+.member-role {
+  margin: 10px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(20, 20, 15, 0.5);
+}
+
+@media (max-width: 900px) {
+  .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 460px) {
+  .team-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── Footer CTA ── */
+.section--footer .display { color: #f1eee7; }
+
+/* ── Contact field (footer) ── */
+.contact {
+  width: min(560px, 100%);
+  margin-top: clamp(30px, 4.5vh, 52px);
+}
+
+.contact-field {
+  position: relative;
+  display: block;
+  border-bottom: 1px solid rgba(241, 238, 231, 0.28);
+  transition: border-color 0.4s ease;
+}
+
+.contact-field:focus-within {
+  border-color: rgba(241, 238, 231, 0.75);
+}
+
+.contact-field input {
+  display: block;
+  width: 100%;
+  padding: 0 0 10px;
+  border: 0;
+  background: none;
+  color: #f1eee7;
+  font-family: inherit;
+  font-size: clamp(1.25rem, 3.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+  cursor: none;
+}
+
+.contact-field input::placeholder {
+  color: rgba(241, 238, 231, 0.3);
+  font-weight: 600;
+}
+
+.contact-field input:focus {
+  outline: none;
+}
+
+/* Chrome paints its own opaque background and text colour on autofill, which
+   turns this into a white slab on the dark footer. Clipping that background to
+   the glyphs hides it, and the huge transition delay stops the UA's colour
+   animation from reinstating it. */
+.contact-field input:-webkit-autofill,
+.contact-field input:-webkit-autofill:hover,
+.contact-field input:-webkit-autofill:focus,
+.contact-field input:autofill {
+  -webkit-text-fill-color: #f1eee7;
+  -webkit-background-clip: text;
+  background-clip: text;
+  caret-color: #f1eee7;
+  transition: background-color 100000s ease-in-out 0s;
+}
+
+.contact-done {
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(241, 238, 231, 0.28);
+  font-size: clamp(1.25rem, 3.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #f1eee7;
+  animation: contactDone 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes contactDone {
+  from { opacity: 0; transform: translateY(10px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-done { animation: none; }
+}
+
+/* Dust overlay sits exactly over the text box */
+.contact-dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.contact-hint {
+  margin: 16px 0 0;
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  color: rgba(241, 238, 231, 0.45);
+  transition: color 0.35s ease;
+}
+
+.contact-hint[data-state="invalid"] {
+  color: #f87171;
+}
+
+.contact-hint[data-state="done"] {
+  color: rgba(241, 238, 231, 0.85);
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(34px, 5vh, 56px);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: rgba(241, 238, 231, 0.42);
+}
+
+@media (max-width: 760px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(-n + 2) { border-bottom: 1px solid rgba(20, 20, 15, 0.14); }
+  .stat:nth-child(odd)::before { display: none; }
+  .service-head { grid-template-columns: 38px minmax(0, 1fr) auto; }
+  .service-panel-inner { grid-template-columns: 38px minmax(0, 1fr); }
 }

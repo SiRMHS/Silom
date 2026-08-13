@@ -1,0 +1,31 @@
+---
+description: Entry point for Three.js WebGL guidance. Routes to domain-specific skills for scene setup, geometry, materials, lighting, and more. Auto-attaches on JS/TS files using three.js WebGLRenderer.
+globs: **/*.{js,jsx,ts,tsx,mjs}
+alwaysApply: false
+---
+
+# Three.js (WebGL)
+
+Use the Three.js skill pack when working with `three`, `WebGLRenderer`, meshes, cameras, GLTF loading, OrbitControls, raycasting, or EffectComposer.
+
+## WebGPU projects
+
+If imports use `three/webgpu` or TSL (`three/tsl`), follow the **webgpu-threejs-tsl** rule instead.
+
+## Skill routing
+
+Read the relevant sub-skill before implementing:
+
+@.cursor/skills/threejs/SKILL.md
+@.cursor/skills/threejs-fundamentals/SKILL.md
+@.cursor/skills/threejs-geometry/SKILL.md
+@.cursor/skills/threejs-materials/SKILL.md
+@.cursor/skills/threejs-lighting/SKILL.md
+@.cursor/skills/threejs-textures/SKILL.md
+@.cursor/skills/threejs-animation/SKILL.md
+@.cursor/skills/threejs-loaders/SKILL.md
+@.cursor/skills/threejs-interaction/SKILL.md
+@.cursor/skills/threejs-postprocessing/SKILL.md
+@.cursor/skills/threejs-shaders/SKILL.md
+
+Pick the sub-skill that matches the task domain — do not load all of them.
