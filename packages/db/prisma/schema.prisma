@@ -1,0 +1,321 @@
+// Rahyad site — content, auth and media schema.
+//
+// Everything the public site renders as text or as a list lives here, so the
+// admin panel can edit it without a deploy. One-off strings sit in `Setting`
+// (a labelled key/value table the panel renders as grouped forms); anything
+// that repeats gets its own model with an explicit `order` column.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────── auth
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(CLIENT)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions Session[]
+  uploads  Media[]
+
+  @@index([role])
+}
+
+/// Opaque session cookies. Only the hash of the token is stored, so a database
+/// leak can't be replayed as a login.
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userAgent String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────────────────────── media
+
+model Media {
+  id         String   @id @default(cuid())
+  url        String   @unique
+  filename   String
+  mimeType   String
+  size       Int
+  width      Int?
+  height     Int?
+  alt        String   @default("")
+  createdAt  DateTime @default(now())
+  uploadedBy String?
+
+  uploader User? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+
+  teamMembers   TeamMember[]
+  partners      Partner[]
+  projects      Project[]
+  projectShots  ProjectImage[]
+
+  @@index([createdAt])
+}
+
+// ─────────────────────────────────────────── one-off strings
+
+enum SettingGroup {
+  GENERAL
+  SEO
+  MANIFESTO
+  SERVICES
+  WORK
+  TEAM
+  LOGOS
+  CONTACT
+  FOOTER
+  BOOT
+  PROJECTS
+  A11Y
+}
+
+enum SettingKind {
+  TEXT
+  TEXTAREA
+  URL
+  COLOR
+  NUMBER
+}
+
+/// A single editable string. `label`/`hint` exist so the admin panel can render
+/// a self-describing form instead of a wall of raw keys.
+model Setting {
+  id    String       @id @default(cuid())
+  key   String       @unique
+  value String
+  group SettingGroup
+  kind  SettingKind  @default(TEXT)
+  label String
+  hint  String?
+  order Int          @default(0)
+
+  @@index([group, order])
+}
+
+// ─────────────────────────────────────────── animated headlines
+
+enum HeadlineGroup {
+  MANIFESTO
+  FOOTER
+}
+
+enum WordEmphasis {
+  NONE
+  MARK
+  BRAND
+}
+
+/// The display headlines animate word by word, and individual words carry a
+/// highlight. Storing words as rows keeps that structure editable.
+model HeadlineWord {
+  id       String        @id @default(cuid())
+  group    HeadlineGroup
+  text     String
+  emphasis WordEmphasis  @default(NONE)
+  order    Int           @default(0)
+
+  @@index([group, order])
+}
+
+// ─────────────────────────────────────────── home page collections
+
+model Stat {
+  id      String @id @default(cuid())
+  value   Int
+  suffix  String @default("")
+  label   String
+  accent  String @default("#ef4444")
+  order   Int    @default(0)
+  visible Boolean @default(true)
+
+  @@index([order])
+}
+
+model Service {
+  id         String   @id @default(cuid())
+  indexLabel String
+  title      String
+  body       String
+  tags       String[] @default([])
+  accent     String   @default("#ef4444")
+  order      Int      @default(0)
+  visible    Boolean  @default(true)
+
+  @@index([order])
+}
+
+model TeamMember {
+  id       String  @id @default(cuid())
+  name     String
+  role     String
+  monogram String
+  accent   String  @default("#ef4444")
+  imageId  String?
+  order    Int     @default(0)
+  visible  Boolean @default(true)
+
+  image Media? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([order])
+}
+
+/// Partner logos. With no `image` the marquee falls back to rendering `name`
+/// as a styled wordmark, which is what `weight`/`spacing`/`italic` control.
+model Partner {
+  id      String  @id @default(cuid())
+  name    String
+  imageId String?
+  weight  Int     @default(700)
+  spacing String  @default("-0.02em")
+  italic  Boolean @default(false)
+  order   Int     @default(0)
+  visible Boolean @default(true)
+
+  image Media? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([order])
+}
+
+// ─────────────────────────────────────────── projects canvas
+
+/// A project, used in three places: a tile on the infinite canvas, a card in
+/// the home page's featured strip, and its own case-study page at
+/// /projects/<slug>. One row feeds all three, so a card can never describe a
+/// project differently from the page it opens.
+///
+/// `col`/`row`/`w`/`h` place the tile in the 6×4 module that repeats across the
+/// canvas plane. The module packs to exactly 24 units with no holes — change a
+/// span and the packing has to be rechecked, or the tiling shows gaps.
+model Project {
+  id       String   @id @default(cuid())
+  slug     String   @unique
+  title    String
+  category String
+  year     String
+  tags     String[] @default([])
+  color    String   @default("#3b6ef5")
+
+  // case study
+  client   String @default("")
+  role     String @default("")
+  summary  String @default("")
+  /// Ordered [{ h, p }] blocks — چالش / رویکرد / نتیجه and anything after.
+  sections Json   @default("[]")
+
+  // canvas placement
+  col Int @default(0)
+  row Int @default(0)
+  w   Int @default(2)
+  h   Int @default(1)
+
+  imageId String?
+  order   Int     @default(0)
+  visible Boolean @default(true)
+
+  image   Media?         @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  gallery ProjectImage[]
+
+  @@index([order])
+}
+
+/// Ordered gallery of a case study, edited in the panel. A join row rather than
+/// a Json array of urls, so deleting a media file can't leave the page pointing
+/// at a missing image.
+model ProjectImage {
+  id        String @id @default(cuid())
+  projectId String
+  mediaId   String
+  order     Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, order])
+  @@index([mediaId])
+}
+
+// ─────────────────────────────────────────── navigation
+
+/// Bottom dock links. `txLabel`/`txColor` drive the full-screen page
+/// transition that plays before navigating (see transition.js / TxOut).
+model DockLink {
+  id      String  @id @default(cuid())
+  label   String
+  href    String
+  txLabel String?
+  txColor String?
+  order   Int     @default(0)
+  visible Boolean @default(true)
+
+  @@index([order])
+}
+
+enum RailSide {
+  START
+  END
+}
+
+/// The two large edge links on the home screen.
+model RailLink {
+  id         String   @id @default(cuid())
+  label      String
+  caption    String
+  indexLabel String
+  href       String
+  side       RailSide
+  accent     String   @default("#ef4444")
+  order      Int      @default(0)
+  visible    Boolean  @default(true)
+
+  @@index([order])
+}
+
+/// Words the boot sequence cycles through before landing on the brand name.
+model BootWord {
+  id    String @id @default(cuid())
+  text  String
+  order Int    @default(0)
+
+  @@index([order])
+}
+
+// ─────────────────────────────────────────── inbox
+
+/// Submissions from the footer contact field, which previously went nowhere.
+model ContactMessage {
+  id        String   @id @default(cuid())
+  contact   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userAgent String?
+
+  @@index([createdAt])
+  @@index([isRead])
+}
