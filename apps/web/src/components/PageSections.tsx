@@ -1,88 +1,39 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import PaperCanvas from "@/components/PaperCanvas";
-import ContactForm from "@/components/ContactForm";
+import TxLink from "@/components/TxLink";
+import SiteFooter from "@/components/SiteFooter";
 import LogoMarquee from "@/components/LogoMarquee";
+import MemberMedia from "@/components/MemberMedia";
+import type { HomeContent } from "@rahyad/core";
+import { pick } from "@rahyad/core/strings";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const STATS = [
-  { value: 12, suffix: "+", label: "سال تجربه", accent: "#ef4444" },
-  { value: 180, suffix: "+", label: "پروژه", accent: "#1d4ed8" },
-  { value: 40, suffix: "+", label: "برند", accent: "#c2410c" },
-  { value: 9, suffix: "", label: "جایزه", accent: "#0f766e" },
-];
-
-const SERVICES = [
-  {
-    index: "۰۱",
-    title: "هویت برند",
-    body: "از نام و نشان تا سیستم بصری و لحن کلامی؛ هویتی که در هر نقطه‌ی تماس یکدست بماند.",
-    tags: ["لوگو", "سیستم بصری", "کتابچه برند"],
-    accent: "#ef4444",
-  },
-  {
-    index: "۰۲",
-    title: "طراحی و توسعه‌ی وب",
-    body: "تجربه‌ی کاربری روشن، رابط دقیق و پیاده‌سازی سریع — سایتی که هم زیباست هم کار می‌کند.",
-    tags: ["UX/UI", "Next.js", "بهینه‌سازی"],
-    accent: "#1d4ed8",
-  },
-  {
-    index: "۰۳",
-    title: "تولید محتوا و ویدیو",
-    body: "روایتی که دیده می‌شود؛ از ایده و استوری‌بورد تا موشن‌گرافیک و تدوین نهایی.",
-    tags: ["موشن", "کمپین", "عکاسی"],
-    accent: "#c2410c",
-  },
-  {
-    index: "۰۴",
-    title: "استراتژی و رشد",
-    body: "پژوهش بازار، جایگاه‌یابی و برنامه‌ی رشد؛ تصمیم‌هایی که بر داده تکیه دارند.",
-    tags: ["پژوهش", "پوزیشنینگ", "کمپین"],
-    accent: "#0f766e",
-  },
-];
-
-const WORK = [
-  {
-    index: "۰۱",
-    title: "نشان‌واره‌ی آبان",
-    cat: "هویت برند",
-    year: "۱۴۰۳",
-    scope: "هویت بصری، کتابچه برند",
-    accent: "#ef4444",
-  },
-  {
-    index: "۰۲",
-    title: "پلتفرم مهرگان",
-    cat: "وب و محصول",
-    year: "۱۴۰۳",
-    scope: "طراحی محصول، توسعه",
-    accent: "#1d4ed8",
-  },
-  {
-    index: "۰۳",
-    title: "کمپین شب‌تاب",
-    cat: "ویدیو و کمپین",
-    year: "۱۴۰۲",
-    scope: "کارگردانی، موشن",
-    accent: "#c2410c",
-  },
-];
-
-const TEAM = [
-  { name: "آرش نیک‌روش", role: "مدیر خلاقیت", monogram: "آ", accent: "#ef4444" },
-  { name: "سحر مرادی", role: "مدیر هنری", monogram: "س", accent: "#1d4ed8" },
-  { name: "نیما رستمی", role: "سرپرست توسعه", monogram: "ن", accent: "#0f766e" },
-  { name: "الهام کاظمی", role: "استراتژیست برند", monogram: "ا", accent: "#c2410c" },
-];
-
 const faNum = (n: number) => Math.round(n).toLocaleString("fa-IR");
+
+/* 0 → ۰۱, 1 → ۰۲ … the card index is positional, not stored per row */
+const faIndex = (i: number) => (i + 1).toLocaleString("fa-IR").padStart(2, "۰");
+
+/* The two highlight treatments the display headlines can carry (globals.css) */
+const EMPHASIS_CLASS: Record<string, string> = { NONE: "", MARK: "mark", BRAND: "brand" };
+
+function Words({ words }: { words: { text: string; emphasis: string }[] }) {
+  return (
+    <>
+      {words.map((w, i) => (
+        <span className="word" key={i}>
+          <span className={`word-inner ${EMPHASIS_CLASS[w.emphasis] ?? ""}`}>{w.text}</span>
+        </span>
+      ))}
+    </>
+  );
+}
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -93,7 +44,18 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function PageSections() {
+export default function PageSections({ content }: { content: HomeContent }) {
+  const {
+    strings: t,
+    stats: STATS,
+    services: SERVICES,
+    work: WORK,
+    team: TEAM,
+    manifestoWords,
+    footerWords,
+    partners,
+  } = content;
+
   const root = useRef<HTMLDivElement | null>(null);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [openIdx, setOpenIdx] = useState(0);
@@ -107,7 +69,7 @@ export default function PageSections() {
       if (!panel) return;
       const open = i === openIdx;
       const inner = panel.querySelector(".service-panel-inner");
-      const bits = panel.querySelectorAll(".service-body, .tag");
+      const bits = panel.querySelectorAll(".service-body, .service-more, .tag");
 
       if (reduce) {
         gsap.set(panel, { height: open ? "auto" : 0 });
@@ -162,27 +124,65 @@ export default function PageSections() {
 
       // Hidden from JS, never from CSS — without JS the page still reads
       gsap.set(".js-reveal", { opacity: 0, y: 34 });
-      gsap.set(".stat, .service, .work-card, .member", { opacity: 0 });
+      gsap.set(".stat, .work-card, .member", { opacity: 0 });
+      gsap.set(".service", { opacity: 0, y: 30 });
       gsap.set(".word-inner", { yPercent: 115 });
 
-      // Generic reveal — batched so a burst of elements shares one tween
-      ScrollTrigger.batch(".js-reveal", {
-        start: "top 88%",
-        once: true,
-        onEnter: (els) =>
-          gsap.fromTo(
-            els,
-            { y: 34, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: "power3.out",
-              stagger: 0.08,
-              overwrite: true,
-            },
-          ),
-      });
+      /* Generic reveal, driven by IntersectionObserver rather than
+         ScrollTrigger.batch.
+
+         ScrollTrigger caches each trigger's position when it is created, and
+         this page keeps growing afterwards — the accordion animates its first
+         panel open, the WebGL sheet mounts, fonts swap, the video loads. A
+         trigger near the bottom then holds a start position for a layout that
+         no longer exists and can simply never fire, which strands whatever it
+         was hiding at opacity 0 for good. The contact field at the very end of
+         the page was the one that showed it.
+
+         An observer has no cached geometry and re-evaluates on every layout
+         change, so the reveal cannot be missed.
+
+         The service rows ride along: their reveal is a plain one-shot fade,
+         neither positional nor scrubbed, so it has no reason to own a
+         ScrollTrigger of its own. */
+      const io = new IntersectionObserver(
+        (entries) => {
+          const hit = entries.filter((e) => e.isIntersecting).map((e) => e.target);
+          if (!hit.length) return;
+          hit.forEach((el) => io.unobserve(el));
+          gsap.to(hit, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            stagger: 0.08,
+            overwrite: true,
+          });
+        },
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      gsap.utils.toArray<HTMLElement>(".js-reveal, .service").forEach((el) => io.observe(el));
+
+      /* The remaining animations do need ScrollTrigger (they are positional or
+         scrubbed), so re-measure once the page has stopped moving. */
+      const refresh = () => ScrollTrigger.refresh();
+      const settle = window.setTimeout(refresh, 900); // after the accordion opens
+      document.fonts?.ready.then(refresh).catch(() => {});
+      window.addEventListener("load", refresh);
+
+      /* Backstop. Whatever the reason a trigger fails to fire — a throttled
+         tab, an observer that never delivers, a layout that moved at the wrong
+         moment — copy must not stay invisible. Anything still hidden after a
+         few seconds is simply shown. When the observer works normally this
+         finds nothing to do. */
+      const rescue = window.setTimeout(() => {
+        const stuck = gsap.utils
+          .toArray<HTMLElement>(".js-reveal, .service")
+          .filter((el) => Number(getComputedStyle(el).opacity) < 0.05);
+        // set, not to: a tween needs the rAF ticker, which is exactly what may
+        // be unavailable in the situations this backstop exists for
+        if (stuck.length) gsap.set(stuck, { y: 0, opacity: 1, overwrite: true });
+      }, 2600);
 
       // Headline words rise out of their own mask
       gsap.utils.toArray<HTMLElement>(".js-words").forEach((el) => {
@@ -213,8 +213,29 @@ export default function PageSections() {
         const rule = cell.querySelector(".stat-rule");
         const counter = { v: 0 };
 
+        /* `once: true` is deliberately absent, and it is not an oversight.
+
+           A ScrollTrigger declared on a *timeline* is not measured when it is
+           created — it waits a tick, because the timeline is still being
+           populated — so it sits in ScrollTrigger's global list with no
+           position yet. The next trigger created after it (the team cards,
+           below) force-refreshes that backlog on the way to measuring itself.
+           If the page is already scrolled past the stats when this effect runs
+           — a Fast Refresh, or a remount at a restored scroll position — those
+           refreshes fire immediately, and a `once` trigger removes itself from
+           the very list that is being walked, so the walk reads off the end of
+           it and throws. That kills the whole page: React unwinds the tree, and
+           the hero's canvases go with it.
+
+           `play none none none` is what `once` was here for anyway — forward on
+           enter, nothing on the other three edges — and re-entering only
+           replays a timeline that has already finished, which is a no-op. */
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: ".stats", start: "top 82%", once: true },
+          scrollTrigger: {
+            trigger: ".stats",
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
           delay: i * 0.1,
         });
 
@@ -232,21 +253,6 @@ export default function PageSections() {
             },
             "-=0.7",
           );
-      });
-
-      // Service rows slide in with their divider
-      gsap.utils.toArray<HTMLElement>(".service").forEach((row) => {
-        gsap.fromTo(
-          row,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.85,
-            ease: "power3.out",
-            scrollTrigger: { trigger: row, start: "top 88%", once: true },
-          },
-        );
       });
 
       // Team cards rise in sequence
@@ -283,6 +289,13 @@ export default function PageSections() {
           scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
         });
       });
+
+      return () => {
+        io.disconnect();
+        clearTimeout(settle);
+        clearTimeout(rescue);
+        window.removeEventListener("load", refresh);
+      };
     },
     { scope: root },
   );
@@ -299,39 +312,19 @@ export default function PageSections() {
         {/* ── مانیفست ─────────────────────────────── */}
         <section id="about" className="section">
           <div className="shell">
-            <Eyebrow>رهیاد — آژانس خلاقیت</Eyebrow>
+            <Eyebrow>{pick(t, "manifesto.eyebrow")}</Eyebrow>
 
             <h2 className="display js-words">
-              {[
-                "برندها",
-                "را",
-                "از",
-                { t: "دیده‌شدن", c: "mark" },
-                "به",
-                { t: "خاطر‌ماندن", c: "mark" },
-                "می‌رسانیم.",
-              ].map((w, i) => {
-                const text = typeof w === "string" ? w : w.t;
-                const cls = typeof w === "string" ? "" : w.c;
-                return (
-                  <span className="word" key={i}>
-                    <span className={`word-inner ${cls}`}>{text}</span>
-                  </span>
-                );
-              })}
+              <Words words={manifestoWords} />
             </h2>
 
-            <p className="lede js-reveal">
-              رهیاد یک استودیوی خلاقیت است؛ جایی که استراتژی، طراحی و روایت کنار هم
-              می‌نشینند تا هر برند صدای خودش را پیدا کند. از هویت بصری تا تجربه‌ی
-              دیجیتال، هر پروژه را مثل یک اثر می‌سازیم — نه یک سفارش.
-            </p>
+            <p className="lede js-reveal">{pick(t, "manifesto.lede")}</p>
 
             <dl className="stats">
               {STATS.map((s) => (
                 <div
                   className="stat"
-                  key={s.label}
+                  key={s.id}
                   style={{ ["--accent" as string]: s.accent }}
                 >
                   <span className="stat-rule" aria-hidden="true" />
@@ -359,15 +352,27 @@ export default function PageSections() {
         {/* ── خدمات ───────────────────────────────── */}
         <section id="services" className="section section--tint">
           <div className="shell">
-            <Eyebrow>چه کاری انجام می‌دهیم</Eyebrow>
-            <h2 className="headline js-reveal">خدمات</h2>
+            <Eyebrow>{pick(t, "services.eyebrow")}</Eyebrow>
+            <div className="work-head js-reveal">
+              <h2 className="headline">{pick(t, "services.heading", "خدمات")}</h2>
+              {/* Leaving the home page plays the full-screen transition, the
+                  same as the dock's own link to /services */}
+              <TxLink
+                className="ghost-link"
+                href={pick(t, "services.linkHref", "/services")}
+                label={pick(t, "services.linkLabel", "همه‌ی خدمات")}
+              >
+                {pick(t, "services.linkLabel", "همه‌ی خدمات")}
+                <span aria-hidden="true">←</span>
+              </TxLink>
+            </div>
 
             <ul className="service-list">
               {SERVICES.map((s, i) => {
                 const open = i === openIdx;
                 return (
                   <li
-                    key={s.index}
+                    key={s.id}
                     className="service"
                     data-open={open ? "" : undefined}
                     style={{ ["--accent" as string]: s.accent }}
@@ -403,10 +408,25 @@ export default function PageSections() {
                     >
                       <div className="service-panel-inner">
                         <p className="service-body">{s.body}</p>
+
+                        {/* This row is the summary of a whole page, and the
+                            link is how you get to the rest of it — so it
+                            follows the paragraph it continues rather than
+                            sitting among the tags. */}
+                        <TxLink
+                          className="service-more"
+                          href={`/services/${s.slug}`}
+                          label={s.title}
+                          accent={s.accent}
+                        >
+                          {pick(t, "services.rowCta", "جزئیات بیشتر")}
+                          <span aria-hidden="true">←</span>
+                        </TxLink>
+
                         <div className="service-tags">
-                          {s.tags.map((t) => (
-                            <span key={t} className="tag">
-                              {t}
+                          {s.tags.map((tag) => (
+                            <span key={tag} className="tag">
+                              {tag}
                             </span>
                           ))}
                         </div>
@@ -420,33 +440,38 @@ export default function PageSections() {
         </section>
 
         {/* ── همکاران ─────────────────────────────── */}
-        <LogoMarquee />
+        <LogoMarquee title={pick(t, "logos.title")} partners={partners} />
 
         {/* ── کارهای منتخب ────────────────────────── */}
         <section id="work" className="section">
           <div className="shell">
-            <Eyebrow>نمونه‌کار</Eyebrow>
+            <Eyebrow>{pick(t, "work.eyebrow")}</Eyebrow>
             <div className="work-head js-reveal">
-              <h2 className="headline">کارهای منتخب</h2>
-              <a className="ghost-link" href="/projects">
-                همه‌ی پروژه‌ها
+              <h2 className="headline">{pick(t, "work.heading", "کارهای منتخب")}</h2>
+              <Link className="ghost-link" href={pick(t, "work.linkHref", "/projects")}>
+                {pick(t, "work.linkLabel", "همه‌ی پروژه‌ها")}
                 <span aria-hidden="true">←</span>
-              </a>
+              </Link>
             </div>
 
             <div className="work-grid">
-              {WORK.map((w) => (
-                <a
-                  key={w.title}
-                  href="/projects"
+              {WORK.map((w, i) => (
+                <Link
+                  key={w.id}
+                  href={`/projects/${w.slug}`}
                   className="work-card"
-                  style={{ ["--accent" as string]: w.accent }}
+                  style={{ ["--accent" as string]: w.color }}
                 >
                   <span className="work-frame">
-                    <span className="work-thumb" aria-hidden="true" />
+                    <span
+                      className="work-thumb"
+                      aria-hidden="true"
+                      // falls back to the accent block when no image is set
+                      style={w.image ? { backgroundImage: `url(${w.image})` } : undefined}
+                    />
                     <span className="work-veil" aria-hidden="true" />
                     <span className="work-open" aria-hidden="true">
-                      مشاهده
+                      {pick(t, "work.cardCta", "مشاهده")}
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M19 12H5M11 18l-6-6 6-6" />
                       </svg>
@@ -458,15 +483,15 @@ export default function PageSections() {
 
                   <span className="work-meta">
                     <span className="work-index" aria-hidden="true">
-                      {w.index}
+                      {faIndex(i)}
                     </span>
                     <span className="work-cat">{w.cat}</span>
                   </span>
 
                   <span className="work-title">{w.title}</span>
                   <span className="work-rule" aria-hidden="true" />
-                  <span className="work-scope">{w.scope}</span>
-                </a>
+                  <span className="work-scope">{w.role}</span>
+                </Link>
               ))}
             </div>
           </div>
@@ -475,27 +500,26 @@ export default function PageSections() {
         {/* ── تیم ─────────────────────────────────── */}
         <section id="team" className="section section--tint">
           <div className="shell">
-            <Eyebrow>آدم‌ها</Eyebrow>
+            <Eyebrow>{pick(t, "team.eyebrow")}</Eyebrow>
             <div className="work-head js-reveal">
-              <h2 className="headline">تیم ما</h2>
-              <p className="team-note">
-                یک استودیوی کوچک و ثابت — همان‌هایی که پروژه را می‌گیرند، تحویلش
-                هم می‌دهند.
-              </p>
+              <h2 className="headline">{pick(t, "team.heading", "تیم ما")}</h2>
+              <p className="team-note">{pick(t, "team.note")}</p>
             </div>
 
             <ul className="team-grid">
               {TEAM.map((m) => (
                 <li
-                  key={m.name}
+                  key={m.id}
                   className="member"
                   style={{ ["--accent" as string]: m.accent }}
                 >
-                  <span className="member-frame">
-                    <span className="member-monogram" aria-hidden="true">
-                      {m.monogram}
-                    </span>
-                  </span>
+                  {/* a portrait — still, GIF or clip — replaces the monogram tile */}
+                  <MemberMedia
+                    src={m.image}
+                    alt={m.imageAlt}
+                    isVideo={m.isVideo}
+                    monogram={m.monogram}
+                  />
                   <h3 className="member-name">{m.name}</h3>
                   <span className="member-rule" aria-hidden="true" />
                   <p className="member-role">{m.role}</p>
@@ -506,37 +530,10 @@ export default function PageSections() {
         </section>
         </div>
 
-        {/* ── تماس ── outside .page-sheet on purpose: see .page-sheet in CSS ── */}
-        <footer id="contact" className="section section--footer">
-          <div className="shell">
-            <h2 className="display display--center js-words">
-              {[
-                "بیایید",
-                "چیزی",
-                "بسازیم",
-                "که",
-                { t: "یادش", c: "brand" },
-                { t: "بماند.", c: "brand" },
-              ].map((w, i) => {
-                const text = typeof w === "string" ? w : w.t;
-                const cls = typeof w === "string" ? "" : w.c;
-                return (
-                  <span className="word" key={i}>
-                    <span className={`word-inner ${cls}`}>{text}</span>
-                  </span>
-                );
-              })}
-            </h2>
-
-            <ContactForm />
-
-            <div className="footer-meta js-reveal">
-              <span>تهران، ایران</span>
-              <span aria-hidden="true">•</span>
-              <span>۱۴۰۴ — رهیاد</span>
-            </div>
-          </div>
-        </footer>
+        {/* ── تماس ── outside .page-sheet on purpose: see .page-sheet in CSS ──
+            The same footer every other page ends on; here the effect above
+            already animates its words, so it is told not to do that itself. */}
+        <SiteFooter words={footerWords} strings={t} revealedByPage />
       </div>
     </div>
   );

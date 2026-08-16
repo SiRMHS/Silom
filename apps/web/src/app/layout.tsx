@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { peyda } from "@/lib/fonts/peyda";
+import PageTransition from "@/components/PageTransition";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={`${peyda.variable} antialiased`}>
       <body className={`${peyda.className} bg-black`}>
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

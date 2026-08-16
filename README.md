@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# رهیاد
 
-## Getting Started
+سایت رهیاد به‌صورت مونوریپو، با لایه‌ی داده و منطق محتوا جدا از اپلیکیشن Next.
 
-First, run the development server:
+## ساختار
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+apps/
+  web/        اپ Next.js — صفحه‌های عمومی، پنل مدیریت، اکشن‌های سرور
+packages/
+  db/         اسکیمای Prisma، مایگریشن‌ها، seed، کلاینت دیتابیس، هش رمز
+  core/       خواندن محتوا، تعریف مجموعه‌های پنل، پاک‌سازی متن غنی
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`apps/web` فقط لایه‌ی نمایش است؛ هیچ کوئری‌ای مستقیم به Prisma نمی‌زند مگر
+از راه `@rahyad/db`. `@rahyad/core` هیچ چیزی از `next` وارد نمی‌کند، پس اگر
+روزی سرویس دیگری هم بخواهد همین محتوا را بخواند، بدون Next کار می‌کند.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+پکیج‌ها سورس TypeScript منتشر می‌کنند و Next با `transpilePackages` آن‌ها را
+کنار خود اپ کامپایل می‌کند، پس مرحله‌ی build جداگانه‌ای لازم ندارند.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## راه‌اندازی
 
-## Learn More
+```bash
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+متغیرهای محیطی در یک فایل `.env` در ریشه‌ی مخزن‌اند. Next فقط پوشه‌ی خود اپ را
+نگاه می‌کند، برای همین `apps/web/.env` یک symlink به همان فایل است. اگر مخزن را
+تازه clone کرده‌اید و این لینک وجود ندارد، بسازیدش:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+ln -sfn ../../.env apps/web/.env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+سپس دیتابیس:
 
-## Deploy on Vercel
+```bash
+npm run db:migrate
+npm run db:seed
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## دستورها
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+همه از ریشه‌ی مخزن اجرا می‌شوند و به ورک‌اسپیس درست فرستاده می‌شوند.
+
+| دستور | کار |
+| --- | --- |
+| `npm run dev` | سرور توسعه |
+| `npm run build` | build تولید |
+| `npm run start` | اجرای build |
+| `npm run typecheck` | بررسی تایپ همه‌ی پکیج‌ها |
+| `npm run lint` | ESLint روی اپ |
+| `npm run db:migrate` | ساخت و اعمال مایگریشن |
+| `npm run db:seed` | پر کردن دیتابیس |
+| `npm run db:studio` | Prisma Studio |
+| `npm run db:generate` | تولید دوباره‌ی کلاینت Prisma |
+
+## پنل مدیریت
+
+`/admin` — متن‌ها، تیترها، آمار، خدمات، تیم، همکاران، پروژه‌ها، مجله، منوها،
+رسانه، پیام‌ها و کاربران همه از همان‌جا ویرایش می‌شوند. منوی پایین و لینک‌های
+کناری هم از دیتابیس خوانده می‌شوند، پس تغییرشان در پنل نیاز به دیپلوی ندارد.

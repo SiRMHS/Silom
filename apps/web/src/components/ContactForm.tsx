@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { submitContact } from "@/app/contact-actions";
+import { pick, type SiteStrings } from "@rahyad/core/strings";
 
 /**
  * Contact field whose text disintegrates into dust on submit.
@@ -130,7 +132,7 @@ function dissolve(canvas: HTMLCanvasElement, box: DOMRect, text: string, font: s
   });
 }
 
-export default function ContactForm() {
+export default function ContactForm({ strings }: { strings: SiteStrings }) {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<"idle" | "invalid" | "sending" | "done">("idle");
 
@@ -171,7 +173,15 @@ export default function ContactForm() {
       input.style.caretColor = "";
     }
 
-    // TODO: no endpoint yet — wire this to your form handler / CRM.
+    // Lands in the admin panel's inbox. A failure here is deliberately not
+    // surfaced: the dust has already played, and re-showing the field would
+    // read as the message being lost rather than retried.
+    try {
+      await submitContact(email);
+    } catch (err) {
+      console.error("[contact]", err);
+    }
+
     setValue("");
     setStatus("done");
   };
@@ -182,10 +192,10 @@ export default function ContactForm() {
           reset — an empty box after a send is a dead end, and it keeps the
           controlled value out of the picture entirely. */}
       {status === "done" ? (
-        <p className="contact-done">پیام‌تان رسید.</p>
+        <p className="contact-done">{pick(strings, "contact.doneTitle", "پیام‌تان رسید.")}</p>
       ) : (
         <label className="contact-field" ref={wrapRef}>
-          <span className="sr-only">ایمیل یا شماره موبایل شما</span>
+          <span className="sr-only">{pick(strings, "contact.srLabel")}</span>
           {/* type=text, not email — the field also takes phone numbers, and
               type=email would fight both the value and the mobile keyboard.
               The placeholder stays pure LTR: a mixed fa/en one gets reordered
@@ -198,7 +208,7 @@ export default function ContactForm() {
             dir="ltr"
             autoComplete="email"
             spellCheck={false}
-            placeholder="you@company.com"
+            placeholder={pick(strings, "contact.placeholder", "you@company.com")}
             value={value}
             aria-invalid={status === "invalid"}
             aria-describedby="contact-hint"
@@ -213,10 +223,10 @@ export default function ContactForm() {
 
       <p className="contact-hint" id="contact-hint" role="status" data-state={status}>
         {status === "invalid"
-          ? "ایمیل یا شماره‌ی موبایل معتبر نیست"
+          ? pick(strings, "contact.invalid", "ایمیل یا شماره‌ی موبایل معتبر نیست")
           : status === "done"
-            ? "به‌زودی جواب می‌دهیم."
-            : "ایمیل یا شماره موبایل‌تان را بنویسید و اینتر بزنید ↵"}
+            ? pick(strings, "contact.doneHint", "به‌زودی جواب می‌دهیم.")
+            : pick(strings, "contact.hint")}
       </p>
     </form>
   );

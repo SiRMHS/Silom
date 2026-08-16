@@ -72,9 +72,15 @@ model Media {
   uploader User? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
 
   teamMembers   TeamMember[]
+  testimonials  Testimonial[]
   partners      Partner[]
-  projects      Project[]
+  projects      Project[]      @relation("ProjectHero")
+  projectFilms  Project[]      @relation("ProjectFilm")
   projectShots  ProjectImage[]
+  postCovers    Post[]
+  serviceHeroes Service[]      @relation("ServiceHero")
+  serviceFilms  Service[]      @relation("ServiceFilm")
+  serviceShots  ServiceImage[]
 
   @@index([createdAt])
 }
@@ -93,6 +99,7 @@ enum SettingGroup {
   FOOTER
   BOOT
   PROJECTS
+  MAGAZINE
   A11Y
 }
 
@@ -158,8 +165,18 @@ model Stat {
   @@index([order])
 }
 
+/// A service, used in three places: a row in the home page's accordion, a card
+/// on the /services pillar page, and its own landing page at /services/<slug>.
+/// One row feeds all three, so the list of things the studio does can never
+/// disagree with itself.
+///
+/// The first block of columns is what the home accordion shows; everything
+/// after it only the landing page reads. A service with nothing written past
+/// `tags` still renders as a page — the sections, gallery and film are each
+/// left out when empty rather than drawn as holes.
 model Service {
   id         String   @id @default(cuid())
+  slug       String   @unique
   indexLabel String
   title      String
   body       String
@@ -168,14 +185,80 @@ model Service {
   order      Int      @default(0)
   visible    Boolean  @default(true)
 
+  // landing page
+  /// The page's own h1. Falls back to `title` when left empty, so a service
+  /// can read "خدمات" in a list and still open on a full sentence.
+  headline String @default("")
+  /// Lede under the h1, and the meta description search results show.
+  excerpt  String @default("")
+  /// Ordered [{ h, p }] blocks of rich text — same shape as Project.sections.
+  sections Json   @default("[]")
+  /// Ordered [{ q, a }] — what people ask before ordering this.
+  faqs     Json   @default("[]")
+  /// Heading and note above the order form; blank falls back to the site-wide
+  /// strings, so a service only overrides them when it needs its own words.
+  ctaTitle String @default("")
+  ctaNote  String @default("")
+
+  imageId String?
+  filmId  String?
+
+  image    Media?           @relation("ServiceHero", fields: [imageId], references: [id], onDelete: SetNull)
+  film     Media?           @relation("ServiceFilm", fields: [filmId], references: [id], onDelete: SetNull)
+  gallery  ServiceImage[]
+  projects ProjectService[]
+
   @@index([order])
 }
 
+/// Ordered gallery of a service landing page — a join row rather than a Json
+/// array of urls, for the same reason as ProjectImage: deleting a media file
+/// must not leave the page pointing at a missing image.
+model ServiceImage {
+  id        String @id @default(cuid())
+  serviceId String
+  mediaId   String
+  order     Int    @default(0)
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, order])
+  @@index([mediaId])
+}
+
+/// Which services a project is an example of.
+///
+/// Explicit rather than an implicit many-to-many, matching ProjectImage: the
+/// row carries an `order`, so the chips on a case study appear in the order
+/// the panel put them in instead of an arbitrary one.
+model ProjectService {
+  projectId String
+  serviceId String
+  order     Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, serviceId])
+  @@index([serviceId])
+}
+
+/// `bio` is only read by the /contact page's roster — the home page's team
+/// strip shows the name and role alone, so a member with no bio written yet
+/// still renders correctly in both places.
+///
+/// `location` is the third column of the /team roster table. Left blank the
+/// cell simply prints an em dash, so the table still lines up for a studio
+/// that everyone sits in one room of.
 model TeamMember {
   id       String  @id @default(cuid())
   name     String
   role     String
   monogram String
+  bio      String  @default("")
+  location String  @default("")
+  focus    String[] @default([])
   accent   String  @default("#ef4444")
   imageId  String?
   order    Int     @default(0)
@@ -195,6 +278,24 @@ model Partner {
   weight  Int     @default(700)
   spacing String  @default("-0.02em")
   italic  Boolean @default(false)
+  order   Int     @default(0)
+  visible Boolean @default(true)
+
+  image Media? @relation(fields: [imageId], references: [id], onDelete: SetNull)
+
+  @@index([order])
+}
+
+/// What a client said, for the slider at the end of /team. One row is one
+/// slide: the quote itself, who said it, and the line under their name that
+/// says where they said it from. `image` is their portrait — with none, the
+/// slide falls back to the first letter of `name`.
+model Testimonial {
+  id      String  @id @default(cuid())
+  quote   String
+  name    String
+  role    String  @default("")
+  imageId String?
   order   Int     @default(0)
   visible Boolean @default(true)
 
@@ -228,6 +329,8 @@ model Project {
   summary  String @default("")
   /// Ordered [{ h, p }] blocks — چالش / رویکرد / نتیجه and anything after.
   sections Json   @default("[]")
+  /// Ordered [{ q, a }] — the questions this project keeps being asked.
+  faqs     Json   @default("[]")
 
   // canvas placement
   col Int @default(0)
@@ -235,12 +338,20 @@ model Project {
   w   Int @default(2)
   h   Int @default(1)
 
+  /// The case study's hero artwork, and the poster the film opens on. With no
+  /// image the hero falls back to a plate painted in `color`, the same one the
+  /// canvas tile draws — so a project always has a hero, photographed or not.
   imageId String?
+  /// An MP4/WebM played muted and looping between the first two sections.
+  /// Empty simply leaves the section out rather than drawing an empty frame.
+  filmId  String?
   order   Int     @default(0)
   visible Boolean @default(true)
 
-  image   Media?         @relation(fields: [imageId], references: [id], onDelete: SetNull)
-  gallery ProjectImage[]
+  image    Media?           @relation("ProjectHero", fields: [imageId], references: [id], onDelete: SetNull)
+  film     Media?           @relation("ProjectFilm", fields: [filmId], references: [id], onDelete: SetNull)
+  gallery  ProjectImage[]
+  services ProjectService[]
 
   @@index([order])
 }
@@ -259,6 +370,65 @@ model ProjectImage {
 
   @@index([projectId, order])
   @@index([mediaId])
+}
+
+// ─────────────────────────────────────────── magazine
+
+/// A magazine article. Kept apart from `Project` because the two only look
+/// alike: a post is one continuous body with a publish date, where a case
+/// study is a fixed set of blocks placed on the canvas.
+///
+/// `publishedAt` is what the archive sorts and dates by, so it is set the first
+/// time a post goes live and then left alone — editing a published post should
+/// not push it back to the top of the list.
+model Post {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String    @default("")
+  /// Sanitised rich text from the panel's editor — never rendered raw.
+  body        String    @default("")
+  category    String    @default("")
+  tags        String[]  @default([])
+  accent      String    @default("#ef4444")
+  /// Reading time in minutes, recomputed from `body` on every save.
+  readMinutes Int       @default(1)
+  coverId     String?
+  /// [{ q, a }] — same Json-list shape as Project.sections, read only with
+  /// its parent row and never queried on its own.
+  faqs        Json      @default("[]")
+  publishedAt DateTime?
+  visible     Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  cover    Media?        @relation(fields: [coverId], references: [id], onDelete: SetNull)
+  comments PostComment[]
+
+  @@index([visible, publishedAt])
+  @@index([coverId])
+}
+
+/// A reader's comment.
+///
+/// Nothing arrives approved. An unmoderated comment box on a public page is an
+/// open publishing surface for whoever finds it, so a comment is stored the
+/// moment it is written but only rendered once someone in the panel has said
+/// so. No email or address is collected — a name and the text is all the page
+/// ever shows, so it is all that is kept.
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  author    String
+  body      String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userAgent String?
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, approved, createdAt])
+  @@index([approved, createdAt])
 }
 
 // ─────────────────────────────────────────── navigation
@@ -308,12 +478,43 @@ model BootWord {
 
 // ─────────────────────────────────────────── inbox
 
-/// Submissions from the footer contact field, which previously went nowhere.
+enum ContactSource {
+  FOOTER
+  PAGE
+}
+
+/// Submissions from either contact form.
+///
+/// The footer field asks for one thing — an address to reply to — while the
+/// /contact page asks for a full brief: who you are, how to reach you, what you
+/// need, what it is worth and when you need it. Both land here, and everything
+/// the footer form doesn't collect defaults to empty rather than being
+/// nullable, so the inbox never has to distinguish "not asked" from "left
+/// blank". `source` records which form it came from, because a bare address and
+/// a written brief deserve different reading.
 model ContactMessage {
-  id        String   @id @default(cuid())
-  contact   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id      String @id @default(cuid())
+  name    String @default("")
+  /// The address to reply to — an email or a mobile number.
+  contact String
+  /// A second, optional number. The brief asks for both because a written
+  /// answer and a phone call suit different projects.
+  phone   String @default("")
+  subject String @default("")
+  message String @default("")
+
+  /// How they found the studio, in their own words — an open field rather than
+  /// a list, because the answer that matters is the one nobody predicted.
+  referrer String   @default("")
+  /// Titles of the services ticked on the brief, copied rather than joined:
+  /// what someone asked for should not change when a service is renamed.
+  services String[] @default([])
+  budget   String   @default("")
+  timeline String   @default("")
+
+  source    ContactSource @default(FOOTER)
+  isRead    Boolean       @default(false)
+  createdAt DateTime      @default(now())
   userAgent String?
 
   @@index([createdAt])

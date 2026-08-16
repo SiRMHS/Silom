@@ -1,0 +1,29 @@
+
+/* The rest of a brief from the contact page — phone, services, budget, when
+   they need it, how they found us. Rendered as a definition grid under the
+   message, and each row is skipped when the sender left it blank. */
+.ad-msg-brief {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px 20px;
+  margin: 14px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--ad-border-soft);
+}
+.ad-msg-brief dt {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ad-faint);
+}
+.ad-msg-brief dd {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ad-text-2);
+}
+.ad-msg-brief a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ad-border-strong);
+}
+.ad-msg-brief a:hover { color: var(--ad-text); }

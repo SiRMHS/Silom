@@ -1,47 +1,43 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePageTransition } from "@/components/PageTransition";
 
-function isTransitionActive(): boolean {
-  if (typeof document === "undefined") return false;
-  if (document.body.classList.contains("tx-active")) return true;
-  if (document.body.classList.contains("boot-active")) return true;
-
-  const tx = document.getElementById("txOverlay");
-  if (!tx) return false;
-
-  const style = window.getComputedStyle(tx);
-  return style.visibility !== "hidden" && style.display !== "none";
-}
-
-/** UI chrome (brand, bottom nav) — hidden during page transitions */
+/**
+ * UI chrome (brand mark, bottom dock) — hidden while the boot sequence plays
+ * and while a page transition is covering the screen.
+ *
+ * This used to infer both from classes on <body> left over by the old
+ * transition script. That was unreliable in two ways: GalektoHome overwrites
+ * body.className wholesale during init, so the flags could vanish or linger;
+ * and the value was only recomputed when a mutation happened to fire, so chrome
+ * that initialised hidden could stay hidden indefinitely — which is how the
+ * header and dock went missing after coming back from a project.
+ *
+ * Now the transition state comes from the provider that actually owns it, and
+ * the boot flag is read from <html>, which BootScreen owns exclusively and
+ * nothing else rewrites.
+ */
 export function useChromeVisibility() {
-  const [visible, setVisible] = useState(true);
+  const { busy } = usePageTransition();
+  const [booting, setBooting] = useState(false);
 
   useEffect(() => {
-    const update = () => setVisible(!isTransitionActive());
+    const root = document.documentElement;
+    const read = () => setBooting(root.classList.contains("boot-lock"));
 
-    update();
+    read();
 
-    const observer = new MutationObserver(update);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-      subtree: true,
-      childList: true,
-    });
+    // one attribute on one element, rather than every class change on the page
+    const observer = new MutationObserver(read);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
 
-    const tx = document.getElementById("txOverlay");
-    if (tx) {
-      observer.observe(tx, { attributes: true, attributeFilter: ["style", "class"] });
-    }
-
-    window.addEventListener("pageshow", update);
+    window.addEventListener("pageshow", read);
     return () => {
       observer.disconnect();
-      window.removeEventListener("pageshow", update);
+      window.removeEventListener("pageshow", read);
     };
   }, []);
 
-  return visible;
+  return !busy && !booting;
 }

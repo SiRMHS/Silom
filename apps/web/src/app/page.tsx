@@ -3,15 +3,21 @@ import PageSections from "@/components/PageSections";
 import BootScreen from "@/components/BootScreen";
 import BrandHeader from "@/components/BrandHeader";
 import BottomNav from "@/components/BottomNav";
+import { getHomeContent } from "@rahyad/core";
 
-export default function Home() {
+export default async function Home() {
+  // Read once here and hand down, rather than querying from several
+  // components: one round trip, and the page still renders statically until an
+  // admin edit revalidates it.
+  const content = await getHomeContent();
+
   return (
     <>
-      <GalektoHome />
-      <PageSections />
+      <GalektoHome rail={content.rail} />
+      <PageSections content={content} />
       <BootScreen />
-      <BrandHeader />
-      <BottomNav />
+      <BrandHeader ctaLabel="" />
+      <BottomNav items={content.dock} />
     </>
   );
 }

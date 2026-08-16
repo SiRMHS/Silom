@@ -1,23 +1,28 @@
 "use client";
 
+import { usePageTransition } from "@/components/PageTransition";
+
 type Side = "start" | "end";
 
-type RailItem = {
+export type RailItem = {
+  id?: string;
   href: string;
   label: string;
   caption: string;
   index: string;
   side: Side;
   accent: string;
-  tx: { label: string; color: string };
 };
 
 /**
  * `start` = physical right edge in RTL, `end` = physical left edge.
  * main.js toggles body.cursor-left / body.cursor-right from pointer position;
  * the CSS in globals.css maps those to the matching rail item.
+ *
+ * Only used when the RailLink table is empty; the real links are edited in the
+ * admin panel and handed down as `items`.
  */
-const ITEMS: RailItem[] = [
+const FALLBACK_ITEMS: RailItem[] = [
   {
     href: "/projects",
     label: "پروژه‌ها",
@@ -25,16 +30,14 @@ const ITEMS: RailItem[] = [
     index: "۰۱",
     side: "start",
     accent: "#ef4444",
-    tx: { label: "پروژه‌ها", color: "#ef4444" },
   },
   {
-    href: "/artworks",
-    label: "آثار",
-    caption: "گالری تصویرسازی",
+    href: "/magazine",
+    label: "مجله",
+    caption: "نوشته‌ها و یادداشت‌ها",
     index: "۰۲",
     side: "end",
     accent: "#1d4ed8",
-    tx: { label: "آثار", color: "#1d4ed8" },
   },
 ];
 
@@ -55,21 +58,20 @@ function Chevron() {
   );
 }
 
-export default function SideRail() {
+export default function SideRail({ items }: { items?: RailItem[] }) {
+  const railItems = items?.length ? items : FALLBACK_ITEMS;
+  const { go: transitionTo } = usePageTransition();
+
   const go = (e: React.MouseEvent, item: RailItem) => {
     e.preventDefault();
-    if (typeof window.TxOut === "function") {
-      window.TxOut(item.href, item.tx.label, item.tx.color);
-      return;
-    }
-    window.location.assign(item.href);
+    transitionTo(item.href, item.label, item.accent);
   };
 
   return (
     <nav className="rail" aria-label="بخش‌های اصلی">
-      {ITEMS.map((item) => (
+      {railItems.map((item) => (
         <a
-          key={item.href}
+          key={item.id ?? item.href}
           href={item.href}
           onClick={(e) => go(e, item)}
           className={`rail-link rail-link--${item.side}`}

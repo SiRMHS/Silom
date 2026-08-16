@@ -1,34 +1,21 @@
 {
-  "name": "rahyad-temp",
+  "name": "rahyad",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@gsap/react": "^2.1.2",
-    "@types/three": "^0.185.4",
-    "clsx": "^2.1.1",
-    "framer-motion": "^13.1.0",
-    "gsap": "^3.15.0",
-    "lucide-react": "^1.23.0",
-    "next": "16.2.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "tailwind-merge": "^3.6.0",
-    "three": "^0.185.1"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "dev": "npm run dev -w @rahyad/web",
+    "build": "npm run build -w @rahyad/web",
+    "start": "npm run start -w @rahyad/web",
+    "lint": "npm run lint -w @rahyad/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run generate -w @rahyad/db",
+    "db:migrate": "npm run migrate -w @rahyad/db",
+    "db:seed": "npm run seed -w @rahyad/db",
+    "db:studio": "npm run studio -w @rahyad/db",
+    "postinstall": "npm run generate -w @rahyad/db"
   }
 }

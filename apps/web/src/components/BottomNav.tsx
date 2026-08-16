@@ -1,21 +1,33 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useChromeVisibility } from "@/hooks/useChromeVisibility";
+import { usePageTransition } from "@/components/PageTransition";
 
-const NAV_ITEMS = [
-  { label: "خانه", href: "/" },
-  { label: "پروژه‌ها", href: "/projects" },
-  { label: "آژانس", href: "#about" },
-  { label: "تماس", href: "/contact" },
+export type DockItem = {
+  id?: string;
+  label: string;
+  href: string;
+  /** Empty means "navigate without playing the full-screen transition". */
+  txLabel?: string | null;
+  txColor?: string | null;
+};
+
+/**
+ * Only used if the DockLink table is empty — a fresh database still gets a
+ * usable site rather than a bare pill. Every real link comes from `items`,
+ * which the pages read from the panel-editable table.
+ */
+const FALLBACK_ITEMS: DockItem[] = [
+  { label: "خانه", href: "/", txLabel: "خانه", txColor: "#1c1c22" },
+  { label: "خدمات", href: "/services", txLabel: "خدمات", txColor: "#0f766e" },
+  { label: "پروژه‌ها", href: "/projects", txLabel: "پروژه‌ها", txColor: "#ef4444" },
+  { label: "مجله", href: "/magazine", txLabel: "مجله", txColor: "#1c1c22" },
+  { label: "تیم", href: "/team", txLabel: "تیم", txColor: "#c2410c" },
 ];
 
-const TX_META: Record<string, { label: string; color: string }> = {
-  "/": { label: "خانه", color: "#1c1c22" },
-  "/projects": { label: "پروژه‌ها", color: "#ef4444" },
-  "/contact": { label: "تماس", color: "#1c1c22" },
-};
 
 /** Blurred white puck that trails the pointer inside the pill. */
 function useCursorGlow(
@@ -61,8 +73,11 @@ function useCursorGlow(
   }, [pillRef, glowRef]);
 }
 
-export default function BottomNav() {
+export default function BottomNav({ items }: { items?: DockItem[] }) {
+  const navItems = items?.length ? items : FALLBACK_ITEMS;
   const visible = useChromeVisibility();
+  const { go } = usePageTransition();
+  const router = useRouter();
   const [activePath, setActivePath] = useState("/");
   const [dotX, setDotX] = useState<number | null>(null);
 
@@ -98,19 +113,20 @@ export default function BottomNav() {
     return () => window.removeEventListener("resize", placeDot);
   }, [placeDot]);
 
-  const navigate = (href: string) => {
-    if (href.startsWith("#")) {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  const navigate = (item: DockItem) => {
+    if (item.href.startsWith("#")) {
+      document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth" });
       return;
     }
-    if (href === window.location.pathname) return;
+    if (item.href === window.location.pathname) return;
 
-    const meta = TX_META[href];
-    if (meta && typeof window.TxOut === "function") {
-      window.TxOut(href, meta.label, meta.color);
+    // A link with no transition text goes straight through, which is how the
+    // panel switches the curtain off for a single link.
+    if (!item.txLabel) {
+      router.push(item.href);
       return;
     }
-    window.location.assign(href);
+    go(item.href, item.txLabel, item.txColor);
   };
 
   return (
@@ -130,16 +146,16 @@ export default function BottomNav() {
         </span>
 
         <div ref={listRef} className="dock-list">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <a
-              key={item.href}
+              key={item.id ?? item.href}
               ref={(el) => {
                 linkRefs.current[item.href] = el;
               }}
               href={item.href}
               onClick={(e) => {
                 e.preventDefault();
-                navigate(item.href);
+                navigate(item);
               }}
               className="dock-link"
               aria-current={activePath === item.href ? "page" : undefined}
@@ -163,8 +179,3 @@ export default function BottomNav() {
   );
 }
 
-declare global {
-  interface Window {
-    TxOut?: (url: string, text: string, color: string) => void;
-  }
-}

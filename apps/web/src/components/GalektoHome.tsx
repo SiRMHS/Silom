@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import SideRail from "@/components/SideRail";
+import { useEffect, useRef } from "react";
+import SideRail, { type RailItem } from "@/components/SideRail";
 import ScrollCue from "@/components/ScrollCue";
 
 function loadScript(src: string): Promise<void> {
@@ -96,7 +96,9 @@ function initEarlyCRTMask() {
   if (bevel) applyClip(bevel, innerClip);
 }
 
-export default function GalektoHome() {
+export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   useEffect(() => {
     if (window.__galektoInit) return;
     window.__galektoInit = true;
@@ -156,6 +158,52 @@ export default function GalektoHome() {
       document.documentElement.dir = prevHtmlDir;
       document.documentElement.style.background = prevHtmlBg;
       document.body.className = prevBodyClass;
+    };
+  }, []);
+
+  /**
+   * The hero video is the whole first screen, so a load that never starts
+   * reads as a blank white page.
+   *
+   * Two ways it gets stuck, both silent — no `error` event either time:
+   * a tab opened in the background has its media load deferred by the browser
+   * and nothing resumes it once the tab is shown, and a refused autoplay parks
+   * the element before the first frame. So the element gets nudged whenever
+   * the page becomes visible again, and once more on the first input.
+   */
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    // Reloading costs a fetch, so it's bounded; play() is free to retry.
+    let reloads = 0;
+
+    const kick = () => {
+      if (document.hidden) return;
+      if (v.readyState === 0 && reloads < 3) {
+        reloads++;
+        v.load();
+      }
+      void v.play().catch(() => {});
+    };
+
+    // A deferred load reports no error and no progress, so the only signal is
+    // that nothing arrived by the time it should have.
+    const timer = window.setTimeout(kick, 2500);
+
+    document.addEventListener("visibilitychange", kick);
+    window.addEventListener("pageshow", kick);
+    window.addEventListener("pointerdown", kick, { once: true, passive: true });
+    v.addEventListener("error", kick);
+    v.addEventListener("stalled", kick);
+
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", kick);
+      window.removeEventListener("pageshow", kick);
+      window.removeEventListener("pointerdown", kick);
+      v.removeEventListener("error", kick);
+      v.removeEventListener("stalled", kick);
     };
   }, []);
 
@@ -221,7 +269,7 @@ export default function GalektoHome() {
       </div>
 
       {/* Side navigation */}
-      <SideRail />
+      <SideRail items={rail} />
       <ScrollCue />
 
       {/* Portrait + name */}
@@ -234,6 +282,7 @@ export default function GalektoHome() {
                   original loop.mp4); main.js swaps in loop-mobile.mp4 on phones.
                   `media` on <source> only works inside <picture>, never <video>. */}
               <video
+                ref={videoRef}
                 className="portrait-base portrait-video"
                 id="portraitBase"
                 autoPlay

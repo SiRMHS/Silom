@@ -100,6 +100,9 @@
  
   /* ── 2. BACKGROUND ── */
   function resizeBgCanvas() {
+    // The canvas lives in the React tree, so it can be gone by the time a
+    // resize or the rAF loop reaches this — cached at init, null afterwards.
+    if (!bgCanvas) return;
     bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
   }
 

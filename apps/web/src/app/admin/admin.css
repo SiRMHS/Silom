@@ -1,0 +1,1691 @@
+/* ═══════════════════════════════════════════════════════════
+   Admin panel — scoped styles.
+
+   The look follows the modern app-shell convention (Linear, Liveblocks,
+   Vercel): near-black canvas, one inset content panel with its own scroll
+   and a sticky header, hairline borders instead of heavy chrome, 6–10px
+   radii, and colour used only where it carries meaning.
+
+   globals.css locks html/body to a white background with hidden scrollbars
+   for the CRT site shell. The panel shares that document, so the overrides
+   below are keyed on :has([data-admin-root]) — CSS-only, no body class to
+   set from JS and no flash on first paint.
+   ═══════════════════════════════════════════════════════════ */
+
+html:root:has([data-admin-root]),
+html:root:has([data-admin-root]) > body {
+  background: var(--ad-bg) !important;
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+}
+
+html:root:has([data-admin-root]) {
+  overflow-y: auto;
+  scroll-behavior: auto;
+  color-scheme: dark;
+}
+
+[data-admin-root] {
+  /* surfaces — each step is a real elevation, not a random grey */
+  --ad-bg: #08090a;
+  --ad-surface: #0e0f11;
+  --ad-surface-2: #17181a;
+  --ad-surface-3: #1f2023;
+  --ad-elevated: #131416;
+
+  /* hairlines */
+  --ad-border: rgba(255, 255, 255, 0.09);
+  --ad-border-strong: rgba(255, 255, 255, 0.16);
+  --ad-border-soft: rgba(255, 255, 255, 0.055);
+
+  /* ink */
+  --ad-text: #f2f3f5;
+  --ad-text-2: #c2c5cb;
+  --ad-muted: #8a8f98;
+  --ad-faint: #62666d;
+
+  /* meaning */
+  --ad-accent: #f6b506;
+  --ad-accent-ink: #1a1400;
+  --ad-accent-soft: rgba(246, 181, 6, 0.13);
+  --ad-danger: #f2555a;
+  --ad-danger-soft: rgba(242, 85, 90, 0.11);
+  --ad-ok: #4cb782;
+  --ad-ok-soft: rgba(76, 183, 130, 0.12);
+
+  /* geometry + depth */
+  --ad-r-sm: 6px;
+  --ad-r: 8px;
+  --ad-r-lg: 12px;
+  --ad-radius: var(--ad-r-lg); /* legacy alias */
+  --ad-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ad-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ad-shadow-lg: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --ad-ring: 0 0 0 3px rgba(246, 181, 6, 0.22);
+  --ad-ease: cubic-bezier(0.25, 0.6, 0.25, 1);
+
+  color: var(--ad-text);
+  background: var(--ad-bg);
+  min-height: 100dvh;
+  font-family: var(--font-peyda), system-ui, sans-serif;
+  direction: rtl;
+  font-size: 14px;
+  line-height: 1.65;
+  letter-spacing: -0.003em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+[data-admin-root] *,
+[data-admin-root] *::before,
+[data-admin-root] *::after {
+  box-sizing: border-box;
+}
+
+/* fields carry their own ring (border + glow), so they opt out of the
+   global outline instead of wearing both */
+[data-admin-root] :focus-visible:not(.ad-input, .ad-textarea, .ad-select, .ad-editor *) {
+  outline: 2px solid var(--ad-accent);
+  outline-offset: 1px;
+}
+
+/* scrollbars — thin, only visible while the surface is in use */
+[data-admin-root] * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+[data-admin-root] *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+[data-admin-root] *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 99px;
+}
+[data-admin-root] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: content-box;
+}
+
+.ad-icon {
+  flex: none;
+}
+
+/* ── shell ───────────────────────────────────────────────── */
+
+.ad-shell {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.ad-sidebar {
+  height: 100dvh;
+  padding: 14px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  background: var(--ad-bg);
+}
+
+/* workspace switcher-ish brand block */
+.ad-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px 14px;
+}
+.ad-brand-mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  display: block;
+  object-fit: contain;
+}
+.ad-brand b {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  display: block;
+}
+.ad-brand span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ad-faint);
+  line-height: 1.3;
+}
+
+/* only the link list scrolls — brand and account row stay put */
+.ad-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 8px;
+}
+/* the gap belongs on the group, not on .ad-nav — the links live one level
+   down, so spacing set here is what actually separates two rows */
+.ad-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ad-nav-group:first-child {
+  padding-top: 2px;
+}
+.ad-nav-group {
+  padding: 13px 10px 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ad-faint);
+}
+.ad-nav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--ad-r);
+  color: var(--ad-text-2);
+  text-decoration: none;
+  font-size: 14.5px;
+  font-weight: 500;
+  transition: background 0.12s var(--ad-ease), color 0.12s var(--ad-ease);
+}
+.ad-nav a .ad-icon {
+  color: var(--ad-muted);
+  transition: color 0.12s var(--ad-ease);
+}
+.ad-nav a > span:first-of-type {
+  margin-inline-end: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ad-nav a:hover {
+  background: var(--ad-surface-2);
+  color: var(--ad-text);
+}
+.ad-nav a:hover .ad-icon {
+  color: var(--ad-text-2);
+}
+.ad-nav a[aria-current="page"] {
+  background: var(--ad-surface-3);
+  color: #fff;
+  font-weight: 600;
+}
+.ad-nav a[aria-current="page"] .ad-icon {
+  color: var(--ad-accent);
+}
+.ad-nav-count {
+  font-size: 12px;
+  color: var(--ad-faint);
+  font-variant-numeric: tabular-nums;
+  padding-inline-start: 4px;
+}
+
+.ad-sidebar-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--ad-border-soft);
+}
+.ad-who {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: var(--ad-r-sm);
+  font-size: 11.5px;
+  color: var(--ad-muted);
+  overflow: hidden;
+}
+.ad-who-avatar {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ad-surface-3);
+  border: 1px solid var(--ad-border);
+  color: var(--ad-text-2);
+  font-size: 11px;
+  font-weight: 700;
+}
+.ad-who div {
+  min-width: 0;
+}
+.ad-who b {
+  display: block;
+  color: var(--ad-text);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ad-who span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: ltr;
+  text-align: right;
+}
+.ad-sidebar-actions {
+  display: flex;
+  gap: 6px;
+}
+.ad-sidebar-actions > * {
+  flex: 1;
+}
+.ad-sidebar-actions form {
+  display: flex;
+  flex: 1;
+}
+.ad-sidebar-actions form .ad-btn {
+  width: 100%;
+}
+
+/* the inset content panel — its own scroll container */
+.ad-main {
+  min-width: 0;
+  margin: 8px;
+  margin-inline-start: 0;
+  height: calc(100dvh - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* content settles into a readable column on wide screens; the header stays
+     full-bleed by mirroring this padding */
+  --ad-pad: max(28px, (100% - 1240px) / 2);
+  padding: 0 var(--ad-pad) 72px;
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  box-shadow: var(--ad-shadow-sm);
+}
+
+/* ── page header (sticky inside the panel) ───────────────── */
+
+.ad-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 calc(var(--ad-pad, 28px) * -1) 22px;
+  padding: 16px var(--ad-pad, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--ad-surface);
+  border-bottom: 1px solid var(--ad-border-soft);
+}
+.ad-head h1,
+.ad-head h2 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  margin: 0;
+  line-height: 1.35;
+}
+.ad-head h2 {
+  font-size: 16px;
+}
+.ad-head p {
+  margin: 2px 0 0;
+  color: var(--ad-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+  max-width: 68ch;
+}
+.ad-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── surfaces ────────────────────────────────────────────── */
+
+.ad-card {
+  background: var(--ad-elevated);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  padding: 18px 20px;
+}
+.ad-card + .ad-card {
+  margin-top: 14px;
+}
+.ad-card > h2 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.ad-card > h2 + p {
+  margin: 3px 0 16px;
+  color: var(--ad-muted);
+  font-size: 12.5px;
+}
+
+.ad-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.ad-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── forms ───────────────────────────────────────────────── */
+
+.ad-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ad-field > label,
+.ad-label {
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--ad-text-2);
+}
+.ad-hint {
+  font-size: 11.5px;
+  color: var(--ad-faint);
+  line-height: 1.6;
+}
+
+.ad-input,
+.ad-textarea,
+.ad-select {
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: var(--ad-surface-2);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-sm);
+  color: var(--ad-text);
+  font: inherit;
+  font-size: 13.5px;
+  transition: border-color 0.12s var(--ad-ease), box-shadow 0.12s var(--ad-ease),
+    background 0.12s var(--ad-ease);
+}
+.ad-input::placeholder,
+.ad-textarea::placeholder {
+  color: var(--ad-faint);
+}
+.ad-input:hover:not(:disabled),
+.ad-textarea:hover:not(:disabled),
+.ad-select:hover:not(:disabled) {
+  border-color: var(--ad-border-strong);
+}
+.ad-input:focus,
+.ad-textarea:focus,
+.ad-select:focus {
+  outline: none;
+  background: var(--ad-surface-2);
+  border-color: var(--ad-accent);
+  box-shadow: var(--ad-ring);
+}
+.ad-select {
+  cursor: pointer;
+  appearance: none;
+  padding-inline-end: 28px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ad-muted) 50%),
+    linear-gradient(135deg, var(--ad-muted) 50%, transparent 50%);
+  background-position: left 13px top 55%, left 8px top 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.ad-textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.8;
+  padding: 8px 10px;
+}
+.ad-input[dir="ltr"],
+.ad-input.is-ltr {
+  direction: ltr;
+  text-align: left;
+}
+.ad-input:disabled,
+.ad-textarea:disabled,
+.ad-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ad-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ad-row > * {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+.ad-row--tight > * {
+  flex: 0 1 110px;
+}
+
+.ad-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ad-text-2);
+  cursor: pointer;
+  user-select: none;
+}
+/* custom checkbox — the native accent-color box is too loud at this scale */
+[data-admin-root] input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  display: grid;
+  place-content: center;
+  border: 1px solid var(--ad-border-strong);
+  border-radius: 4px;
+  background: var(--ad-surface-2);
+  cursor: pointer;
+  transition: background 0.12s var(--ad-ease), border-color 0.12s var(--ad-ease);
+}
+[data-admin-root] input[type="checkbox"]:hover:not(:disabled) {
+  border-color: var(--ad-muted);
+}
+[data-admin-root] input[type="checkbox"]::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  transform: scale(0);
+  transition: transform 0.1s var(--ad-ease);
+  background: var(--ad-accent-ink);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+[data-admin-root] input[type="checkbox"]:checked {
+  background: var(--ad-accent);
+  border-color: var(--ad-accent);
+}
+[data-admin-root] input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+[data-admin-root] input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* A row of checkboxes that reads as a set of tags rather than a form —
+   used where the choice is "which of these does this belong to", like the
+   services a project is filed under. */
+.ad-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ad-check--chip {
+  gap: 9px;
+  padding: 8px 13px;
+  border: 1px solid var(--ad-border);
+  border-radius: 999px;
+  background: var(--ad-surface-2);
+  transition: border-color 0.12s var(--ad-ease), background 0.12s var(--ad-ease);
+}
+.ad-check--chip:hover {
+  border-color: var(--ad-border-strong);
+}
+/* The service's own colour, so the chips here match the chips on the site */
+.ad-check-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c, var(--ad-muted));
+  opacity: 0.5;
+  transition: opacity 0.12s var(--ad-ease);
+}
+.ad-check--chip:has(input:checked) {
+  border-color: var(--ad-border-strong);
+  background: var(--ad-surface-3);
+  color: var(--ad-text);
+}
+.ad-check--chip:has(input:checked) .ad-check-dot {
+  opacity: 1;
+}
+
+/* colour input sits next to a text field showing the hex */
+.ad-color {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ad-color input[type="color"] {
+  width: 34px;
+  height: 32px;
+  padding: 2px;
+  background: var(--ad-surface-2);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-sm);
+  cursor: pointer;
+  flex: none;
+}
+.ad-color .ad-input {
+  direction: ltr;
+  text-align: left;
+  font-family: ui-monospace, "SF Mono", monospace;
+  font-size: 12.5px;
+}
+
+/* ── buttons ─────────────────────────────────────────────── */
+
+.ad-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--ad-r-sm);
+  border: 1px solid var(--ad-border);
+  background: var(--ad-surface-2);
+  color: var(--ad-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: background 0.12s var(--ad-ease), border-color 0.12s var(--ad-ease),
+    opacity 0.12s var(--ad-ease), transform 0.06s var(--ad-ease);
+}
+.ad-btn:hover:not(:disabled):not([data-disabled]) {
+  background: var(--ad-surface-3);
+  border-color: var(--ad-border-strong);
+}
+.ad-btn:active:not(:disabled):not([data-disabled]) {
+  transform: translateY(0.5px);
+}
+.ad-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.ad-btn .ad-icon {
+  color: var(--ad-muted);
+}
+.ad-btn:hover:not(:disabled) .ad-icon {
+  color: currentColor;
+}
+
+.ad-btn--primary {
+  background: var(--ad-accent);
+  border-color: transparent;
+  color: var(--ad-accent-ink);
+  font-weight: 650;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.ad-btn--primary:hover:not(:disabled):not([data-disabled]) {
+  background: #ffc424;
+  border-color: transparent;
+}
+.ad-btn--primary .ad-icon,
+.ad-btn--primary:hover .ad-icon {
+  color: currentColor;
+}
+
+.ad-btn--danger {
+  color: #ff9ea1;
+  border-color: rgba(242, 85, 90, 0.28);
+  background: var(--ad-danger-soft);
+}
+.ad-btn--danger:hover:not(:disabled):not([data-disabled]) {
+  background: rgba(242, 85, 90, 0.18);
+  border-color: rgba(242, 85, 90, 0.45);
+}
+
+.ad-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--ad-text-2);
+}
+.ad-btn--ghost:hover:not(:disabled):not([data-disabled]) {
+  background: var(--ad-surface-2);
+  border-color: var(--ad-border);
+  color: var(--ad-text);
+}
+
+.ad-btn--sm {
+  height: 26px;
+  padding: 0 9px;
+  font-size: 12.5px;
+  border-radius: var(--ad-r-sm);
+}
+.ad-btn--icon {
+  width: 26px;
+  padding: 0;
+}
+.ad-btn[data-disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── item rows (collection editors) ──────────────────────── */
+
+.ad-item {
+  background: var(--ad-elevated);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  transition: border-color 0.12s var(--ad-ease);
+}
+.ad-item:hover {
+  border-color: var(--ad-border-strong);
+}
+.ad-item[data-hidden] {
+  opacity: 0.6;
+}
+.ad-item-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+/* ── disclosure (accordion) ──────────────────────────────── */
+
+.ad-disclosure {
+  flex: 1 1 200px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  border: 0;
+  border-radius: var(--ad-r-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background 0.12s var(--ad-ease);
+}
+.ad-disclosure:hover {
+  background: var(--ad-surface-2);
+}
+.ad-disclosure-caret {
+  display: grid;
+  place-items: center;
+  color: var(--ad-muted);
+  transition: transform 0.2s var(--ad-ease), color 0.12s var(--ad-ease);
+}
+.ad-disclosure[aria-expanded="true"] .ad-disclosure-caret {
+  transform: rotate(180deg);
+  color: var(--ad-text-2);
+}
+
+/* grid-rows collapse: animates without measuring, keeps fields in the form */
+.ad-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s var(--ad-ease), opacity 0.18s var(--ad-ease);
+  opacity: 0;
+}
+.ad-collapse-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+[data-open] > form > .ad-collapse,
+[data-open] > .ad-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  padding-top: 13px;
+}
+
+.ad-item-head .ad-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.ad-item-title {
+  font-weight: 600;
+  font-size: 13.5px;
+  margin-inline-end: auto;
+}
+.ad-item-tools {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Six columns so full / half / third all divide cleanly */
+.ad-fields {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 13px;
+}
+.ad-field[data-span="full"] {
+  grid-column: span 6;
+}
+.ad-field[data-span="half"] {
+  grid-column: span 3;
+}
+.ad-field[data-span="third"] {
+  grid-column: span 2;
+}
+@media (max-width: 700px) {
+  .ad-field[data-span="half"],
+  .ad-field[data-span="third"] {
+    grid-column: span 6;
+  }
+}
+
+/* ── sections repeater ───────────────────────────────────── */
+
+.ad-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.ad-section-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--ad-border-soft);
+  border-radius: var(--ad-r);
+  background: var(--ad-bg);
+  transition: border-color 0.12s var(--ad-ease);
+}
+.ad-section-row:hover {
+  border-color: var(--ad-border);
+}
+.ad-section-tools {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ad-section-num {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ad-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── list toolbar + pagination ───────────────────────────── */
+
+.ad-listbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.ad-listbar .ad-input {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.ad-listbar-spacer {
+  flex: 1 1 auto;
+}
+
+.ad-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.ad-pager-info {
+  font-size: 12.5px;
+  color: var(--ad-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ad-thumb {
+  display: block;
+  width: 34px;
+  height: 26px;
+  border-radius: 5px;
+  border: 1px solid var(--ad-border);
+  background-size: cover;
+  background-position: center;
+}
+.ad-link {
+  color: var(--ad-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+.ad-link:hover {
+  color: var(--ad-accent);
+}
+.ad-sub {
+  font-size: 11.5px;
+  color: var(--ad-faint);
+  margin-top: 1px;
+}
+
+/* ── rich text editor ────────────────────────────────────── */
+
+.ad-editor {
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r);
+  background: var(--ad-bg);
+  overflow: hidden;
+  transition: border-color 0.12s var(--ad-ease), box-shadow 0.12s var(--ad-ease);
+}
+.ad-editor:focus-within {
+  border-color: var(--ad-accent);
+  box-shadow: var(--ad-ring);
+}
+
+.ad-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 6px;
+  background: var(--ad-surface-2);
+  border-bottom: 1px solid var(--ad-border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.ad-tb-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-inline-end: 5px;
+  margin-inline-end: 3px;
+  border-inline-end: 1px solid var(--ad-border-soft);
+}
+.ad-tb-group:last-child {
+  border-inline-end: 0;
+}
+
+.ad-tb-btn {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ad-text-2);
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s var(--ad-ease), color 0.12s var(--ad-ease);
+}
+.ad-tb-btn:hover:not(:disabled) {
+  background: var(--ad-surface-3);
+  color: var(--ad-text);
+}
+.ad-tb-btn[data-active] {
+  background: var(--ad-accent-soft);
+  color: var(--ad-accent);
+}
+.ad-tb-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ad-tb-select {
+  height: 26px;
+  padding: 0 8px;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 5px;
+  color: var(--ad-text);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.ad-tb-swatches {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.ad-tb-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.12s var(--ad-ease);
+}
+.ad-tb-swatch:hover {
+  transform: scale(1.18);
+}
+
+.ad-editor-body {
+  padding: 14px 16px;
+  max-height: 60dvh;
+  overflow-y: auto;
+}
+.ad-editor-body .ProseMirror {
+  outline: none;
+  min-height: inherit;
+}
+.ad-editor-body .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ad-faint);
+  float: right;
+  height: 0;
+  pointer-events: none;
+}
+
+.ad-editor-foot {
+  display: flex;
+  gap: 14px;
+  padding: 5px 12px;
+  border-top: 1px solid var(--ad-border-soft);
+  background: var(--ad-surface);
+  font-size: 11px;
+  color: var(--ad-faint);
+}
+
+/* editor content styling — mirrors how the case-study page renders it */
+.ad-prose {
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: var(--ad-text);
+}
+.ad-prose > * + * {
+  margin-top: 0.85em;
+}
+.ad-prose h2 {
+  font-size: 21px;
+  font-weight: 800;
+}
+.ad-prose h3 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.ad-prose h4 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.ad-prose a {
+  color: var(--ad-accent);
+  text-decoration: underline;
+}
+.ad-prose ul,
+.ad-prose ol {
+  padding-inline-start: 1.4em;
+}
+.ad-prose ul {
+  list-style: disc;
+}
+.ad-prose ol {
+  list-style: decimal;
+}
+.ad-prose li + li {
+  margin-top: 0.3em;
+}
+.ad-prose blockquote {
+  border-inline-start: 3px solid var(--ad-accent);
+  padding-inline-start: 14px;
+  color: var(--ad-text-2);
+}
+.ad-prose code {
+  background: var(--ad-surface-3);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", monospace;
+  font-size: 0.9em;
+  direction: ltr;
+  display: inline-block;
+}
+.ad-prose pre {
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+}
+.ad-prose pre code {
+  background: none;
+  padding: 0;
+}
+.ad-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.ad-prose hr {
+  border: 0;
+  border-top: 1px solid var(--ad-border);
+}
+.ad-prose mark {
+  background: #fde68a;
+  color: #1a1400;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+.ad-prose table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow: hidden;
+}
+.ad-prose th,
+.ad-prose td {
+  border: 1px solid var(--ad-border);
+  padding: 7px 10px;
+  vertical-align: top;
+}
+.ad-prose th {
+  background: var(--ad-surface-2);
+  font-weight: 700;
+}
+.ad-prose .selectedCell {
+  background: var(--ad-accent-soft);
+}
+.ad-prose ul[data-type="taskList"] {
+  list-style: none;
+  padding-inline-start: 0.3em;
+}
+.ad-prose ul[data-type="taskList"] li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.ad-prose ul[data-type="taskList"] li > label {
+  margin-top: 0.35em;
+}
+
+/* ── modal ───────────────────────────────────────────────── */
+
+.ad-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.ad-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 3, 4, 0.72);
+  backdrop-filter: blur(3px);
+  animation: adFade 0.15s var(--ad-ease) both;
+}
+.ad-modal-box {
+  position: relative;
+  width: min(880px, 100%);
+  max-height: 82dvh;
+  overflow-y: auto;
+  background: var(--ad-elevated);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--ad-shadow-lg);
+  animation: adPop 0.18s var(--ad-ease) both;
+}
+.ad-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ad-modal-head b {
+  font-size: 14.5px;
+  font-weight: 650;
+}
+
+@keyframes adFade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes adPop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+/* media cards double as picker buttons */
+button.ad-media-card {
+  cursor: pointer;
+  text-align: right;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  transition: border-color 0.12s var(--ad-ease);
+}
+button.ad-media-card:hover {
+  border-color: var(--ad-border-strong);
+}
+.ad-media-card[data-selected] {
+  border-color: var(--ad-accent);
+  box-shadow: 0 0 0 2px var(--ad-accent-soft);
+}
+
+.ad-empty {
+  padding: 44px 20px;
+  text-align: center;
+  color: var(--ad-muted);
+  border: 1px dashed var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.012);
+}
+
+/* ── tables ──────────────────────────────────────────────── */
+
+.ad-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  background: var(--ad-elevated);
+}
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 520px;
+}
+.ad-table th,
+.ad-table td {
+  padding: 9px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--ad-border-soft);
+}
+.ad-table th {
+  background: var(--ad-surface-2);
+  font-weight: 600;
+  font-size: 11.5px;
+  color: var(--ad-muted);
+  white-space: nowrap;
+}
+.ad-table tr:last-child td {
+  border-bottom: 0;
+}
+.ad-table tbody tr {
+  transition: background 0.1s var(--ad-ease);
+}
+.ad-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+/* row actions stay present but recede until the row is the one in play */
+.ad-table .ad-item-tools {
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  opacity: 0.62;
+  transition: opacity 0.12s var(--ad-ease);
+}
+.ad-table tr:hover .ad-item-tools,
+.ad-table tr:focus-within .ad-item-tools {
+  opacity: 1;
+}
+
+/* ── misc ────────────────────────────────────────────────── */
+
+.ad-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--ad-surface-2);
+  border: 1px solid var(--ad-border);
+  color: var(--ad-text-2);
+}
+.ad-badge--ok {
+  color: #7ee2b0;
+  border-color: rgba(76, 183, 130, 0.3);
+  background: var(--ad-ok-soft);
+}
+.ad-badge--off {
+  color: var(--ad-muted);
+}
+
+/* ── inbox ───────────────────────────────────────────────── */
+
+/* A card per message rather than a table row: the contact page's form sends a
+   written brief, and a paragraph in a table cell is unreadable. */
+.ad-msg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ad-msg {
+  padding: 14px 16px;
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  background: var(--ad-elevated);
+}
+
+/* Unread is marked on the edge, so a full inbox still shows what is new */
+.ad-msg[data-unread] {
+  border-inline-start: 2px solid var(--ad-accent);
+}
+
+.ad-msg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ad-msg-who {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ad-msg-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ad-text);
+}
+
+.ad-msg-contact {
+  font-size: 13px;
+  color: var(--ad-text-2);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+a.ad-msg-contact:hover {
+  color: var(--ad-text);
+  text-decoration: underline;
+}
+
+.ad-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+  font-size: 11.5px;
+  color: var(--ad-muted);
+}
+
+.ad-msg-subject {
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ad-text);
+}
+
+.ad-msg-body {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ad-text-2);
+  /* stored and rendered as plain text; this keeps the writer's line breaks */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ad-note {
+  padding: 10px 13px;
+  border-radius: var(--ad-r);
+  font-size: 12.5px;
+  border: 1px solid var(--ad-border);
+  background: var(--ad-surface-2);
+  color: var(--ad-text-2);
+}
+.ad-note--error {
+  color: #ffb0b3;
+  border-color: rgba(242, 85, 90, 0.28);
+  background: var(--ad-danger-soft);
+}
+.ad-note--ok {
+  color: #8fe8bb;
+  border-color: rgba(76, 183, 130, 0.28);
+  background: var(--ad-ok-soft);
+}
+
+/* live-region toast for save confirmations */
+.ad-toast {
+  position: fixed;
+  /* inline-end = away from the sidebar, so it never covers the account row */
+  inset-block-end: 20px;
+  inset-inline-end: 28px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border-radius: var(--ad-r);
+  background: var(--ad-surface-3);
+  border: 1px solid var(--ad-border);
+  color: var(--ad-text);
+  font-size: 13px;
+  font-weight: 550;
+  box-shadow: var(--ad-shadow-lg);
+  animation: adToastIn 0.22s var(--ad-ease) both;
+}
+.ad-toast::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ad-ok);
+  box-shadow: 0 0 0 3px var(--ad-ok-soft);
+}
+.ad-toast--error::before {
+  background: var(--ad-danger);
+  box-shadow: 0 0 0 3px var(--ad-danger-soft);
+}
+@keyframes adToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
+/* ── dashboard tiles ─────────────────────────────────────── */
+
+.ad-tiles {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.ad-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 15px 16px;
+  background: var(--ad-elevated);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: border-color 0.14s var(--ad-ease), background 0.14s var(--ad-ease);
+}
+.ad-tile::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.12), transparent);
+  opacity: 0;
+  transition: opacity 0.14s var(--ad-ease);
+}
+.ad-tile:hover {
+  border-color: var(--ad-border-strong);
+  background: var(--ad-surface-2);
+}
+.ad-tile:hover::after {
+  opacity: 1;
+}
+.ad-tile b {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.ad-tile span {
+  font-size: 12.5px;
+  color: var(--ad-muted);
+}
+
+/* ── media library ───────────────────────────────────────── */
+
+.ad-media-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.ad-media-card {
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r);
+  overflow: hidden;
+  background: var(--ad-elevated);
+  display: flex;
+  flex-direction: column;
+}
+.ad-media-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #0a0a0c center / cover no-repeat;
+  display: block;
+  overflow: hidden;
+}
+
+/* Clips can't ride on `background`, so they get a layer of their own. */
+.ad-thumb-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ad-media-meta {
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--ad-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+
+/* image picker button + preview */
+.ad-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ad-picker-preview {
+  position: relative;
+  overflow: hidden;
+  width: 48px;
+  height: 36px;
+  border-radius: var(--ad-r-sm);
+  border: 1px solid var(--ad-border);
+  background: #0a0a0c center / cover no-repeat;
+  flex: none;
+}
+
+/* ── gallery field ───────────────────────────────────────── */
+
+.ad-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.ad-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ad-gallery-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-sm);
+}
+.ad-gallery-thumb {
+  width: 52px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--ad-r-sm);
+  border: 1px solid var(--ad-border);
+  background: #0a0a0c center / cover no-repeat;
+}
+.ad-gallery-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  direction: ltr;
+  text-align: left;
+}
+.ad-gallery-tools {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+
+/* ── login ───────────────────────────────────────────────── */
+
+.ad-login {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+}
+/* one soft brand glow behind the card, nothing else */
+.ad-login::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  width: 760px;
+  height: 560px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(246, 181, 6, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.ad-login-box {
+  position: relative;
+  width: min(384px, 100%);
+  background: var(--ad-elevated);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-r-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--ad-shadow-lg);
+}
+.ad-login-box h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.ad-login-box > p {
+  margin: -8px 0 6px;
+  color: var(--ad-muted);
+  font-size: 12.5px;
+}
+
+/* ── responsive ──────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .ad-shell {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+  .ad-sidebar {
+    position: static;
+    height: auto;
+    overflow: visible;
+    border-bottom: 1px solid var(--ad-border);
+  }
+  .ad-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .ad-nav a {
+    flex: 1 1 150px;
+  }
+  .ad-nav-group {
+    width: 100%;
+    padding: 10px 8px 2px;
+  }
+  .ad-sidebar-foot {
+    margin-top: 14px;
+  }
+  .ad-main {
+    margin: 0;
+    height: auto;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    --ad-pad: 18px;
+    padding: 0 var(--ad-pad) 60px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-admin-root] *,
+  [data-admin-root] *::before,
+  [data-admin-root] *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Comment moderation — the body is the column that actually gets read, so it
+   is given room and keeps the reader's own line breaks. */
+.ad-comment-body {
+  max-width: 52ch;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+  color: var(--ad-text-2);
+}
+
+/* The filter tabs are plain links, so the current one is marked rather than
+   inferred from the route. */
+.ad-listbar .ad-btn[data-active] {
+  background: var(--ad-accent-soft);
+  border-color: var(--ad-accent);
+  color: var(--ad-text);
+}
