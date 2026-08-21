@@ -39,9 +39,6 @@ yarn-error.log*
 .claude
 .cursor
 
-# docker deploy: Let's Encrypt account/certs live on the server only
-/certbot/
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts

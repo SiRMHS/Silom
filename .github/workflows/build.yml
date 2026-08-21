@@ -1,0 +1,87 @@
+name: Build images
+
+# Only builds — no deploy. This server has no international internet
+# access (can't pull from a registry, can't reach Let's Encrypt), so
+# there's no self-hosted runner and nothing here ever touches it. Download
+# the artifact this produces from the Actions run page and follow
+# docs/DEPLOYMENT.md to load it on the server by hand.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply migrations to the throwaway build DB
+        run: npm run migrate:deploy -w @rahyad/db
+
+      - uses: docker/setup-buildx-action@v3
+        with:
+          # `RUN npm run build` inside the Dockerfile needs to reach the
+          # `postgres` service above; buildx's default docker-container
+          # driver runs in its own network namespace, so host networking is
+          # required for `localhost:5432` to resolve to it.
+          driver-opts: network=host
+
+      - name: Build migrate image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: migrator
+          load: true
+          tags: rahyad-migrate:latest
+          cache-from: type=gha,scope=migrate
+          cache-to: type=gha,mode=max,scope=migrate
+
+      - name: Build app image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runner
+          network: host
+          load: true
+          build-args: |
+            DATABASE_URL=${{ env.DATABASE_URL }}
+          tags: rahyad-app:latest
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+
+      - name: Pull postgres (the server needs this image too, and can't reach Docker Hub itself)
+        run: docker pull postgres:16-alpine
+
+      - name: Save images to a single tarball
+        run: docker save rahyad-app:latest rahyad-migrate:latest postgres:16-alpine | gzip > rahyad-images.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rahyad-images
+          path: rahyad-images.tar.gz
+          retention-days: 7
