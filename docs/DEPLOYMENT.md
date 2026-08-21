@@ -1,9 +1,11 @@
 # دیپلوی روی سرور لینوکسی
 
 استک: Postgres + اپ Next.js (`output: "standalone"`) + nginx (پراکسی و TLS) + certbot،
-همه با Docker Compose. دیپلوی با یک self-hosted GitHub Actions runner که روی
-خود سرور نصب می‌شود انجام می‌گیرد — با هر push به `main`، runner همان جا
-`docker compose build/up` را اجرا می‌کند؛ نیازی به SSH از GitHub به سرور نیست.
+همه با Docker Compose. با هر push به `main`، ورک‌فلو دو job داره: `build`
+(روی runner ابری خود گیت‌هاب) image‌های `app` و `migrate` رو می‌سازه و به
+GHCR push می‌کنه، بعد `deploy` (روی یک self-hosted runner که خود سرور نصب
+می‌شود) همون image‌ها رو pull می‌کنه، migration می‌زنه و بالا می‌آره —
+نیازی به SSH از GitHub به سرور نیست.
 
 ## پیش‌نیاز: DNS
 
@@ -80,14 +82,22 @@ runner با لیبل پیش‌فرض `self-hosted` ثبت می‌شود که ب�
 
 ## ۴) اولین دیپلوی دستی
 
-قبل از اینکه CI اولین بار اجرا بشه، یک بار دستی از `/opt/rahyad` این‌ها رو
-اجرا کن — چون گرفتن گواهی SSL به nginx بالا نیاز داره و اون هم به app image
-ساخته‌شده:
+`app` و `migrate` توی GitHub Actions ساخته و به GHCR (`ghcr.io`) push
+می‌شوند (job به اسم `build` توی `.github/workflows/deploy.yml`) — پس قبل از
+هر چیز یک بار به `main` push کن (یا از تب Actions، **Run workflow** رو بزن)
+تا این image‌ها ساخته بشن. همون اجرا سعی می‌کنه `nginx` رو هم بالا بیاره که
+چون هنوز گواهی SSL نداریم شکست می‌خوره — طبیعیه، مرحله‌ی `deploy` تا همون‌جا
+(`db`, `migrate`, `app`) انجام شده و کافیه.
+
+بعد، یک بار دستی از `/opt/rahyad` این‌ها رو اجرا کن تا گواهی SSL گرفته بشه:
 
 ```bash
+# اگه package روی GHCR رو public نکردی، برای pull دستی (خارج از Actions)
+# با یک token با scope حداقل read:packages لاگین کن:
+#   echo $GHCR_TOKEN | docker login ghcr.io -u <github-username> --password-stdin
 docker compose up -d db
+docker compose pull migrate app
 docker compose run --rm migrate
-docker compose build app
 docker compose up -d app
 
 ./scripts/init-letsencrypt.sh
@@ -101,11 +111,12 @@ Let's Encrypt می‌گیره، nginx رو reload می‌کنه و سرویس ت
 
 ## ۵) دیپلوی‌های بعدی
 
-خودکار: هر push به `main` باعث می‌شه `.github/workflows/deploy.yml` روی
-runner اجرا بشه — migration میگیره، image رو دوباره می‌سازه و
-`docker compose up -d` می‌کنه. برای اجرای دستی همون workflow (بدون push)،
-از تب Actions مخزن گزینه‌ی **Run workflow** رو بزن (چون `workflow_dispatch`
-هم فعاله).
+خودکار: هر push به `main` باعث می‌شه `.github/workflows/deploy.yml` اجرا
+بشه — اول `build` (ابری) image‌های تازه رو به GHCR می‌سازه و push می‌کنه،
+بعد `deploy` (self-hosted، روی سرور) اون‌ها رو pull می‌کنه، migration
+می‌زنه و `docker compose up -d` می‌کنه. برای اجرای دستی همون workflow
+(بدون push)، از تب Actions مخزن گزینه‌ی **Run workflow** رو بزن (چون
+`workflow_dispatch` هم فعاله).
 
 ## نکات
 

@@ -36,6 +36,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+.claude
+.cursor
 
 # docker deploy: Let's Encrypt account/certs live on the server only
 /certbot/

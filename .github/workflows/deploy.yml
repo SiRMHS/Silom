@@ -9,10 +9,102 @@ concurrency:
   group: deploy-production
   cancel-in-progress: false
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
+  # Builds the `app` and `migrate` images on a GitHub-hosted runner and
+  # pushes them to GHCR. Runs against a throwaway Postgres service — `next
+  # build` queries a real database during generateStaticParams (see
+  # Dockerfile), it just doesn't need production data for that, only the
+  # schema migrated. Pages not in that (empty) static param list still
+  # render fine on request against the real prod DB, since dynamicParams
+  # defaults to true (see apps/web/src/app/{magazine,services,projects}/[slug]).
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    outputs:
+      image-base: ${{ steps.image-base.outputs.value }}
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute lowercase GHCR image base
+        id: image-base
+        run: echo "value=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply migrations to the throwaway build DB
+        run: npm run migrate:deploy -w @rahyad/db
+
+      - uses: docker/setup-buildx-action@v3
+        with:
+          # `RUN npm run build` inside the Dockerfile needs to reach the
+          # `postgres` service above; buildx's default docker-container
+          # driver runs in its own network namespace, so host networking is
+          # required for `localhost:5432` to resolve to it.
+          driver-opts: network=host
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push migrate image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: migrator
+          push: true
+          tags: |
+            ${{ steps.image-base.outputs.value }}/migrate:latest
+            ${{ steps.image-base.outputs.value }}/migrate:sha-${{ github.sha }}
+          cache-from: type=gha,scope=migrate
+          cache-to: type=gha,mode=max,scope=migrate
+
+      - name: Build and push app image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runner
+          network: host
+          push: true
+          build-args: |
+            DATABASE_URL=${{ env.DATABASE_URL }}
+          tags: |
+            ${{ steps.image-base.outputs.value }}/app:latest
+            ${{ steps.image-base.outputs.value }}/app:sha-${{ github.sha }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+
   deploy:
+    needs: build
     runs-on: [self-hosted, linux]
     timeout-minutes: 30
+    env:
+      IMAGE_TAG: sha-${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,16 +113,20 @@ jobs:
           # both. See docs/DEPLOYMENT.md.
           clean: false
 
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Bring up the database
         run: docker compose up -d db
 
+      - name: Pull the images the build job just pushed
+        run: docker compose pull migrate app
+
       - name: Apply pending Prisma migrations
         run: docker compose run --rm migrate
-
-      - name: Build the app image
-        # Needs `db` (started above) reachable on rahyad_net — next build
-        # queries it during static generation. See Dockerfile.
-        run: docker compose build app
 
       - name: Deploy
         run: docker compose up -d app nginx certbot

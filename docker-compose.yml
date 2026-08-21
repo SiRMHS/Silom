@@ -1,14 +1,20 @@
 # Production stack for a single Linux server: Postgres + the Next.js app +
 # nginx (TLS termination, reverse proxy) + certbot (Let's Encrypt renewal).
 #
+# `app` and `migrate` are built in GitHub Actions and pushed to GHCR (see
+# .github/workflows/deploy.yml) — the `build:` blocks below are kept only as
+# a manual fallback (`docker compose build app`) for building on the server
+# itself when you're debugging and don't want to wait on CI.
+#
 # Prereqs on the server (see docs/DEPLOYMENT.md):
 #   docker network create rahyad_net
 #   ./scripts/init-letsencrypt.sh   (once, before the first `nginx` start)
 #
-# Typical deploy sequence (also what .github/workflows/deploy.yml runs):
+# Typical deploy sequence (also what .github/workflows/deploy.yml's `deploy`
+# job runs, after the `build` job has pushed fresh images to GHCR):
 #   docker compose up -d db
+#   docker compose pull migrate app
 #   docker compose run --rm migrate
-#   docker compose build app
 #   docker compose up -d app nginx certbot
 
 services:
@@ -30,6 +36,7 @@ services:
 
   # One-off: `docker compose run --rm migrate`. Not part of `up`.
   migrate:
+    image: ghcr.io/${GHCR_OWNER}/${GHCR_REPO}/migrate:${IMAGE_TAG:-latest}
     build:
       context: .
       target: migrator
@@ -42,6 +49,7 @@ services:
     profiles: ["tools"]
 
   app:
+    image: ghcr.io/${GHCR_OWNER}/${GHCR_REPO}/app:${IMAGE_TAG:-latest}
     build:
       context: .
       target: runner
@@ -49,6 +57,8 @@ services:
       # next build runs generateStaticParams / page data fetching against a
       # real database, so it needs a migrated Postgres reachable at build
       # time — hence `network: rahyad_net` above and `db` as the host here.
+      # (CI builds against a throwaway, freshly-migrated Postgres instead —
+      # see the `build` job in .github/workflows/deploy.yml.)
       args:
         DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     restart: unless-stopped
