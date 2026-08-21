@@ -23,18 +23,31 @@ FROM node:22-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# ---- deps: install once, cached as long as package.json/lockfile don't change
+# ---- deps: install once, cached as long as package.json/lockfile/schema don't change.
+# packages/db/prisma and prisma.config.ts have to be in here (not just the
+# migrator/builder stages below) because root's `postinstall` runs `prisma
+# generate` for @rahyad/db — it needs the schema to generate from, and
+# prisma.config.ts (not schema.prisma) is where this project's datasource
+# url comes from, since the schema's `datasource` block has no `url` field.
 FROM base AS deps
+# prisma.config.ts reads DATABASE_URL from process.env. `generate` (below,
+# via postinstall) never connects to it, but Prisma's config loader still
+# needs *a* string here, before the real DATABASE_URL is set (that only
+# happens in `builder`). Scoped to `deps` so it doesn't leak into `runner`,
+# which is built FROM base, not FROM deps.
+ENV DATABASE_URL="postgresql://user:password@localhost:5432/db"
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
+COPY packages/db/prisma.config.ts ./packages/db/prisma.config.ts
+COPY packages/db/prisma ./packages/db/prisma
 RUN npm ci
 
 # ---- migrator: applies pending Prisma migrations to a running Postgres.
-# Only needs the schema + migrations, not the rest of the source tree.
+# Only needs the schema + migrations (already in `deps`), not the rest of
+# the source tree.
 FROM deps AS migrator
-COPY packages/db/prisma ./packages/db/prisma
 WORKDIR /app/packages/db
 ENTRYPOINT ["npx", "prisma", "migrate", "deploy"]
 
