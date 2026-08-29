@@ -17,6 +17,7 @@
     "db:seed": "npm run seed -w @rahyad/db",
     "db:export": "npm run export -w @rahyad/db",
     "db:import": "npm run import -w @rahyad/db",
+    "db:create-admin": "npm run create-admin -w @rahyad/db",
     "db:studio": "npm run studio -w @rahyad/db",
     "postinstall": "npm run generate -w @rahyad/db"
   }

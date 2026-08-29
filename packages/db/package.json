@@ -14,6 +14,7 @@
     "seed": "prisma db seed",
     "export": "tsx prisma/export-content.ts",
     "import": "tsx prisma/import-content.ts",
+    "create-admin": "tsx prisma/create-admin.ts",
     "studio": "prisma studio",
     "typecheck": "tsc --noEmit"
   },

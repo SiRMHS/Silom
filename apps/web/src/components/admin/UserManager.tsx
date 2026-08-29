@@ -6,6 +6,7 @@ import {
   deleteUser,
   resetPassword,
   setUserActive,
+  updateUser,
   type UserFormState,
 } from "@/app/admin/(panel)/user-actions";
 import Toast, { useToast } from "./Toast";
@@ -26,6 +27,7 @@ export default function UserManager({ users, meId }: { users: UserRow[]; meId: s
   const [state, action, creating] = useActionState<UserFormState, FormData>(createUser, undefined);
   const [pending, start] = useTransition();
   const [resetFor, setResetFor] = useState<string | null>(null);
+  const [editFor, setEditFor] = useState<string | null>(null);
 
   return (
     <>
@@ -125,7 +127,21 @@ export default function UserManager({ users, meId }: { users: UserRow[]; meId: s
                     <button
                       type="button"
                       className="ad-btn ad-btn--sm"
-                      onClick={() => setResetFor(resetFor === u.id ? null : u.id)}
+                      onClick={() => {
+                        setEditFor(editFor === u.id ? null : u.id);
+                        setResetFor(null);
+                      }}
+                    >
+                      ویرایش
+                    </button>
+
+                    <button
+                      type="button"
+                      className="ad-btn ad-btn--sm"
+                      onClick={() => {
+                        setResetFor(resetFor === u.id ? null : u.id);
+                        setEditFor(null);
+                      }}
                     >
                       رمز تازه
                     </button>
@@ -161,6 +177,42 @@ export default function UserManager({ users, meId }: { users: UserRow[]; meId: s
                       </>
                     )}
                   </div>
+
+                  {editFor === u.id && (
+                    <form
+                      style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}
+                      action={(fd) =>
+                        start(async () => {
+                          const res = await updateUser(undefined, fd);
+                          show(res?.error ?? res?.ok ?? "", Boolean(res?.error));
+                          if (!res?.error) setEditFor(null);
+                        })
+                      }
+                    >
+                      <input type="hidden" name="id" value={u.id} />
+                      <input
+                        name="name"
+                        className="ad-input"
+                        placeholder="نام"
+                        defaultValue={u.name}
+                        minLength={2}
+                        required
+                      />
+                      <input
+                        name="email"
+                        type="email"
+                        className="ad-input is-ltr"
+                        dir="ltr"
+                        placeholder="ایمیل"
+                        defaultValue={u.email}
+                        autoComplete="off"
+                        required
+                      />
+                      <button className="ad-btn ad-btn--sm ad-btn--primary" type="submit" disabled={pending}>
+                        ثبت
+                      </button>
+                    </form>
+                  )}
 
                   {resetFor === u.id && (
                     <form

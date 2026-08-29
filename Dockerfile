@@ -57,6 +57,11 @@ WORKDIR /app/packages/db
 # Copied on its own, after `npm ci` in `deps`, so editing content doesn't
 # invalidate the dependency layer and force a reinstall on every push.
 COPY packages/db/content-snapshot.json ./content-snapshot.json
+# `create-admin` is run by hand against this stage (see docs/DEPLOYMENT.md) and
+# is the only thing here that needs a file from src/. `deps` copies no source,
+# just the generated client that `prisma generate` wrote into src/generated, so
+# this one dependency-free file is added rather than the whole tree.
+COPY packages/db/src/password.ts ./src/password.ts
 ENTRYPOINT ["sh", "-c", "npm run migrate:deploy && npm run import"]
 
 # ---- builder: full source, prisma client generation, next build
@@ -77,6 +82,18 @@ RUN npm run migrate:deploy -w @rahyad/db
 # server imports (see the `migrator` stage), so the pages baked in here and the
 # rows the running site edits start out identical.
 RUN npm run db:import
+# The one place that has both the script and a live connection. The runtime
+# image is the traced standalone output — no tsx, no Prisma CLI, no
+# packages/db source — so this cannot be done by exec'ing into the running
+# container later, and nothing else on any deploy path creates a user
+# (migrations only move the schema; the snapshot deliberately skips accounts).
+#
+# Idempotent, and it only reaches the live database when DATABASE_URL points at
+# it, which is the case on Coolify where the build talks to the managed
+# Postgres. On the GitHub Actions path DATABASE_URL is a throwaway container,
+# so there this writes a user nobody sees and the account is made on the server
+# instead — see docs/DEPLOYMENT.md.
+RUN npm run db:create-admin
 RUN npm run build
 
 # ---- runner: minimal production image, no node_modules/source beyond what was traced

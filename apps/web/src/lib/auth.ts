@@ -55,6 +55,18 @@ export async function destroySession() {
 }
 
 /**
+ * The stored identifier of the session making this request, or null.
+ *
+ * Lets an action tell "this session" apart from the same user's other ones —
+ * so changing your own password can sign out every other device without
+ * signing you out of the one you are typing into.
+ */
+export async function currentSessionTokenHash(): Promise<string | null> {
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  return token ? hashToken(token) : null;
+}
+
+/**
  * Reads the current user. Wrapped in `cache` so a render that checks auth in a
  * layout, a page and an action still costs one query.
  */

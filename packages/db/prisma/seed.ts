@@ -990,10 +990,12 @@ async function main() {
     db.bootWord.createMany({ data: BOOT_WORDS.map((text, i) => ({ text, order: i })) }),
   );
 
-  // First admin. Credentials come from the environment so a real password can
-  // be set without touching this file.
-  const email = process.env.ADMIN_EMAIL ?? "admin@rahyad.local";
-  const password = process.env.ADMIN_PASSWORD ?? "rahyad1234";
+  // First admin. The defaults are the documented starting credentials (see
+  // README.md); the environment overrides them so a real password can be set
+  // without touching this file. Either way it is only created when missing, so
+  // a password changed in the panel is never reset by a re-run.
+  const email = process.env.ADMIN_EMAIL ?? "matthew@rahyad.ir";
+  const password = process.env.ADMIN_PASSWORD ?? "matthew1234";
   const existingAdmin = await db.user.findUnique({ where: { email } });
   if (existingAdmin) {
     console.log(`  مدیر: ${email} از قبل وجود دارد`);
@@ -1001,7 +1003,7 @@ async function main() {
     await db.user.create({
       data: {
         email,
-        name: process.env.ADMIN_NAME ?? "مدیر سایت",
+        name: process.env.ADMIN_NAME ?? "Matthew",
         passwordHash: await hashPassword(password),
         role: Role.ADMIN,
       },

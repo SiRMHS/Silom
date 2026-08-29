@@ -50,6 +50,14 @@ services:
       target: migrator
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      # Read only by the one-off `create-admin` command (docs/DEPLOYMENT.md).
+      # Passed through from .env rather than typed on the command line, so the
+      # password stays out of shell history and out of `ps` output. The normal
+      # migrate+import entrypoint ignores them.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-}
+      ADMIN_RESET: ${ADMIN_RESET:-}
     depends_on:
       db:
         condition: service_healthy
