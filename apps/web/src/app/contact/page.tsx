@@ -3,18 +3,20 @@ import BrandHeader from "@/components/BrandHeader";
 import BottomNav from "@/components/BottomNav";
 import ContactPageForm from "@/components/ContactPageForm";
 import SiteFooter from "@/components/SiteFooter";
-import { getContactContent, getFooterWords, getServiceCards, getStrings, pick } from "@rahyad/core";
+import { getContactContent, getFooterWords, getServiceCards, pick } from "@rahyad/core";
+import { pageMetadata, seoStrings } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getStrings();
-  return {
+  const s = await seoStrings();
+  return pageMetadata({
+    path: "/contact",
     title: pick(s, "seo.contact.title", "تماس با ما | رهیــــاد"),
     description: pick(
       s,
       "seo.contact.description",
       "با تیم رهیاد در تماس باشید — فرم تماس، نشانی استودیو و معرفی اعضای تیم.",
     ),
-  };
+  });
 }
 
 /** ASCII digits → Persian, so a number stored as 02191002233 still reads fa. */

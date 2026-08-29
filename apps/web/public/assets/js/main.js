@@ -191,16 +191,20 @@
     drawBackground(dt);
     updateLiquidMask();
 
-    if (slideReady) {
+    if (slideReady && slideGroup) {
       slideOffset = lerp(slideOffset, targetSlide, SLIDE_EASE);
       slideGroup.style.transform = `translateX(${slideOffset.toFixed(2)}px)`;
     }
 
     // ── Cursor ring: lerp in RAF so ring smoothly follows dot ──
+    // Guarded like the canvas above: between a route unmounting and the next
+    // rebind() there is no ring in the document.
     rawRingX += (mouseX - rawRingX) * RING_EASE;
     rawRingY += (mouseY - rawRingY) * RING_EASE;
-    cursorRing.style.left = rawRingX.toFixed(2) + 'px';
-    cursorRing.style.top  = rawRingY.toFixed(2) + 'px';
+    if (cursorRing) {
+      cursorRing.style.left = rawRingX.toFixed(2) + 'px';
+      cursorRing.style.top  = rawRingY.toFixed(2) + 'px';
+    }
 
     // ── Menu dots: fluid menü üzerindeyse beyaz ──
     {
@@ -329,8 +333,21 @@
     } catch (_) { /* keep desktop source from markup */ }
   }
 
-  /* ── INIT (HATA ÇÖZÜLDÜ: SVG body yüklendikten sonra ekleniyor) ── */
-  function init() {
+  /**
+   * Point every cached element reference at what is currently in the document.
+   *
+   * This file is loaded once, but the home page it drives is a React route:
+   * navigating away unmounts every element below and coming back builds new
+   * ones, while this module — and the rAF loop it started — carry on writing to
+   * the detached originals, so the hero comes back inert.
+   *
+   * GalektoHome calls this on every mount. Only lookups are redone: the loop,
+   * the timers and the injected SVG filters are page-global and starting a
+   * second copy of them is what this is meant to avoid. The body classes
+   * (`page-index`, `js-ready`) belong to GalektoHome, which sets them on each
+   * mount — this file only adds them the first time through `init`.
+   */
+  function rebind() {
     body = document.body;
     bgCanvas = document.getElementById('bgCanvas');
     bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
@@ -340,13 +357,25 @@
     portraitFrame = document.getElementById('portraitFrame');
     nameSection = document.getElementById('nameSection');
     illustrationCanvas = document.getElementById('illustrationCanvas');
-    if (illustrationCanvas) illustrationCtx = illustrationCanvas.getContext('2d');
+    illustrationCtx = illustrationCanvas ? illustrationCanvas.getContext('2d') : null;
+    slideGroup = document.getElementById('slideGroup');
+    cursorDot = document.getElementById('cursorDot');
+    cursorRing = document.getElementById('cursorRing');
+    resizeBgCanvas();
+    void initPortraitVideo();
+  }
+
+  window.rebindGalektoHome = rebind;
+
+  /* ── INIT (HATA ÇÖZÜLDÜ: SVG body yüklendikten sonra ekleniyor) ── */
+  function init() {
+    rebind();
     portrecizimImg = new Image();
     portrecizimImg.src = 'assets/images/portrecizim.webp';
 
     // ── Load homePage settings from Sanity ──
     window.HomePageConfig = { illustrationEnabled: false };
-    void initPortraitVideo();
+    // initPortraitVideo() already ran as part of rebind(), above.
     if (window.sanityFetch) {
       window.sanityFetch('*[_type=="homePage"][0]{portraitImage{asset->{url}},illustrationEnabled,illustrationImage{asset->{url}},fluidBgEnabled,fluidBgImage{asset->{url}},fluidBgColor}')
         .then(function(data) {
@@ -397,9 +426,7 @@
         .catch(function() {});
     }
 
-    slideGroup = document.getElementById('slideGroup');
-    cursorDot = document.getElementById('cursorDot');
-    cursorRing = document.getElementById('cursorRing');
+    // slideGroup / cursorDot / cursorRing are looked up in rebind(), above.
     if (cursorDot)  { cursorDot.style.left  = mouseX+'px'; cursorDot.style.top  = mouseY+'px'; }
     if (cursorRing) { cursorRing.style.left = rawRingX+'px'; cursorRing.style.top = rawRingY+'px'; }
 

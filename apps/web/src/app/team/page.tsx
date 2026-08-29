@@ -5,7 +5,8 @@ import BottomNav from "@/components/BottomNav";
 import SiteFooter from "@/components/SiteFooter";
 import TeamTable from "@/components/TeamTable";
 import Testimonials from "@/components/Testimonials";
-import { getStrings, getTeamContent, pick } from "@rahyad/core";
+import { getTeamContent, pick } from "@rahyad/core";
+import { pageMetadata, seoStrings } from "@/lib/seo";
 
 /**
  * The studio, described by the lists it already keeps.
@@ -26,15 +27,16 @@ import { getStrings, getTeamContent, pick } from "@rahyad/core";
  */
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getStrings();
-  return {
+  const s = await seoStrings();
+  return pageMetadata({
+    path: "/team",
     title: pick(s, "seo.team.title", "تیم ما | رهیــــاد"),
     description: pick(
       s,
       "seo.team.description",
       "استودیوی رهیاد — مشتریان، توانمندی‌ها و آدم‌هایی که کار را انجام می‌دهند.",
     ),
-  };
+  });
 }
 
 /** ASCII digits → Persian, so a stat stored as 120 still reads fa. */

@@ -3,14 +3,16 @@ import BrandHeader from "@/components/BrandHeader";
 import BottomNav from "@/components/BottomNav";
 import MagazineIndex from "@/components/MagazineIndex";
 import SiteFooter from "@/components/SiteFooter";
-import { getFooterWords, getMagazineContent, getStrings, pick } from "@rahyad/core";
+import { getFooterWords, getMagazineContent, pick } from "@rahyad/core";
+import { pageMetadata, seoStrings } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getStrings();
-  return {
+  const s = await seoStrings();
+  return pageMetadata({
+    path: "/magazine",
     title: pick(s, "seo.magazine.title", "مجله | رهیــــاد"),
     description: pick(s, "seo.magazine.description", "نوشته‌ها و یادداشت‌های تیم رهیاد"),
-  };
+  });
 }
 
 export default async function MagazinePage() {

@@ -53,6 +53,8 @@ npm run db:seed
 | `npm run lint` | ESLint روی اپ |
 | `npm run db:migrate` | ساخت و اعمال مایگریشن |
 | `npm run db:seed` | پر کردن دیتابیس |
+| `npm run db:export` | نوشتن محتوای دیتابیس در `content-snapshot.json` (قبل از هر push محتوا) |
+| `npm run db:import` | اعمال همان اسنپ‌شات روی دیتابیسی که `DATABASE_URL` می‌گوید |
 | `npm run db:studio` | Prisma Studio |
 | `npm run db:generate` | تولید دوباره‌ی کلاینت Prisma |
 

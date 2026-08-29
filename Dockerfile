@@ -44,12 +44,20 @@ COPY packages/db/prisma.config.ts ./packages/db/prisma.config.ts
 COPY packages/db/prisma ./packages/db/prisma
 RUN npm ci
 
-# ---- migrator: applies pending Prisma migrations to a running Postgres.
-# Only needs the schema + migrations (already in `deps`), not the rest of
-# the source tree.
+# ---- migrator: brings a running Postgres up to date — schema first, then the
+# committed content snapshot. Needs only the schema and migrations (already in
+# `deps`) plus the snapshot copied below — not the rest of the source tree.
+#
+# The import is part of this rather than a stage of its own so the server's
+# deploy sequence stays one command; it rewrites the content tables from
+# packages/db/content-snapshot.json and leaves accounts, comments and the
+# contact inbox alone (see prisma/content-models.ts).
 FROM deps AS migrator
 WORKDIR /app/packages/db
-ENTRYPOINT ["npx", "prisma", "migrate", "deploy"]
+# Copied on its own, after `npm ci` in `deps`, so editing content doesn't
+# invalidate the dependency layer and force a reinstall on every push.
+COPY packages/db/content-snapshot.json ./content-snapshot.json
+ENTRYPOINT ["sh", "-c", "npm run migrate:deploy && npm run import"]
 
 # ---- builder: full source, prisma client generation, next build
 FROM deps AS builder
@@ -62,6 +70,13 @@ RUN npm run db:generate
 # it by hand. Same command the `migrator` stage runs; `npm run -w` puts the cwd
 # on packages/db, which is where prisma.config.ts resolves its paths from.
 RUN npm run migrate:deploy -w @rahyad/db
+# Every public page is prerendered by `next build` against this database, so
+# whatever is in it at this moment is the content the image ships with. On CI
+# that database is a throwaway created seconds ago and is otherwise empty —
+# without this the image would be built from blank pages. Same snapshot the
+# server imports (see the `migrator` stage), so the pages baked in here and the
+# rows the running site edits start out identical.
+RUN npm run db:import
 RUN npm run build
 
 # ---- runner: minimal production image, no node_modules/source beyond what was traced
@@ -82,6 +97,15 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./.next/sta
 # under process.cwd()/public/uploads) — docker-compose mounts a volume here.
 RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
 
+# Uploads committed to the repo are kept outside the mount point as well, since
+# the volume hides ./public/uploads at runtime; the entrypoint copies in
+# whatever the volume is missing. Without this, a `Media` row from the content
+# snapshot could point at a file the running container cannot see.
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public/uploads /app/seed-uploads
+COPY --chown=nextjs:nodejs apps/web/docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 USER nextjs
 EXPOSE 3000
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "server.js"]

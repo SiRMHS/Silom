@@ -19,6 +19,7 @@ import {
   getStrings,
   pick,
 } from "@rahyad/core";
+import { pageMetadata } from "@/lib/seo";
 
 /**
  * One service, at full length.
@@ -47,10 +48,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const s = await getServiceBySlug(slug);
   if (!s) return { title: "خدمات | رهیــــاد" };
-  return {
+
+  return pageMetadata({
+    path: `/services/${s.slug}`,
     title: `${s.title} | رهیــــاد`,
     description: s.excerpt || s.body,
-  };
+    openGraph: {
+      images: s.image ? [{ url: s.image, alt: s.imageAlt || s.title }] : undefined,
+    },
+  });
 }
 
 const faIndex = (i: number) => (i + 1).toLocaleString("fa-IR").padStart(2, "۰");

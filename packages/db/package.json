@@ -12,6 +12,8 @@
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
+    "export": "tsx prisma/export-content.ts",
+    "import": "tsx prisma/import-content.ts",
     "studio": "prisma studio",
     "typecheck": "tsc --noEmit"
   },

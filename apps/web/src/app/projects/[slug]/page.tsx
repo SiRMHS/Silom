@@ -17,6 +17,7 @@ import {
   pick,
   type SiteProject,
 } from "@rahyad/core";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const projects = await getAllProjects();
@@ -31,7 +32,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const p = await getProjectBySlug(slug);
   if (!p) return { title: "پروژه | رهیــــاد" };
-  return { title: `${p.title} | رهیــــاد`, description: p.summary };
+
+  return pageMetadata({
+    path: `/projects/${p.slug}`,
+    title: `${p.title} | رهیــــاد`,
+    description: p.summary,
+    openGraph: {
+      // `article` rather than `website`: a case study is a dated piece of work
+      // by the studio, and that is what the preview should say it is.
+      type: "article",
+      // The hero the page itself opens on. A project with none falls through to
+      // the site card rather than sharing a blank frame.
+      images: p.image ? [{ url: p.image, alt: p.imageAlt || p.title }] : undefined,
+    },
+  });
 }
 
 const faIndex = (i: number) => (i + 1).toLocaleString("fa-IR").padStart(2, "۰");

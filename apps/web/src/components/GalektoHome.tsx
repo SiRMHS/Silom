@@ -99,11 +99,22 @@ function initEarlyCRTMask() {
 export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  /**
+   * Document-level state, reapplied on every mount.
+   *
+   * This is a route, so leaving the home page unmounts it and the cleanup below
+   * puts `<html>` and `<body>` back the way the rest of the site wants them.
+   * Coming back has to redo all of it — which is why it is deliberately not
+   * behind the one-shot guard the script loading uses.
+   *
+   * `js-ready` is the one that matters: the stylesheet hides `.portrait-section`
+   * (the entire hero, video included) until the class is present, and main.js
+   * only ever adds it once, on its own first run. Without this, returning to the
+   * home page through the page transition left the video loaded and playing
+   * behind `visibility: hidden` — which reads exactly like a video that failed
+   * to load.
+   */
   useEffect(() => {
-    if (window.__galektoInit) return;
-    window.__galektoInit = true;
-    window.__bootScreenActive = true;
-
     const prevHtmlLang = document.documentElement.lang;
     const prevHtmlDir = document.documentElement.dir;
     const prevBodyClass = document.body.className;
@@ -112,15 +123,39 @@ export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
     document.documentElement.lang = "fa";
     document.documentElement.dir = "rtl";
     document.documentElement.style.background = "#ffffff";
-    document.body.className = "page-index";
+    // On the first visit main.js adds `js-ready` itself once it has taken over,
+    // so the boot sequence isn't preceded by a flash of the hero.
+    document.body.className = window.__galektoReady ? "page-index js-ready" : "page-index";
 
+    // Already-loaded sheets are returned as-is, so this is a no-op on a return
+    // visit — but the first mount of a session may not be the home page.
     loadStylesheet("/assets/css/style.css");
     loadStylesheet("/assets/css/nav.css");
 
-    requestAnimationFrame(() => {
-      initEarlyCRTMask();
-      window.addEventListener("resize", initEarlyCRTMask);
+    const frame = requestAnimationFrame(() => {
+      // The scripts cache the elements they drive, and this mount replaced all
+      // of them. Re-point them before reshaping anything.
+      window.rebindGalektoHome?.();
+      if (typeof window.setPageCRTShape === "function") window.setPageCRTShape();
+      else initEarlyCRTMask();
     });
+    window.addEventListener("resize", initEarlyCRTMask);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", initEarlyCRTMask);
+      document.documentElement.lang = prevHtmlLang;
+      document.documentElement.dir = prevHtmlDir;
+      document.documentElement.style.background = prevHtmlBg;
+      document.body.className = prevBodyClass;
+    };
+  }, []);
+
+  /** The one-time half: stylesheets and scripts, which outlive any one mount. */
+  useEffect(() => {
+    if (window.__galektoInit) return;
+    window.__galektoInit = true;
+    window.__bootScreenActive = true;
 
     const w = window.innerWidth;
     if (w < 1200) {
@@ -142,6 +177,18 @@ export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
         await loadScript("/assets/js/main.js");
         await loadScript("/assets/js/nav.js");
         await loadScript("/assets/js/tv-overlay.js");
+        // Tells the effect above that main.js has run, so a later mount adds
+        // `js-ready` itself rather than waiting for a re-init that never comes.
+        window.__galektoReady = true;
+        // And repairs the narrow case where a mount happened while these
+        // scripts were still loading: it read the flag before it was set, so it
+        // wrote a body class without `js-ready` and nothing else would ever add
+        // one. main.js's own `init` already added it, so this is a no-op except
+        // in exactly that race. Conditioned on `page-index` so it can't leave
+        // the class behind on some other route the viewer has moved on to.
+        if (document.body.classList.contains("page-index")) {
+          document.body.classList.add("js-ready");
+        }
         if (typeof window.setPageCRTShape === "function") {
           window.setPageCRTShape();
         } else {
@@ -151,14 +198,6 @@ export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
         console.error("[GalektoHome]", err);
       }
     })();
-
-    return () => {
-      window.removeEventListener("resize", initEarlyCRTMask);
-      document.documentElement.lang = prevHtmlLang;
-      document.documentElement.dir = prevHtmlDir;
-      document.documentElement.style.background = prevHtmlBg;
-      document.body.className = prevBodyClass;
-    };
   }, []);
 
   /**
@@ -336,7 +375,11 @@ export default function GalektoHome({ rail }: { rail?: RailItem[] }) {
 declare global {
   interface Window {
     __galektoInit?: boolean;
+    /** Set once main.js has run, so a later mount can reveal the hero itself. */
+    __galektoReady?: boolean;
     __bootScreenActive?: boolean;
+    /** main.js — re-points its cached element references at the current DOM. */
+    rebindGalektoHome?: () => void;
     FluidSimOverride?: Record<string, number>;
     sanityFetch?: (query: string) => Promise<null>;
     setPageCRTShape?: () => void;

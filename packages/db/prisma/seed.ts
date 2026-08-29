@@ -45,7 +45,18 @@ const SETTINGS: SeedSetting[] = [
   { key: "brand.wordmark", value: "رهیــــاد", group: "GENERAL", label: "نشان‌واره (کشیده)", hint: "همان که در هدر بالای صفحه دیده می‌شود" },
   { key: "brand.name", value: "رهیاد", group: "GENERAL", label: "نام برند", hint: "شکل ساده، بدون کشیدگی" },
 
-  // SEO
+  // SEO — site-wide. `seo.site.url` is what every absolute URL in the head is
+  // built from (canonical links, og:image, sitemap.xml, robots.txt), so it has
+  // to be the real public origin or social previews resolve against nothing.
+  { key: "seo.site.url", value: "https://rahyad.com", group: "SEO", kind: "URL", label: "نشانی کامل سایت", hint: "با https و بدون اسلش پایانی — مبنای لینک‌های canonical، sitemap و تصویر اشتراک‌گذاری" },
+  { key: "seo.site.name", value: "رهیــــاد", group: "SEO", label: "نام سایت", hint: "چیزی که کنار عنوان صفحه در نتایج گوگل و شبکه‌های اجتماعی دیده می‌شود" },
+  { key: "seo.keywords", value: "آژانس خلاقیت, طراحی برند, هویت بصری, طراحی وب, تولید محتوا, رهیاد", group: "SEO", kind: "TEXTAREA", label: "کلیدواژه‌ها", hint: "با ویرگول جدا کنید" },
+  { key: "seo.og.image", value: "", group: "SEO", kind: "URL", label: "تصویر اشتراک‌گذاری (اختیاری)", hint: "خالی بگذارید تا تصویر پیش‌فرض سایت استفاده شود؛ اندازه‌ی پیشنهادی ۱۲۰۰×۶۳۰" },
+  { key: "seo.verification.google", value: "", group: "SEO", label: "کد تأیید Google Search Console", hint: "فقط مقدار content تگ meta — بدون خود تگ" },
+  { key: "seo.robots.indexable", value: "1", group: "SEO", label: "اجازه‌ی نمایه‌سازی موتورهای جست‌وجو", hint: "۱ یعنی سایت ایندکس شود، ۰ یعنی کل سایت از نتایج بیرون بماند (برای پیش از راه‌اندازی)" },
+  { key: "seo.organization.type", value: "Organization", group: "SEO", label: "نوع سازمان در داده‌ی ساختاریافته", hint: "مثلاً Organization یا ProfessionalService — گوگل از این برای نمایش کارت سازمان استفاده می‌کند" },
+
+  // SEO — per page
   { key: "seo.home.title", value: "رهیــــاد | آژانس خلاقیت", group: "SEO", label: "عنوان صفحه‌ی اصلی" },
   { key: "seo.home.description", value: "آژانس خلاقیت رهیاد — طراحی و هنر دیجیتال", group: "SEO", label: "توضیح صفحه‌ی اصلی", kind: "TEXTAREA" },
   { key: "seo.projects.title", value: "پروژه‌ها | رهیــــاد", group: "SEO", label: "عنوان صفحه‌ی پروژه‌ها" },

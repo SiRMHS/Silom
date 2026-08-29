@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import ServicesReel from "@/components/ServicesReel";
 import BrandHeader from "@/components/BrandHeader";
 import BottomNav from "@/components/BottomNav";
-import { getServicesContent, getStrings, pick } from "@rahyad/core";
+import { getServicesContent, pick } from "@rahyad/core";
+import { pageMetadata, seoStrings } from "@/lib/seo";
 
 /**
  * The services hub — the pillar the individual service pages cluster around.
@@ -20,15 +21,16 @@ import { getServicesContent, getStrings, pick } from "@rahyad/core";
  */
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getStrings();
-  return {
+  const s = await seoStrings();
+  return pageMetadata({
+    path: "/services",
     title: pick(s, "seo.services.title", "خدمات | رهیــــاد"),
     description: pick(
       s,
       "seo.services.description",
       "خدمات آژانس خلاقیت رهیاد — از هویت برند و طراحی وب تا تولید محتوا و استراتژی رشد.",
     ),
-  };
+  });
 }
 
 export default async function ServicesPage() {

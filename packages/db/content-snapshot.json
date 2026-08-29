@@ -1,0 +1,2662 @@
+{
+  "version": 1,
+  "exportedAt": "2026-08-29T18:14:17.597Z",
+  "migration": "20260815233000_testimonials",
+  "rows": {
+    "media": [
+      {
+        "id": "cmsua6vaw0000j1ofgm739si1",
+        "url": "/uploads/what-is-hosting-14a21ce0d0f9.png",
+        "filename": "What-is-hosting_.png",
+        "mimeType": "image/png",
+        "size": 72936,
+        "width": 972,
+        "height": 648,
+        "alt": "",
+        "createdAt": "2026-08-15T11:16:57.464Z",
+        "uploadedBy": null
+      },
+      {
+        "id": "cmsud6t6m0000rnofgqskt9s2",
+        "url": "/uploads/example-person-abced33ed948.png",
+        "filename": "example-person.png",
+        "mimeType": "image/png",
+        "size": 928537,
+        "width": 982,
+        "height": 1101,
+        "alt": "",
+        "createdAt": "2026-08-15T12:40:53.566Z",
+        "uploadedBy": null
+      }
+    ],
+    "setting": [
+      {
+        "id": "cmsrtnuim0000lrofw19nnfsq",
+        "key": "brand.wordmark",
+        "value": "رهیــــاد",
+        "group": "GENERAL",
+        "kind": "TEXT",
+        "label": "نشان‌واره (کشیده)",
+        "hint": "همان که در هدر بالای صفحه دیده می‌شود",
+        "order": 0
+      },
+      {
+        "id": "cmsrtnuks0001lrof97jou6go",
+        "key": "brand.name",
+        "value": "رهیاد",
+        "group": "GENERAL",
+        "kind": "TEXT",
+        "label": "نام برند",
+        "hint": "شکل ساده، بدون کشیدگی",
+        "order": 1
+      },
+      {
+        "id": "cmsrtnuku0002lrof6xnx1nqm",
+        "key": "seo.home.title",
+        "value": "رهیــــاد | آژانس خلاقیت",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی اصلی",
+        "hint": null,
+        "order": 9
+      },
+      {
+        "id": "cmsrtnukw0003lrofh59tk4zv",
+        "key": "seo.home.description",
+        "value": "آژانس خلاقیت رهیاد — طراحی و هنر دیجیتال",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی اصلی",
+        "hint": null,
+        "order": 10
+      },
+      {
+        "id": "cmsrtnukx0004lrofgsiph3ha",
+        "key": "seo.projects.title",
+        "value": "پروژه‌ها | رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی پروژه‌ها",
+        "hint": null,
+        "order": 11
+      },
+      {
+        "id": "cmsrtnuky0005lrof6a8bu825",
+        "key": "seo.projects.description",
+        "value": "پروژه‌های آژانس خلاقیت رهیاد",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی پروژه‌ها",
+        "hint": null,
+        "order": 12
+      },
+      {
+        "id": "cmsrtnul00006lrofemd37puc",
+        "key": "manifesto.eyebrow",
+        "value": "رهیاد — آژانس خلاقیت",
+        "group": "MANIFESTO",
+        "kind": "TEXT",
+        "label": "تیتر کوچک بالای بخش",
+        "hint": null,
+        "order": 21
+      },
+      {
+        "id": "cmsrtnul20007lrofgcdyvx9p",
+        "key": "manifesto.lede",
+        "value": "رهیاد یک استودیوی خلاقیت است؛ جایی که استراتژی، طراحی و روایت کنار هم می‌نشینند تا هر برند صدای خودش را پیدا کند. از هویت بصری تا تجربه‌ی دیجیتال، هر پروژه را مثل یک اثر می‌سازیم — نه یک سفارش.",
+        "group": "MANIFESTO",
+        "kind": "TEXTAREA",
+        "label": "متن معرفی",
+        "hint": null,
+        "order": 22
+      },
+      {
+        "id": "cmsrtnul30008lrofsc3jmjwk",
+        "key": "services.eyebrow",
+        "value": "چه کاری انجام می‌دهیم",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "تیتر کوچک",
+        "hint": null,
+        "order": 23
+      },
+      {
+        "id": "cmsrtnul40009lrof7ehzqyfh",
+        "key": "services.heading",
+        "value": "خدمات",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان بخش",
+        "hint": null,
+        "order": 24
+      },
+      {
+        "id": "cmsrtnul5000alrof4hmunrkt",
+        "key": "work.eyebrow",
+        "value": "نمونه‌کار",
+        "group": "WORK",
+        "kind": "TEXT",
+        "label": "تیتر کوچک",
+        "hint": null,
+        "order": 46
+      },
+      {
+        "id": "cmsrtnul6000blrof9yb040dd",
+        "key": "work.heading",
+        "value": "کارهای منتخب",
+        "group": "WORK",
+        "kind": "TEXT",
+        "label": "عنوان بخش",
+        "hint": null,
+        "order": 47
+      },
+      {
+        "id": "cmsrtnul7000clrof8gng64eq",
+        "key": "work.linkLabel",
+        "value": "همه‌ی پروژه‌ها",
+        "group": "WORK",
+        "kind": "TEXT",
+        "label": "متن لینک همه‌ی پروژه‌ها",
+        "hint": null,
+        "order": 48
+      },
+      {
+        "id": "cmsrtnul9000dlrofqto2usu2",
+        "key": "work.linkHref",
+        "value": "/projects",
+        "group": "WORK",
+        "kind": "URL",
+        "label": "مقصد لینک همه‌ی پروژه‌ها",
+        "hint": null,
+        "order": 49
+      },
+      {
+        "id": "cmsrtnula000elrofhcrx7hvl",
+        "key": "work.cardCta",
+        "value": "مشاهده",
+        "group": "WORK",
+        "kind": "TEXT",
+        "label": "متن روی کارت هنگام هاور",
+        "hint": null,
+        "order": 50
+      },
+      {
+        "id": "cmsrtnulc000flrof3otcd5zj",
+        "key": "team.eyebrow",
+        "value": "آدم‌ها",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "تیتر کوچک",
+        "hint": null,
+        "order": 52
+      },
+      {
+        "id": "cmsrtnulg000glrofijtotywd",
+        "key": "team.heading",
+        "value": "تیم ما",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان بخش",
+        "hint": null,
+        "order": 53
+      },
+      {
+        "id": "cmsrtnuli000hlrof4yxz6icp",
+        "key": "team.note",
+        "value": "یک استودیوی کوچک و ثابت — همان‌هایی که پروژه را می‌گیرند، تحویلش هم می‌دهند.",
+        "group": "TEAM",
+        "kind": "TEXTAREA",
+        "label": "توضیح کنار عنوان",
+        "hint": null,
+        "order": 54
+      },
+      {
+        "id": "cmsrtnulk000ilrof8c1y5gby",
+        "key": "logos.title",
+        "value": "برندهایی که با ما کار کرده‌اند",
+        "group": "LOGOS",
+        "kind": "TEXT",
+        "label": "عنوان بخش همکاران",
+        "hint": null,
+        "order": 75
+      },
+      {
+        "id": "cmsrtnull000jlrofufx0g9wx",
+        "key": "contact.srLabel",
+        "value": "ایمیل یا شماره موبایل شما",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد (برای صفحه‌خوان)",
+        "hint": null,
+        "order": 76
+      },
+      {
+        "id": "cmsrtnuln000klrofrl0at8ri",
+        "key": "contact.placeholder",
+        "value": "you@company.com",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "متن راهنمای داخل فیلد",
+        "hint": "لاتین بماند؛ متن فارسی داخل فیلد LTR به‌هم می‌ریزد",
+        "order": 77
+      },
+      {
+        "id": "cmsrtnulo000llrofq6sx5wsa",
+        "key": "contact.hint",
+        "value": "ایمیل یا شماره موبایل‌تان را بنویسید و اینتر بزنید ",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "راهنمای زیر فیلد",
+        "hint": null,
+        "order": 78
+      },
+      {
+        "id": "cmsrtnulo000mlrof06r547ud",
+        "key": "contact.invalid",
+        "value": "ایمیل یا شماره‌ی موبایل معتبر نیست",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "پیام خطای اعتبارسنجی",
+        "hint": null,
+        "order": 79
+      },
+      {
+        "id": "cmsrtnulp000nlrofocjtrzwt",
+        "key": "contact.doneTitle",
+        "value": "پیام‌تان رسید.",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "پیام موفقیت",
+        "hint": null,
+        "order": 80
+      },
+      {
+        "id": "cmsrtnulq000olrof887qhw3j",
+        "key": "contact.doneHint",
+        "value": "به‌زودی جواب می‌دهیم.",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "زیرنویس پیام موفقیت",
+        "hint": null,
+        "order": 81
+      },
+      {
+        "id": "cmsrtnuls000plrofluuycwr1",
+        "key": "footer.location",
+        "value": "تهران، ایران",
+        "group": "FOOTER",
+        "kind": "TEXT",
+        "label": "محل",
+        "hint": null,
+        "order": 124
+      },
+      {
+        "id": "cmsrtnult000qlrof8ks8r0xm",
+        "key": "footer.copyright",
+        "value": "۱۴۰۴ — رهیاد",
+        "group": "FOOTER",
+        "kind": "TEXT",
+        "label": "کپی‌رایت",
+        "hint": null,
+        "order": 125
+      },
+      {
+        "id": "cmsrtnulu000rlrof9ahuylmt",
+        "key": "boot.tuning",
+        "value": "در حال تنظیم آنتن…",
+        "group": "BOOT",
+        "kind": "TEXT",
+        "label": "متن حین نویز اولیه",
+        "hint": null,
+        "order": 126
+      },
+      {
+        "id": "cmsrtnulw000slroful80j78f",
+        "key": "boot.finalWord",
+        "value": "رهیاد",
+        "group": "BOOT",
+        "kind": "TEXT",
+        "label": "کلمه‌ی پایانی",
+        "hint": "کلمه‌ای که بزرگ می‌شود و به هدر پرواز می‌کند",
+        "order": 127
+      },
+      {
+        "id": "cmsrtnuly000tlrof5q95wynr",
+        "key": "projects.hint",
+        "value": "برای گشتن بکشید",
+        "group": "PROJECTS",
+        "kind": "TEXT",
+        "label": "راهنمای کشیدن بوم",
+        "hint": null,
+        "order": 128
+      },
+      {
+        "id": "cmsrtnum1000ulrofkd3fog51",
+        "key": "a11y.skipToContent",
+        "value": "پرش به محتوا",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "لینک پرش به محتوا",
+        "hint": null,
+        "order": 133
+      },
+      {
+        "id": "cmsrtnum2000vlrof9tnbvuet",
+        "key": "a11y.mainHeading",
+        "value": "رهیــــاد — آژانس خلاقیت",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "عنوان اصلی صفحه (پنهان)",
+        "hint": null,
+        "order": 134
+      },
+      {
+        "id": "cmsrtnum2000wlrofxyt4u2mw",
+        "key": "a11y.videoLabel",
+        "value": "ویدیوی رهیاد",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "توضیح ویدیوی هیرو",
+        "hint": null,
+        "order": 135
+      },
+      {
+        "id": "cmsrtnum4000xlrofvno67qg9",
+        "key": "a11y.railNavLabel",
+        "value": "بخش‌های اصلی",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "برچسب ناوبری کناری",
+        "hint": null,
+        "order": 136
+      },
+      {
+        "id": "cmsrtnum7000ylrofcxuqyh88",
+        "key": "a11y.dockNavLabel",
+        "value": "ناوبری اصلی",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "برچسب ناوبری پایین",
+        "hint": null,
+        "order": 137
+      },
+      {
+        "id": "cmsrtnum8000zlrofv0marte2",
+        "key": "a11y.brandHome",
+        "value": "رهیــــاد — صفحه اصلی",
+        "group": "A11Y",
+        "kind": "TEXT",
+        "label": "برچسب لینک نشان‌واره",
+        "hint": null,
+        "order": 138
+      },
+      {
+        "id": "cmsrvc7d4000ffhof7mktwfxv",
+        "key": "work.featuredCount",
+        "value": "3",
+        "group": "WORK",
+        "kind": "NUMBER",
+        "label": "چند پروژه در صفحه‌ی اصلی",
+        "hint": "کارت‌های این بخش از ابتدای فهرست پروژه‌ها برداشته می‌شوند",
+        "order": 51
+      },
+      {
+        "id": "cmsu9vub700067zof1yi92bgj",
+        "key": "seo.magazine.title",
+        "value": "مجله | رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی مجله",
+        "hint": null,
+        "order": 13
+      },
+      {
+        "id": "cmsu9vub900077zofddtdvqh7",
+        "key": "seo.magazine.description",
+        "value": "نوشته‌ها و یادداشت‌های تیم رهیاد درباره‌ی طراحی و برند",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی مجله",
+        "hint": null,
+        "order": 14
+      },
+      {
+        "id": "cmsu9wfgp000xr5of45g7dgy9",
+        "key": "magazine.eyebrow",
+        "value": "مجله‌ی رهیاد",
+        "group": "MAGAZINE",
+        "kind": "TEXT",
+        "label": "تیتر کوچک بالای صفحه",
+        "hint": null,
+        "order": 129
+      },
+      {
+        "id": "cmsu9wfgr000yr5ofesbnnvm0",
+        "key": "magazine.title",
+        "value": "چیزهایی که یاد گرفته‌ایم",
+        "group": "MAGAZINE",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی مجله",
+        "hint": null,
+        "order": 130
+      },
+      {
+        "id": "cmsu9wfgu000zr5ofsuil95qk",
+        "key": "magazine.intro",
+        "value": "یادداشت‌هایی درباره‌ی طراحی، برند و کارهایی که در راه ساختن‌شان چیزی فهمیدیم.",
+        "group": "MAGAZINE",
+        "kind": "TEXTAREA",
+        "label": "توضیح زیر عنوان",
+        "hint": null,
+        "order": 131
+      },
+      {
+        "id": "cmsu9wfgv0010r5ofuxv0qcwu",
+        "key": "magazine.empty",
+        "value": "هنوز نوشته‌ای منتشر نشده. به‌زودی.",
+        "group": "MAGAZINE",
+        "kind": "TEXT",
+        "label": "متن وقتی نوشته‌ای نیست",
+        "hint": null,
+        "order": 132
+      },
+      {
+        "id": "cmsuebwqg0008kpofgdxf0o5t",
+        "key": "seo.contact.title",
+        "value": "تماس با ما | رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی تماس",
+        "hint": null,
+        "order": 17
+      },
+      {
+        "id": "cmsuebwqi0009kpofus7guhf1",
+        "key": "seo.contact.description",
+        "value": "با تیم رهیاد در تماس باشید — فرم تماس، نشانی استودیو و معرفی اعضای تیم.",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی تماس",
+        "hint": null,
+        "order": 18
+      },
+      {
+        "id": "cmsuebwqz000xkpofiee5p8ep",
+        "key": "contact.page.eyebrow",
+        "value": "تماس با ما",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "تیتر کوچک صفحه‌ی تماس",
+        "hint": null,
+        "order": 82
+      },
+      {
+        "id": "cmsuebwr0000ykpofyib847bz",
+        "key": "contact.page.title",
+        "value": "بیایید درباره‌ی کارتان حرف بزنیم",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی تماس",
+        "hint": null,
+        "order": 83
+      },
+      {
+        "id": "cmsuebwr1000zkpof0jamxbje",
+        "key": "contact.page.intro",
+        "value": "چه پروژه‌ی مشخصی داشته باشید و چه فقط ایده‌ای که هنوز شکل نگرفته، بنویسید. جواب هر پیام را خودمان می‌دهیم، نه یک پاسخ خودکار.",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "توضیح زیر عنوان صفحه‌ی تماس",
+        "hint": null,
+        "order": 84
+      },
+      {
+        "id": "cmsuebwr10010kpofz3tpqju0",
+        "key": "contact.page.directTitle",
+        "value": "یا مستقیم",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "عنوان ستون راه‌های تماس",
+        "hint": null,
+        "order": 85
+      },
+      {
+        "id": "cmsuebwr20011kpofqbbi79uw",
+        "key": "contact.emailLabel",
+        "value": "ایمیل",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب ایمیل",
+        "hint": null,
+        "order": 86
+      },
+      {
+        "id": "cmsuebwr20012kpofqh7rx7zq",
+        "key": "contact.email",
+        "value": "hello@rahyad.ir",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "ایمیل استودیو",
+        "hint": "خالی بگذارید تا این ردیف در صفحه نیاید",
+        "order": 87
+      },
+      {
+        "id": "cmsuebwr30013kpofu7pfnhwh",
+        "key": "contact.phoneLabel",
+        "value": "تلفن",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب تلفن",
+        "hint": null,
+        "order": 88
+      },
+      {
+        "id": "cmsuebwr30014kpoffv64vgnj",
+        "key": "contact.phone",
+        "value": "021 9100 2233",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "شماره‌ی تماس",
+        "hint": "با رقم لاتین بنویسید؛ سایت خودش فارسی نمایش می‌دهد",
+        "order": 89
+      },
+      {
+        "id": "cmsuebwr40015kpof96k6vo6p",
+        "key": "contact.addressLabel",
+        "value": "نشانی",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب نشانی",
+        "hint": null,
+        "order": 90
+      },
+      {
+        "id": "cmsuebwr40016kpofyl1lu02o",
+        "key": "contact.address",
+        "value": "تهران، خیابان ولیعصر، کوچه‌ی نهم، پلاک ۲۴، طبقه‌ی سوم",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "نشانی استودیو",
+        "hint": null,
+        "order": 91
+      },
+      {
+        "id": "cmsuebwr40017kpof33239v98",
+        "key": "contact.hoursLabel",
+        "value": "ساعت کاری",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب ساعت کاری",
+        "hint": null,
+        "order": 92
+      },
+      {
+        "id": "cmsuebwr50018kpofabhsfr1h",
+        "key": "contact.hours",
+        "value": "شنبه تا چهارشنبه، ۹ تا ۱۸",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "ساعت کاری",
+        "hint": null,
+        "order": 93
+      },
+      {
+        "id": "cmsuebwr50019kpofxa3bl1o2",
+        "key": "contact.socialLabel",
+        "value": "رهیــاد تو مجازی",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب شبکه‌های اجتماعی",
+        "hint": null,
+        "order": 94
+      },
+      {
+        "id": "cmsuebwr6001akpofg9ftpmxo",
+        "key": "contact.social.instagram",
+        "value": "https://instagram.com/",
+        "group": "CONTACT",
+        "kind": "URL",
+        "label": "اینستاگرام",
+        "hint": "خالی بگذارید تا این دکمه در صفحه نیاید",
+        "order": 95
+      },
+      {
+        "id": "cmsuebwr6001bkpoftgdux44e",
+        "key": "contact.social.linkedin",
+        "value": "",
+        "group": "CONTACT",
+        "kind": "URL",
+        "label": "لینکدین",
+        "hint": "خالی بگذارید تا این دکمه در صفحه نیاید",
+        "order": 96
+      },
+      {
+        "id": "cmsuebwr7001ckpofqn9l1c96",
+        "key": "contact.social.behance",
+        "value": "",
+        "group": "CONTACT",
+        "kind": "URL",
+        "label": "بی‌هنس",
+        "hint": "خالی بگذارید تا این دکمه در صفحه نیاید",
+        "order": 97
+      },
+      {
+        "id": "cmsuebwr7001dkpofjz3get4f",
+        "key": "contact.form.title",
+        "value": "پروژه‌ای در ذهن دارید؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "عنوان فرم",
+        "hint": null,
+        "order": 100
+      },
+      {
+        "id": "cmsuebwr8001ekpofwxar5mp7",
+        "key": "contact.form.note",
+        "value": "فرم را پر کنید؛ هرچه درباره‌ی پروژه بنویسید، جواب اول‌مان دقیق‌تر خواهد بود.",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "توضیح بالای فرم",
+        "hint": null,
+        "order": 101
+      },
+      {
+        "id": "cmsuebwr8001fkpof6tgx2kqr",
+        "key": "contact.form.name",
+        "value": "شما را چه صدا کنیم؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد نام",
+        "hint": null,
+        "order": 102
+      },
+      {
+        "id": "cmsuebwr8001gkpof8nv934s9",
+        "key": "contact.form.contact",
+        "value": "کجا جواب‌تان را بفرستیم؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد تماس",
+        "hint": null,
+        "order": 104
+      },
+      {
+        "id": "cmsuebwr9001hkpofnpkofhzi",
+        "key": "contact.form.subject",
+        "value": "موضوع",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد موضوع",
+        "hint": null,
+        "order": 115
+      },
+      {
+        "id": "cmsuebwra001ikpofclit5z2i",
+        "key": "contact.form.subjectHint",
+        "value": "مثلاً: هویت بصری برای یک کافه",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "راهنمای داخل فیلد موضوع",
+        "hint": null,
+        "order": 116
+      },
+      {
+        "id": "cmsuebwrb001jkpofvdmjg12a",
+        "key": "contact.form.optional",
+        "value": "اختیاری",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "نشانه‌ی فیلد اختیاری",
+        "hint": null,
+        "order": 117
+      },
+      {
+        "id": "cmsuebwrb001kkpofgbcdh4kv",
+        "key": "contact.form.message",
+        "value": "از پروژه‌تان بگویید",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد پیام",
+        "hint": null,
+        "order": 118
+      },
+      {
+        "id": "cmsuebwrb001lkpof68jelf9o",
+        "key": "contact.form.submit",
+        "value": "ارسال پیام",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "متن دکمه‌ی ارسال",
+        "hint": null,
+        "order": 120
+      },
+      {
+        "id": "cmsuebwrc001mkpofpxost09q",
+        "key": "contact.form.sending",
+        "value": "در حال ارسال…",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "متن دکمه هنگام ارسال",
+        "hint": null,
+        "order": 121
+      },
+      {
+        "id": "cmsuebwrc001nkpofa5urvz6l",
+        "key": "contact.form.doneTitle",
+        "value": "پیام‌تان رسید.",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "عنوان پیام موفقیت فرم",
+        "hint": null,
+        "order": 122
+      },
+      {
+        "id": "cmsuebwrd001okpof4qwsixyg",
+        "key": "contact.form.doneHint",
+        "value": "معمولاً تا یک روز کاری جواب می‌دهیم. اگر عجله دارید، همون شماره‌ی بالا سریع‌ترین راهه",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "زیرنویس پیام موفقیت فرم",
+        "hint": null,
+        "order": 123
+      },
+      {
+        "id": "cmsufcwye0008yxofq6qfxwbv",
+        "key": "seo.services.title",
+        "value": "خدمات | رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی خدمات",
+        "hint": null,
+        "order": 15
+      },
+      {
+        "id": "cmsufcwyh0009yxof279jd3il",
+        "key": "seo.services.description",
+        "value": "خدمات آژانس خلاقیت رهیاد — از هویت برند و طراحی وب تا تولید محتوا و استراتژی رشد.",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی خدمات",
+        "hint": null,
+        "order": 16
+      },
+      {
+        "id": "cmsufcwym000gyxofn4cp8dz7",
+        "key": "services.linkLabel",
+        "value": "همه‌ی خدمات",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "متن لینک فهرست خدمات",
+        "hint": null,
+        "order": 25
+      },
+      {
+        "id": "cmsufcwyn000hyxofi5l9j3ou",
+        "key": "services.linkHref",
+        "value": "/services",
+        "group": "SERVICES",
+        "kind": "URL",
+        "label": "مقصد لینک فهرست خدمات",
+        "hint": null,
+        "order": 26
+      },
+      {
+        "id": "cmsufcwyo000iyxofwrtxytl5",
+        "key": "services.rowCta",
+        "value": "جزئیات بیشتر",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "متن لینک داخل ردیف باز‌شده",
+        "hint": null,
+        "order": 27
+      },
+      {
+        "id": "cmsufcwyo000jyxofv9uqwxps",
+        "key": "services.page.eyebrow",
+        "value": "چه کاری انجام می‌دهیم",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "تیتر کوچک صفحه‌ی خدمات",
+        "hint": null,
+        "order": 19
+      },
+      {
+        "id": "cmsufcwyo000kyxofh2dhk3by",
+        "key": "services.page.title",
+        "value": "خدماتی که ارائه می‌دهیم",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی خدمات",
+        "hint": null,
+        "order": 28
+      },
+      {
+        "id": "cmsufcwyp000lyxofwgwgloi0",
+        "key": "services.page.intro",
+        "value": "هر خدمت صفحه‌ی خودش را دارد: چه کاری انجام می‌دهیم، چطور انجامش می‌دهیم، نمونه‌کارهایش و سوال‌هایی که پیش از سفارش پرسیده می‌شود.",
+        "group": "SERVICES",
+        "kind": "TEXTAREA",
+        "label": "توضیح زیر عنوان صفحه‌ی خدمات",
+        "hint": null,
+        "order": 21
+      },
+      {
+        "id": "cmsufcwyq000myxof3ed1byl3",
+        "key": "services.page.cardCta",
+        "value": "دیدن خدمت",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "متن باز‌کردن خدمت روی اسلاید",
+        "hint": null,
+        "order": 29
+      },
+      {
+        "id": "cmsufcwyr000nyxofylf1o8mz",
+        "key": "services.page.countLabel",
+        "value": "پروژه",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "واحد شمارش پروژه روی کارت",
+        "hint": null,
+        "order": 23
+      },
+      {
+        "id": "cmsufcwyt000oyxofxr8r7cxs",
+        "key": "services.page.empty",
+        "value": "هنوز خدمتی منتشر نشده است.",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "متن فهرست خالی",
+        "hint": null,
+        "order": 31
+      },
+      {
+        "id": "cmsufcwyt000pyxofrcrrnruj",
+        "key": "services.page.ctaTitle",
+        "value": "نیاز به مشاوره بیشتری دارید؟",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان جعبه‌ی پایان صفحه‌ی خدمات",
+        "hint": null,
+        "order": 25
+      },
+      {
+        "id": "cmsufcwyu000qyxof349oenma",
+        "key": "services.page.ctaNote",
+        "value": "پروژه‌تان را بنویسید؛ خودمان می‌گوییم از کجا باید شروع شود و چه چیزی لازم نیست.",
+        "group": "SERVICES",
+        "kind": "TEXTAREA",
+        "label": "توضیح جعبه‌ی پایان صفحه‌ی خدمات",
+        "hint": null,
+        "order": 26
+      },
+      {
+        "id": "cmsufcwyv000ryxof8ktqkzrm",
+        "key": "services.page.ctaLabel",
+        "value": "شروع گفت‌وگو",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "متن دکمه‌ی جعبه‌ی پایان",
+        "hint": null,
+        "order": 27
+      },
+      {
+        "id": "cmsufcwz6000syxofjohwm27i",
+        "key": "services.jump.about",
+        "value": "توضیحات",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: توضیحات",
+        "hint": null,
+        "order": 33
+      },
+      {
+        "id": "cmsufcwzi000tyxof7g7iy6ya",
+        "key": "services.jump.gallery",
+        "value": "گالری",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: گالری",
+        "hint": null,
+        "order": 34
+      },
+      {
+        "id": "cmsufcwzj000uyxofqyg6cfug",
+        "key": "services.jump.work",
+        "value": "نمونه‌کارها",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: نمونه‌کارها",
+        "hint": null,
+        "order": 35
+      },
+      {
+        "id": "cmsufcwzk000vyxof1mq0hyh0",
+        "key": "services.jump.faq",
+        "value": "سوالات",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: سوالات",
+        "hint": null,
+        "order": 36
+      },
+      {
+        "id": "cmsufcwzk000wyxofnc7y9o4a",
+        "key": "services.jump.order",
+        "value": "ثبت سفارش",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: دکمه‌ی سفارش",
+        "hint": null,
+        "order": 37
+      },
+      {
+        "id": "cmsufcwzl000xyxof0ohl1d51",
+        "key": "services.filmCaption",
+        "value": "ویدیوی معرفی",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "زیرنویس ویدیو",
+        "hint": null,
+        "order": 38
+      },
+      {
+        "id": "cmsufcwzl000yyxofmgtw3gsr",
+        "key": "services.work.title",
+        "value": "نمونه‌کارهای این خدمت",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان بخش نمونه‌کارها",
+        "hint": null,
+        "order": 39
+      },
+      {
+        "id": "cmsufcwzl000zyxofbibgd2mz",
+        "key": "services.work.note",
+        "value": "پروژه‌هایی که همین خدمت را گرفته‌اند — هر کارت، صفحه‌ی کامل خودش را باز می‌کند.",
+        "group": "SERVICES",
+        "kind": "TEXTAREA",
+        "label": "توضیح بخش ",
+        "hint": null,
+        "order": 40
+      },
+      {
+        "id": "cmsufcwzm0010yxofxlub3s0k",
+        "key": "services.work.empty",
+        "value": "هنوز پروژه‌ای از این خدمت منتشر نشده است. اولینش می‌تواند مال شما باشد.",
+        "group": "SERVICES",
+        "kind": "TEXTAREA",
+        "label": "متن نبودِ نمونه‌کار",
+        "hint": "پروژه‌ها از صفحه‌ی ویرایش هر پروژه به خدمت وصل می‌شوند",
+        "order": 41
+      },
+      {
+        "id": "cmsufcwzn0011yxofvt14xhlw",
+        "key": "services.order.heading",
+        "value": "سفارش این خدمت",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان بخش فرم سفارش",
+        "hint": null,
+        "order": 42
+      },
+      {
+        "id": "cmsufcwzn0012yxof9lv3qbnk",
+        "key": "services.order.note",
+        "value": "فرم را پر کنید؛ هرچه درباره‌ی کارتان بنویسید، جواب اول‌مان دقیق‌تر خواهد بود.",
+        "group": "SERVICES",
+        "kind": "TEXTAREA",
+        "label": "توضیح پیش‌فرض بالای فرم سفارش",
+        "hint": "هر خدمت می‌تواند متن خودش را داشته باشد؛ این متن وقتی استفاده می‌شود که آنجا خالی باشد",
+        "order": 43
+      },
+      {
+        "id": "cmsufcwzo0013yxof19goptio",
+        "key": "services.order.subjectPrefix",
+        "value": "سفارش",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "پیشوند موضوع پیام",
+        "hint": "موضوع پیام به شکل «سفارش: نام خدمت» از پیش پر می‌شود",
+        "order": 44
+      },
+      {
+        "id": "cmsufcwzo0014yxofx2kym0jf",
+        "key": "services.others.title",
+        "value": "خدمات دیگر",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "عنوان فهرست خدمات دیگر",
+        "hint": null,
+        "order": 45
+      },
+      {
+        "id": "cmsug3781000sqoofnwsuwq52",
+        "key": "services.jump.back",
+        "value": "همه‌ی خدمات",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "نوار میان‌بر: بازگشت به فهرست",
+        "hint": null,
+        "order": 32
+      },
+      {
+        "id": "cmsuls5730025p9ofimbub3s0",
+        "key": "nav.cta.label",
+        "value": "در تماس باشیم",
+        "group": "GENERAL",
+        "kind": "TEXT",
+        "label": "متن دکمه‌ی بالای صفحه",
+        "hint": "روی همه‌ی صفحه‌ها، گوشه‌ی بالا-چپ. خالی بگذارید تا دکمه اصلاً نیاید.",
+        "order": 98
+      },
+      {
+        "id": "cmsuls5730026p9of7zj4mk01",
+        "key": "nav.cta.href",
+        "value": "/contact",
+        "group": "GENERAL",
+        "kind": "URL",
+        "label": "مقصد دکمه‌ی بالای صفحه",
+        "hint": null,
+        "order": 99
+      },
+      {
+        "id": "cmsuls575002ap9of3qwlon5e",
+        "key": "contact.form.namePlaceholder",
+        "value": "نام‌تان را بنویسید",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "راهنمای داخل فیلد نام",
+        "hint": null,
+        "order": 103
+      },
+      {
+        "id": "cmsuls576002cp9ofltxw7ept",
+        "key": "contact.form.phone",
+        "value": "بهترین شماره برای تماس؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب فیلد شماره",
+        "hint": null,
+        "order": 105
+      },
+      {
+        "id": "cmsuls577002dp9ofyv4kcxhi",
+        "key": "contact.form.phonePlaceholder",
+        "value": "۰۹۱۲ ۰۰۰ ۰۰۰۰",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "راهنمای داخل فیلد شماره",
+        "hint": null,
+        "order": 106
+      },
+      {
+        "id": "cmsuls577002ep9ofzr7nmj77",
+        "key": "contact.form.referrer",
+        "value": "چطور ما را پیدا کردید؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب «از کجا ما را شناختید»",
+        "hint": null,
+        "order": 107
+      },
+      {
+        "id": "cmsuls578002fp9ofwd8shpqn",
+        "key": "contact.form.referrers",
+        "value": "گوگل، اینستاگرام، لینکدین، معرفی دوستان، جستجوی اینترنتی، سایر",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "گزینه‌های «از کجا ما را شناختید»",
+        "hint": "با کاما جدا کنید؛ فرستنده یکی را انتخاب می‌کند",
+        "order": 108
+      },
+      {
+        "id": "cmsuls578002gp9ofc7gxi955",
+        "key": "contact.form.services",
+        "value": "به کدام خدمت‌ها نیاز دارید؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب انتخاب خدمات",
+        "hint": "خودِ گزینه‌ها از فهرست خدمات خوانده می‌شوند",
+        "order": 109
+      },
+      {
+        "id": "cmsuls578002hp9of4a7xykl8",
+        "key": "contact.form.budget",
+        "value": "بودجه‌ی پروژه چقدر است؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب بودجه",
+        "hint": null,
+        "order": 110
+      },
+      {
+        "id": "cmsuls579002ip9ofo0rtkz4b",
+        "key": "contact.form.budgets",
+        "value": "تا ۵۰ میلیون تومان، ۵۰ تا ۱۵۰ میلیون تومان، ۱۵۰ تا ۳۰۰ میلیون تومان، بیش از ۳۰۰ میلیون تومان، هنوز نمی‌دانم",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "بازه‌های بودجه",
+        "hint": "با کاما جدا کنید",
+        "order": 111
+      },
+      {
+        "id": "cmsuls579002jp9ofwwjucl20",
+        "key": "contact.form.timeline",
+        "value": "چه زمانی باید تحویل شود؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "برچسب زمان تحویل",
+        "hint": null,
+        "order": 112
+      },
+      {
+        "id": "cmsuls579002kp9offa134oil",
+        "key": "contact.form.timelines",
+        "value": "تا یک ماه، یک تا سه ماه، سه تا شش ماه، تاریخ مشخصی ندارم",
+        "group": "CONTACT",
+        "kind": "TEXTAREA",
+        "label": "گزینه‌های زمان تحویل",
+        "hint": "با کاما جدا کنید",
+        "order": 113
+      },
+      {
+        "id": "cmsuls57a002lp9ofaa5c2aj4",
+        "key": "contact.form.choose",
+        "value": "انتخاب کنید",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "متن گزینه‌ی خالی فهرست‌ها",
+        "hint": null,
+        "order": 114
+      },
+      {
+        "id": "cmsuls57b002qp9ofrp8vkqaz",
+        "key": "contact.form.messagePlaceholder",
+        "value": "چه چیزی می‌سازید؟",
+        "group": "CONTACT",
+        "kind": "TEXT",
+        "label": "راهنمای داخل فیلد پیام",
+        "hint": null,
+        "order": 119
+      },
+      {
+        "id": "cmsuqawzl000c03of1f70ft2g",
+        "key": "seo.team.title",
+        "value": "تیم ما | رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی تیم",
+        "hint": null,
+        "order": 19
+      },
+      {
+        "id": "cmsuqawzo000d03of9jjs4avu",
+        "key": "seo.team.description",
+        "value": "استودیوی رهیاد — مشتریان، توانمندی‌ها و آدم‌هایی که کار را انجام می‌دهند.",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "توضیح صفحه‌ی تیم",
+        "hint": null,
+        "order": 20
+      },
+      {
+        "id": "cmsuqax1g000n03ofgobqch5y",
+        "key": "services.page.cue",
+        "value": "بچرخانید",
+        "group": "SERVICES",
+        "kind": "TEXT",
+        "label": "راهنمای حرکت روی اسلایدها",
+        "hint": null,
+        "order": 30
+      },
+      {
+        "id": "cmsuqax9j001f03ofpp0ixwjw",
+        "key": "team.hub.eyebrow",
+        "value": "استودیو",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "تیتر کوچک صفحه‌ی تیم",
+        "hint": null,
+        "order": 55
+      },
+      {
+        "id": "cmsuqax9k001g03ofkkcs3moz",
+        "key": "team.hub.title",
+        "value": "راهبرد، طراحی و ساخت — زیر یک سقف",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان صفحه‌ی تیم",
+        "hint": null,
+        "order": 56
+      },
+      {
+        "id": "cmsuqax9l001h03of0do6lvvw",
+        "key": "team.hub.intro",
+        "value": "استودیویی مستقل که روی ایده، سیستم و اجرا با هم کار می‌کند. آنچه پایین می‌آید همان چیزی است که تحویل می‌دهیم و همان کسانی که تحویلش می‌دهند.",
+        "group": "TEAM",
+        "kind": "TEXTAREA",
+        "label": "مقدمه‌ی صفحه‌ی تیم",
+        "hint": null,
+        "order": 57
+      },
+      {
+        "id": "cmsuqax9o001i03ofy17u2b3m",
+        "key": "team.hub.clientsTitle",
+        "value": "مشتریان منتخب",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان بخش لوگوها در صفحه‌ی تیم",
+        "hint": null,
+        "order": 58
+      },
+      {
+        "id": "cmsuqax9q001j03ofsrsjcoz7",
+        "key": "team.hub.capabilitiesTitle",
+        "value": "توانمندی‌ها",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان بخش توانمندی‌ها",
+        "hint": null,
+        "order": 59
+      },
+      {
+        "id": "cmsuqax9r001k03ofd34hx0eh",
+        "key": "team.hub.statsTitle",
+        "value": "در یک نگاه",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان بخش آمار در صفحه‌ی تیم",
+        "hint": null,
+        "order": 60
+      },
+      {
+        "id": "cmsuqax9s001l03offlc7lbp9",
+        "key": "team.hub.statsNote",
+        "value": "هیچ‌کدام از این عددها یک‌شبه جمع نشده‌اند؛ هرکدام یک قدم است که با مسئله‌ی واقعی و آدم واقعی برداشته شده.",
+        "group": "TEAM",
+        "kind": "TEXTAREA",
+        "label": "توضیح کنار آمار",
+        "hint": null,
+        "order": 61
+      },
+      {
+        "id": "cmsuqax9t001m03ofcv8x6jpn",
+        "key": "team.hub.rosterTitle",
+        "value": "تیم ما",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "برچسب کنار جدول تیم",
+        "hint": null,
+        "order": 62
+      },
+      {
+        "id": "cmsuqaxd4001n03ofciuywyky",
+        "key": "team.hub.colName",
+        "value": "نام",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "سرستون نام",
+        "hint": null,
+        "order": 63
+      },
+      {
+        "id": "cmsuqaxd6001o03ofgcn1x9qj",
+        "key": "team.hub.colRole",
+        "value": "سمت",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "سرستون سمت",
+        "hint": null,
+        "order": 64
+      },
+      {
+        "id": "cmsuqaxda001p03ofnlapux77",
+        "key": "team.hub.colLocation",
+        "value": "شهر",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "سرستون شهر",
+        "hint": null,
+        "order": 65
+      },
+      {
+        "id": "cmsuqaxdb001q03of5qfze4v4",
+        "key": "team.hub.ctaEyebrow",
+        "value": "همکاری",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "تیتر کوچک دعوت پایان صفحه‌ی تیم",
+        "hint": null,
+        "order": 66
+      },
+      {
+        "id": "cmsuqaxdc001r03of325x7dnz",
+        "key": "team.hub.ctaTitle",
+        "value": "برای کار در سطح جهانی، آدم‌های سطح جهانی می‌خواهیم.",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان دعوت پایان صفحه‌ی تیم",
+        "hint": null,
+        "order": 67
+      },
+      {
+        "id": "cmsuqaxdd001s03of4q9lwtxn",
+        "key": "team.hub.ctaNote",
+        "value": "هم عمومی‌کار می‌خواهیم هم متخصص، با پیشینه‌ها و نگاه‌های متفاوت. اگر جایگاهی که به شما بخورد اینجا نیست، باز هم بنویسید و بگویید چه چیزی به تیم اضافه می‌کنید.",
+        "group": "TEAM",
+        "kind": "TEXTAREA",
+        "label": "توضیح دعوت پایان صفحه‌ی تیم",
+        "hint": null,
+        "order": 68
+      },
+      {
+        "id": "cmsuqaxdf001t03of0i35m6ad",
+        "key": "team.hub.ctaLabel",
+        "value": "برای‌مان بنویسید",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "متن دکمه‌ی دعوت",
+        "hint": null,
+        "order": 69
+      },
+      {
+        "id": "cmsuqaxfr001u03ofag2j5ae1",
+        "key": "team.hub.ctaHref",
+        "value": "/contact",
+        "group": "TEAM",
+        "kind": "URL",
+        "label": "مقصد دکمه‌ی دعوت",
+        "hint": null,
+        "order": 70
+      },
+      {
+        "id": "cmsurgmvu001vdhofq8dvqqyk",
+        "key": "team.hub.sayTitle",
+        "value": "حرف مشتری‌ها",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "عنوان بخش نقل‌قول‌ها",
+        "hint": null,
+        "order": 71
+      },
+      {
+        "id": "cmsurgmvv001wdhoftisi4b3s",
+        "key": "team.hub.sayLead",
+        "value": "مشتری‌ها چه می‌گویند:",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "خط بالای نقل‌قول‌ها",
+        "hint": null,
+        "order": 72
+      },
+      {
+        "id": "cmsurgmvv001xdhofrg59n6px",
+        "key": "team.hub.sayPrev",
+        "value": "قبلی",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "دکمه‌ی نقل‌قول قبلی",
+        "hint": null,
+        "order": 73
+      },
+      {
+        "id": "cmsurgmvw001ydhofd6z1huro",
+        "key": "team.hub.sayNext",
+        "value": "بعدی",
+        "group": "TEAM",
+        "kind": "TEXT",
+        "label": "دکمه‌ی نقل‌قول بعدی",
+        "hint": null,
+        "order": 74
+      },
+      {
+        "id": "cmteoz22n0002r2ofh45z39uw",
+        "key": "seo.site.url",
+        "value": "https://rahyad.com",
+        "group": "SEO",
+        "kind": "URL",
+        "label": "نشانی کامل سایت",
+        "hint": "با https و بدون اسلش پایانی — مبنای لینک‌های canonical، sitemap و تصویر اشتراک‌گذاری",
+        "order": 2
+      },
+      {
+        "id": "cmteoz22z0003r2ofzru083kq",
+        "key": "seo.site.name",
+        "value": "رهیــــاد",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "نام سایت",
+        "hint": "چیزی که کنار عنوان صفحه در نتایج گوگل و شبکه‌های اجتماعی دیده می‌شود",
+        "order": 3
+      },
+      {
+        "id": "cmteoz2310004r2ofqj1jm37b",
+        "key": "seo.keywords",
+        "value": "آژانس خلاقیت, طراحی برند, هویت بصری, طراحی وب, تولید محتوا, رهیاد",
+        "group": "SEO",
+        "kind": "TEXTAREA",
+        "label": "کلیدواژه‌ها",
+        "hint": "با ویرگول جدا کنید",
+        "order": 4
+      },
+      {
+        "id": "cmteoz2330005r2of7t1edg1j",
+        "key": "seo.og.image",
+        "value": "",
+        "group": "SEO",
+        "kind": "URL",
+        "label": "تصویر اشتراک‌گذاری (اختیاری)",
+        "hint": "خالی بگذارید تا تصویر پیش‌فرض سایت استفاده شود؛ اندازه‌ی پیشنهادی ۱۲۰۰×۶۳۰",
+        "order": 5
+      },
+      {
+        "id": "cmteoz2350006r2ofbjdvp208",
+        "key": "seo.verification.google",
+        "value": "",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "کد تأیید Google Search Console",
+        "hint": "فقط مقدار content تگ meta — بدون خود تگ",
+        "order": 6
+      },
+      {
+        "id": "cmteoz2360007r2ofdpwe6d92",
+        "key": "seo.robots.indexable",
+        "value": "1",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "اجازه‌ی نمایه‌سازی موتورهای جست‌وجو",
+        "hint": "۱ یعنی سایت ایندکس شود، ۰ یعنی کل سایت از نتایج بیرون بماند (برای پیش از راه‌اندازی)",
+        "order": 7
+      },
+      {
+        "id": "cmteoz2370008r2of9mpc57t0",
+        "key": "seo.organization.type",
+        "value": "Organization",
+        "group": "SEO",
+        "kind": "TEXT",
+        "label": "نوع سازمان در داده‌ی ساختاریافته",
+        "hint": "مثلاً Organization یا ProfessionalService — گوگل از این برای نمایش کارت سازمان استفاده می‌کند",
+        "order": 8
+      }
+    ],
+    "headlineWord": [
+      {
+        "id": "cmsrtnumi0010lrofuruvpxp7",
+        "group": "MANIFESTO",
+        "text": "برندها",
+        "emphasis": "NONE",
+        "order": 0
+      },
+      {
+        "id": "cmsrtnumi0011lrofmjf0hwtx",
+        "group": "MANIFESTO",
+        "text": "را",
+        "emphasis": "NONE",
+        "order": 1
+      },
+      {
+        "id": "cmsrtnumi0012lrofrnkf8ib7",
+        "group": "MANIFESTO",
+        "text": "از",
+        "emphasis": "NONE",
+        "order": 2
+      },
+      {
+        "id": "cmsrtnumi0013lrofmogc6d22",
+        "group": "MANIFESTO",
+        "text": "دیده‌شدن",
+        "emphasis": "MARK",
+        "order": 3
+      },
+      {
+        "id": "cmsrtnumi0014lrofnzrw3vct",
+        "group": "MANIFESTO",
+        "text": "به",
+        "emphasis": "NONE",
+        "order": 4
+      },
+      {
+        "id": "cmsrtnumi0015lroffcgmg6fq",
+        "group": "MANIFESTO",
+        "text": "خاطر‌ماندن",
+        "emphasis": "MARK",
+        "order": 5
+      },
+      {
+        "id": "cmsrtnumi0016lrofch9hlwf5",
+        "group": "MANIFESTO",
+        "text": "می‌رسانیم.",
+        "emphasis": "NONE",
+        "order": 6
+      },
+      {
+        "id": "cmsrtnumi0017lrof1fn4f3m0",
+        "group": "FOOTER",
+        "text": "بیایید",
+        "emphasis": "NONE",
+        "order": 7
+      },
+      {
+        "id": "cmsrtnumi0018lrof2wb3asv0",
+        "group": "FOOTER",
+        "text": "چیزی",
+        "emphasis": "NONE",
+        "order": 8
+      },
+      {
+        "id": "cmsrtnumi0019lrofby2c4fz2",
+        "group": "FOOTER",
+        "text": "بسازیم",
+        "emphasis": "NONE",
+        "order": 9
+      },
+      {
+        "id": "cmsrtnumi001alrofn25gq5mi",
+        "group": "FOOTER",
+        "text": "که",
+        "emphasis": "NONE",
+        "order": 10
+      },
+      {
+        "id": "cmsrtnumi001blrofqm25aw99",
+        "group": "FOOTER",
+        "text": "یادش",
+        "emphasis": "BRAND",
+        "order": 11
+      },
+      {
+        "id": "cmsrtnumi001clrof7y96gern",
+        "group": "FOOTER",
+        "text": "بماند.",
+        "emphasis": "BRAND",
+        "order": 12
+      }
+    ],
+    "stat": [
+      {
+        "id": "cmsrtnumo001dlrofs8p3f3tl",
+        "value": 12,
+        "suffix": "+",
+        "label": "سال تجربه",
+        "accent": "#ef4444",
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnumo001elroft08wxdrt",
+        "value": 180,
+        "suffix": "+",
+        "label": "پروژه",
+        "accent": "#1d4ed8",
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnumo001flrof147031t1",
+        "value": 40,
+        "suffix": "+",
+        "label": "برند",
+        "accent": "#c2410c",
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnumo001glrof7k5hot8l",
+        "value": 9,
+        "suffix": "",
+        "label": "جایزه",
+        "accent": "#0f766e",
+        "order": 3,
+        "visible": true
+      }
+    ],
+    "service": [
+      {
+        "id": "cmsrtnumr001hlrofot1mwwj9",
+        "slug": "brand-identity",
+        "indexLabel": "۰۱",
+        "title": "هویت برند",
+        "body": "از نام و نشان تا سیستم بصری و لحن کلامی؛ هویتی که در هر نقطه‌ی تماس یکدست بماند.",
+        "tags": [
+          "لوگو",
+          "سیستم بصری",
+          "کتابچه برند"
+        ],
+        "accent": "#ef4444",
+        "order": 0,
+        "visible": true,
+        "headline": "هویتی که همه‌جا خودش را می‌شناساند",
+        "excerpt": "برند شما فقط یک لوگو نیست؛ مجموعه‌ی تصمیم‌هایی است که هر بار مخاطب با شما روبه‌رو می‌شود تکرار می‌شوند. ما آن تصمیم‌ها را می‌گیریم و در یک سیستم می‌نویسیم تا تیم شما بتواند سال‌ها به آن تکیه کند.",
+        "sections": [
+          {
+            "h": "چه کاری انجام می‌دهیم",
+            "p": "<p>کار با یک جلسه‌ی کشف شروع می‌شود: کسب‌وکار، مخاطب، رقبا و آنچه امروز درست کار نمی‌کند. از آنجا به جایگاه برند، معماری نام و لحن کلامی می‌رسیم و بعد سراغ شکل می‌رویم — نشان، تایپوگرافی، رنگ، شبکه و زبان تصویری.</p><p>خروجی، یک فایل لوگو نیست؛ سیستمی است که در آن مشخص است هر عنصر کجا و چطور استفاده می‌شود.</p>"
+          },
+          {
+            "h": "چطور کار می‌کنیم",
+            "p": "<p>در سه مرحله: کشف و راهبرد، طراحی سیستم، و پیاده‌سازی. هر مرحله یک جلسه‌ی ارائه دارد و تا تأیید نگیریم به مرحله‌ی بعد نمی‌رویم.</p><p>یک پروژه‌ی هویت معمولاً شش تا ده هفته طول می‌کشد؛ اگر عجله دارید، می‌شود دامنه را کوچک‌تر کرد ولی مراحل را نه.</p>"
+          },
+          {
+            "h": "چه چیزی تحویل می‌گیرید",
+            "p": "<p>نشان در همه‌ی فرمت‌های لازم، سیستم تایپوگرافی و رنگ، الگوهای اقلام چاپی و دیجیتال، و کتابچه‌ی برند — با مثال‌های درست و نادرست، نه فقط چند صفحه‌ی تزئینی.</p><p>فایل‌های کاری هم مال شماست؛ چیزی گروگان نگه نمی‌داریم.</p>"
+          }
+        ],
+        "faqs": [
+          {
+            "a": "معمولاً شش تا ده هفته، بسته به دامنه‌ی کار و سرعت بازخوردها. زمان‌بندی دقیق را بعد از جلسه‌ی اول و روی دامنه‌ی مشخص می‌دهیم.",
+            "q": "یک پروژه‌ی هویت برند چقدر طول می‌کشد؟"
+          },
+          {
+            "a": "می‌شود، ولی معمولاً پیشنهاد نمی‌کنیم. لوگویی که بدون سیستم تحویل داده شود، شش ماه بعد در دست چند نفر به چند شکل متفاوت استفاده می‌شود. اگر بودجه محدود است، بهتر است دامنه را کوچک کنیم تا کیفیت را.",
+            "q": "فقط لوگو می‌خواهم؛ می‌شود؟"
+          },
+          {
+            "a": "هر مرحله جلسه‌ی ارائه و دور بازبینی خودش را دارد و پیش از تأیید جلو نمی‌رویم. چون کار از راهبرد شروع می‌شود، معمولاً اختلاف‌ها در همان مرحله‌ی اول حل می‌شود، نه روی رنگ لوگو.",
+            "q": "اگر از طرح‌ها خوشمان نیاید چه می‌شود؟"
+          }
+        ],
+        "ctaTitle": "برندتان را بسازیم؟",
+        "ctaNote": "بنویسید کجا ایستاده‌اید و کجا می‌خواهید برسید؛ در جواب اول می‌گوییم چه چیزی لازم است و چه چیزی نه.",
+        "imageId": null,
+        "filmId": null
+      },
+      {
+        "id": "cmsrtnumr001ilrofs2vvuk7w",
+        "slug": "web-design",
+        "indexLabel": "۰۲",
+        "title": "طراحی و توسعه‌ی وب",
+        "body": "تجربه‌ی کاربری روشن، رابط دقیق و پیاده‌سازی سریع — سایتی که هم زیباست هم کار می‌کند.",
+        "tags": [
+          "UX/UI",
+          "Next.js",
+          "بهینه‌سازی"
+        ],
+        "accent": "#1d4ed8",
+        "order": 1,
+        "visible": true,
+        "headline": "سایتی که سریع باز می‌شود و کارش را انجام می‌دهد",
+        "excerpt": "طراحی و پیاده‌سازی را یک تیم انجام می‌دهد، بنابراین چیزی که در طرح دیده‌اید همان چیزی است که بالا می‌آید — روی موبایل، روی اینترنت کند، و برای کسی که با صفحه‌خوان می‌گردد.",
+        "sections": [
+          {
+            "h": "چه کاری انجام می‌دهیم",
+            "p": "<p>از معماری اطلاعات و مسیر کاربر شروع می‌کنیم، به طراحی رابط می‌رسیم و خودمان پیاده‌اش می‌کنیم. سایت‌ها را با Next.js می‌سازیم و محتوایش را پشت یک پنل مدیریت می‌گذاریم تا تغییر یک جمله به یک انتشار تازه نیاز نداشته باشد.</p>"
+          },
+          {
+            "h": "سرعت و دسترس‌پذیری، نه به‌عنوان مرحله‌ی آخر",
+            "p": "<p>سرعت را جزئی از طراحی می‌دانیم: تصویرها، فونت‌ها و انیمیشن‌ها از همان ابتدا با بودجه‌ی مشخص انتخاب می‌شوند. کنتراست رنگ‌ها، کار با صفحه‌کلید و متن جایگزین تصویرها هم همین‌طور — چیزی که بعداً وصله شود، همان‌طور به نظر می‌رسد.</p>"
+          },
+          {
+            "h": "بعد از تحویل",
+            "p": "<p>پنل مدیریت را به تیم شما آموزش می‌دهیم و مستندش می‌کنیم. اگر بخواهید، نگهداری و بهبود تدریجی را هم به‌صورت ماهانه ادامه می‌دهیم؛ اگر نخواهید، سایت کاملاً دست خودتان است.</p>"
+          }
+        ],
+        "faqs": [
+          {
+            "a": "معمولاً نه. سایت‌ها را با Next.js و یک پنل مدیریت اختصاصی می‌سازیم که فقط همان چیزهایی را دارد که شما ویرایش می‌کنید. نتیجه سریع‌تر و امن‌تر است و افزونه‌ای نیست که روزی از کار بیفتد.",
+            "q": "سایت را با وردپرس می‌سازید؟"
+          },
+          {
+            "a": "بله. متن‌ها، تصویرها، پروژه‌ها و مقاله‌ها همه از پنل قابل ویرایش‌اند و تغییرشان بلافاصله روی سایت می‌نشیند.",
+            "q": "محتوای سایت را خودمان می‌توانیم عوض کنیم؟"
+          },
+          {
+            "a": "هاست و دامنه هزینه‌ی خودشان را دارند. نگهداری از طرف ما اختیاری است؛ سایت بدون آن هم کار می‌کند.",
+            "q": "هزینه‌ی نگهداری دارد؟"
+          }
+        ],
+        "ctaTitle": "سایت تازه‌ای لازم دارید؟",
+        "ctaNote": "بنویسید سایت فعلی‌تان کجا کم می‌آورد؛ از همان‌جا شروع می‌کنیم.",
+        "imageId": null,
+        "filmId": null
+      },
+      {
+        "id": "cmsrtnumr001jlrofwgsoy68v",
+        "slug": "content-production",
+        "indexLabel": "۰۳",
+        "title": "تولید محتوا و ویدیو",
+        "body": "روایتی که دیده می‌شود؛ از ایده و استوری‌بورد تا موشن‌گرافیک و تدوین نهایی.",
+        "tags": [
+          "موشن",
+          "کمپین",
+          "عکاسی"
+        ],
+        "accent": "#c2410c",
+        "order": 2,
+        "visible": true,
+        "headline": "محتوایی که تا آخرش تماشا می‌شود",
+        "excerpt": "ویدیو، موشن و عکس — از ایده و فیلم‌نامه تا تحویل نسخه‌های آماده‌ی هر پلتفرم. یک تیم، از تصمیم اول تا فایل آخر.",
+        "sections": [
+          {
+            "h": "چه کاری انجام می‌دهیم",
+            "p": "<p>تیزر و ویدیوی معرفی، موشن‌گرافیک، عکاسی محصول و محتوای شبکه‌های اجتماعی. کار با یک ایده‌ی روشن و استوری‌بورد شروع می‌شود، نه با دوربین.</p>"
+          },
+          {
+            "h": "چطور کار می‌کنیم",
+            "p": "<p>پیش‌تولید (ایده، فیلم‌نامه، استوری‌بورد و برنامه‌ی تولید)، تولید، و پس‌تولید (تدوین، اصلاح رنگ، صدا و موشن). در هر مرحله نسخه‌ای برای بازبینی می‌بینید تا اصلاح‌ها زودتر و ارزان‌تر انجام شوند.</p>"
+          },
+          {
+            "h": "چه چیزی تحویل می‌گیرید",
+            "p": "<p>نسخه‌ی اصلی به‌علاوه‌ی برش‌های عمودی و مربع برای هر پلتفرم، با و بدون زیرنویس. فایل‌های خام هم در صورت درخواست تحویل داده می‌شوند.</p>"
+          }
+        ],
+        "faqs": [
+          {
+            "a": "بله، هرجا که سوژه باشد — کارخانه، فروشگاه یا دفتر. اگر لوکیشن یا استودیو لازم باشد، در برنامه‌ی تولید می‌آید و از قبل هماهنگ می‌شود.",
+            "q": "فیلم‌برداری در محل ما انجام می‌شود؟"
+          },
+          {
+            "a": "معمولاً سه تا شش هفته از تأیید ایده تا تحویل نسخه‌ی نهایی؛ بخش عمده‌ی این زمان پیش‌تولید است، نه فیلم‌برداری.",
+            "q": "یک ویدیوی معرفی چقدر طول می‌کشد؟"
+          },
+          {
+            "a": "بله. نوشتن روایت بخشی از کار است، نه یک سفارش جدا.",
+            "q": "متن و روایت را هم شما می‌نویسید؟"
+          }
+        ],
+        "ctaTitle": "چیزی برای گفتن دارید؟",
+        "ctaNote": "بگویید چه چیزی را می‌خواهید نشان دهید و برای کجا؛ باقی‌اش با ما.",
+        "imageId": null,
+        "filmId": null
+      },
+      {
+        "id": "cmsrtnumr001klrofqp03wo85",
+        "slug": "growth-strategy",
+        "indexLabel": "۰۴",
+        "title": "استراتژی و رشد",
+        "body": "پژوهش بازار، جایگاه‌یابی و برنامه‌ی رشد؛ تصمیم‌هایی که بر داده تکیه دارند.",
+        "tags": [
+          "پژوهش",
+          "پوزیشنینگ",
+          "کمپین"
+        ],
+        "accent": "#0f766e",
+        "order": 3,
+        "visible": true,
+        "headline": "تصمیم‌هایی که بر داده تکیه دارند، نه بر سلیقه",
+        "excerpt": "پیش از آنکه چیزی طراحی شود، باید معلوم باشد برای چه کسی و چرا. پژوهش، جایگاه‌یابی و برنامه‌ی رشدی که بشود هفته‌به‌هفته اجرایش کرد.",
+        "sections": [
+          {
+            "h": "چه کاری انجام می‌دهیم",
+            "p": "<p>پژوهش بازار و مخاطب، تحلیل رقبا، جایگاه‌یابی برند و برنامه‌ی کانال‌ها. خروجی یک سند تصمیم است: چه می‌گوییم، به چه کسی، از کدام کانال و با چه معیاری می‌سنجیم.</p>"
+          },
+          {
+            "h": "چطور می‌سنجیم",
+            "p": "<p>هر برنامه با چند شاخص مشخص شروع می‌شود و ماهانه بازبینی می‌شود. اگر عددی تکان نخورد، فرض‌مان را عوض می‌کنیم — نه گزارش را.</p>"
+          }
+        ],
+        "faqs": [
+          {
+            "a": "بله. خیلی از پروژه‌ها با همین شروع می‌شوند و بخشی از آن‌ها اصلاً به بازطراحی نمی‌رسند، چون مسئله جای دیگری بوده است.",
+            "q": "بدون طراحی هم فقط استراتژی می‌گیرید؟"
+          },
+          {
+            "a": "اجرای خلاقیت و تولید محتوا بله؛ خرید رسانه را معمولاً با تیم خودتان یا آژانس رسانه‌ای هماهنگ می‌کنیم.",
+            "q": "اجرای کمپین هم با شماست؟"
+          }
+        ],
+        "ctaTitle": "از کجا شروع کنیم؟",
+        "ctaNote": "وضعیت امروزتان را بنویسید؛ در جواب اول می‌گوییم اول کدام تصمیم را باید گرفت.",
+        "imageId": null,
+        "filmId": null
+      }
+    ],
+    "teamMember": [
+      {
+        "id": "cmsrtnun2001olrofpds6efm8",
+        "name": "آرش نیک‌روش",
+        "role": "مدیر خلاقیت",
+        "monogram": "آ",
+        "bio": "پانزده سال است که برندها را از حرف به شکل می‌رساند. جلسه‌ی اول هر پروژه با اوست و تا تحویل آخر هم می‌ماند.",
+        "location": "تهران",
+        "focus": [
+          "راهبرد خلاق",
+          "هدایت پروژه",
+          "روایت برند"
+        ],
+        "accent": "#ef4444",
+        "imageId": "cmsud6t6m0000rnofgqskt9s2",
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun2001plrofvovax8nq",
+        "name": "سحر مرادی",
+        "role": "مدیر هنری",
+        "monogram": "س",
+        "bio": "زبان بصری هر پروژه از دست او درمی‌آید؛ از شبکه و تایپوگرافی تا آخرین جزئیاتی که کسی آگاهانه نمی‌بیند ولی حس می‌کند.",
+        "location": "تهران",
+        "focus": [
+          "هویت بصری",
+          "تایپوگرافی",
+          "هنر تصویری"
+        ],
+        "accent": "#1d4ed8",
+        "imageId": null,
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun2001qlrofdeh8agag",
+        "name": "نیما رستمی",
+        "role": "سرپرست توسعه",
+        "monogram": "ن",
+        "bio": "کاری می‌کند که طرح، روی گوشی و لپ‌تاپ و اینترنت کند هم همان‌قدر خوب باشد. سرعت سایت را جزئی از طراحی می‌داند، نه کاری بعد از آن.",
+        "location": "اصفهان",
+        "focus": [
+          "Next.js",
+          "کارایی",
+          "دسترس‌پذیری"
+        ],
+        "accent": "#0f766e",
+        "imageId": null,
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun2001rlrofz5slzkf5",
+        "name": "الهام کاظمی",
+        "role": "استراتژیست برند",
+        "monogram": "ا",
+        "bio": "قبل از اینکه چیزی طراحی شود، می‌پرسد برای که و چرا. پژوهش و جایگاه‌یابی هر پروژه از این‌جا شروع می‌شود.",
+        "location": "شیراز",
+        "focus": [
+          "پژوهش",
+          "جایگاه‌یابی",
+          "لحن کلامی"
+        ],
+        "accent": "#c2410c",
+        "imageId": null,
+        "order": 3,
+        "visible": true
+      }
+    ],
+    "partner": [
+      {
+        "id": "cmsrtnun6001slrof38har3s5",
+        "name": "Vercel",
+        "imageId": null,
+        "weight": 700,
+        "spacing": "-0.04em",
+        "italic": false,
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001tlrof8b0bg6lv",
+        "name": "Linear",
+        "imageId": null,
+        "weight": 600,
+        "spacing": "-0.02em",
+        "italic": false,
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001ulrofqy63xvwc",
+        "name": "STRAVA",
+        "imageId": null,
+        "weight": 900,
+        "spacing": "-0.01em",
+        "italic": false,
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001vlrofqo7f7cky",
+        "name": "Duolingo",
+        "imageId": null,
+        "weight": 800,
+        "spacing": "-0.03em",
+        "italic": false,
+        "order": 3,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001wlrofeg9kzl60",
+        "name": "FAIRE",
+        "imageId": null,
+        "weight": 400,
+        "spacing": "0.32em",
+        "italic": false,
+        "order": 4,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001xlrofvd8j4qy1",
+        "name": "Notion",
+        "imageId": null,
+        "weight": 700,
+        "spacing": "-0.02em",
+        "italic": false,
+        "order": 5,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001ylroff5g1hhy7",
+        "name": "Figma",
+        "imageId": null,
+        "weight": 600,
+        "spacing": "-0.01em",
+        "italic": false,
+        "order": 6,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun6001zlrofu4ad8c2i",
+        "name": "Canva",
+        "imageId": null,
+        "weight": 700,
+        "spacing": "-0.02em",
+        "italic": true,
+        "order": 7,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun60020lroflnczzbkn",
+        "name": "Descript",
+        "imageId": null,
+        "weight": 700,
+        "spacing": "-0.03em",
+        "italic": false,
+        "order": 8,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun60021lrofwz74r5j0",
+        "name": "IDEO",
+        "imageId": null,
+        "weight": 800,
+        "spacing": "0.22em",
+        "italic": false,
+        "order": 9,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun60022lrofa3telsfz",
+        "name": "Clearbit",
+        "imageId": null,
+        "weight": 600,
+        "spacing": "-0.02em",
+        "italic": false,
+        "order": 10,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnun60023lrofwazm3elb",
+        "name": "Loom",
+        "imageId": null,
+        "weight": 800,
+        "spacing": "-0.03em",
+        "italic": false,
+        "order": 11,
+        "visible": true
+      }
+    ],
+    "testimonial": [
+      {
+        "id": "cmsurgmy4003rdhof1i4i7nac",
+        "quote": "محصول نهایی دقیقاً همانی شد که انتظار داشتیم. روند ساخت از اول تا آخر دور خودِ ما می‌چرخید و آدم‌وار بود، و بعد از تحویل هم هر وقت سؤالی داشتیم جواب گرفتیم.",
+        "name": "پدرام منصوری",
+        "role": "هم‌بنیان‌گذار، نوروزمارکت — تهران",
+        "imageId": null,
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsurgmy4003sdhofb2sl727g",
+        "quote": "چیزی که بیشتر از همه برای‌مان ارزش داشت این بود که قبل از طراحی، وقت گذاشتند و کسب‌وکار ما را فهمیدند. نتیجه‌اش برندی شد که خودمان هم بهتر می‌شناسیمش.",
+        "name": "مریم شریفی",
+        "role": "مدیر بازاریابی، شب‌تاب — اصفهان",
+        "imageId": null,
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsurgmy4003tdhof9xm650ss",
+        "quote": "سایت را در موعدش تحویل دادند و سرعتش روی موبایل دو برابر چیزی شد که قبلاً داشتیم. سه ماه بعد هم نرخ تبدیل‌مان همان‌قدر بالا مانده.",
+        "name": "بهرام کیانی",
+        "role": "مدیرعامل، پارس‌راد — شیراز",
+        "imageId": null,
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsurgmy4003udhof128n7h2y",
+        "quote": "با چند آژانس کار کرده بودیم و همیشه بین تیم فروش و تیم اجرا فاصله بود. این‌جا همان کسی که در جلسه‌ی اول نشسته بود، خودش کار را جلو برد.",
+        "name": "سپیده احمدی",
+        "role": "مدیر برند، آوند — تهران",
+        "imageId": null,
+        "order": 3,
+        "visible": true
+      }
+    ],
+    "project": [
+      {
+        "id": "cmsrtnunc0024lrof501oeiwx",
+        "slug": "aban",
+        "title": "نشان‌واره‌ی آبان",
+        "category": "هویت برند",
+        "year": "۱۴۰۳",
+        "tags": [
+          "برندینگ",
+          "چاپ"
+        ],
+        "color": "#f6b506",
+        "client": "گروه آبان",
+        "role": "هویت بصری، کتابچه‌ی برند",
+        "summary": "یک هلدینگ سرمایه‌گذاری که بعد از پانزده سال، نشانه‌ای داشت که دیگر شبیه خودش نبود. کار ما ساختن یک سیستم بود، نه یک لوگو.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>آبان در پنج حوزه‌ی متفاوت فعال بود و هر زیرمجموعه برای خودش نشانه و رنگ ساخته بود. نتیجه این شده بود که هیچ‌کدام از بیرون به هم وصل دیده نمی‌شدند و اعتبار مجموعه بین‌شان تقسیم می‌شد.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>به‌جای طراحی یک لوگوی تازه، اول معماری برند را نوشتیم: چه چیزی مشترک بماند و چه چیزی اجازه دارد متفاوت باشد. نشانه از یک فرم پایه ساخته شد که برای هر زیرمجموعه یک حالت دارد — همان اسکلت، لحن متفاوت.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>یک سیستم بصری با یک نشانه‌ی مادر و پنج حالت، به‌همراه کتابچه‌ای که تیم داخلی بدون ما هم بتواند با آن کار کند. شش ماه بعد، اقلام تازه بدون بازبینی ما تولید می‌شد.</p>"
+          }
+        ],
+        "faqs": [
+          {
+            "a": "از اولین جلسه تا تحویل کتابچه، حدود پنج ماه. بیشترش صرف توافق روی معماری برند شد، نه طراحی نشانه.",
+            "q": "این پروژه چقدر طول کشید؟"
+          },
+          {
+            "a": "سیستم طوری تحویل داده می‌شود که تیم داخلی بتواند حالت تازه بسازد. دو حالت اول را با هم ساختیم تا الگو روشن باشد.",
+            "q": "نشانه‌ی زیرمجموعه‌ها را هم شما می‌سازید؟"
+          }
+        ],
+        "col": 0,
+        "row": 0,
+        "w": 2,
+        "h": 2,
+        "imageId": null,
+        "filmId": null,
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc0025lrof7xwgcfd3",
+        "slug": "mehregan",
+        "title": "پلتفرم مهرگان",
+        "category": "وب و محصول",
+        "year": "۱۴۰۳",
+        "tags": [
+          "محصول",
+          "وب"
+        ],
+        "color": "#3b6ef5",
+        "client": "مهرگان",
+        "role": "طراحی محصول، توسعه",
+        "summary": "بازطراحی یک پلتفرم آموزشی که کاربر داشت ولی کاربرش نمی‌ماند. مسئله در ظاهر نبود، در مسیر بود.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>نرخ بازگشت کاربر بعد از جلسه‌ی اول به‌شدت افت می‌کرد. داده‌ها می‌گفت مشکل محتوا نیست؛ مردم بعد از ثبت‌نام نمی‌دانستند قدم بعدی چیست.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>کل مسیر را از ثبت‌نام تا جلسه‌ی سوم روی دیوار کشیدیم و هر نقطه‌ای که کاربر باید تصمیم می‌گرفت علامت زدیم. بیشترشان تصمیم‌های بی‌فایده بودند و حذف شدند.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>یک مسیر شروع خطی با یک قدم فعال در هر لحظه. تعداد صفحه‌های تا اولین جلسه از نُه به سه رسید و ماندگاری هفته‌ی اول به‌طور محسوسی بالا رفت.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 2,
+        "row": 0,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc0026lrofbgtijvty",
+        "slug": "shabtab",
+        "title": "کمپین شب‌تاب",
+        "category": "ویدیو و کمپین",
+        "year": "۱۴۰۲",
+        "tags": [
+          "ویدیو",
+          "موشن"
+        ],
+        "color": "#e0483f",
+        "client": "شب‌تاب",
+        "role": "کارگردانی، موشن‌گرافیک",
+        "summary": "کمپین معرفی یک محصول روشنایی که قرار بود در شلوغی نوروز دیده شود، بدون اینکه فریاد بزند.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>بازار در آن فصل پر از تبلیغ پرسروصداست. بودجه‌ی رسانه‌ای شب‌تاب یک‌دهم رقبا بود، پس رقابت بر سر تکرار بی‌معنی بود.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>روی یک ایده‌ی بصری واحد تمرکز کردیم که در سه ثانیه خوانده شود و در هر قاب تکرارپذیر باشد: نور که از جایی می‌آید که انتظارش را نداری.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>یک فیلم اصلی و نُه برش کوتاه برای شبکه‌های اجتماعی، همه از یک زبان بصری. کمپین بدون افزایش بودجه، سهم دیده‌شدن قابل توجهی گرفت.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 4,
+        "row": 0,
+        "w": 2,
+        "h": 2,
+        "imageId": null,
+        "filmId": null,
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc0027lrof1a3oja2x",
+        "slug": "parsrad",
+        "title": "هویت پارس‌راد",
+        "category": "هویت برند",
+        "year": "۱۴۰۲",
+        "tags": [
+          "برندینگ"
+        ],
+        "color": "#128a7d",
+        "client": "پارس‌راد",
+        "role": "هویت بصری",
+        "summary": "یک شرکت مهندسی با چهل سال سابقه که می‌خواست جوان‌تر دیده شود، بدون اینکه سابقه‌اش را دور بیندازد.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>تعادل بین اعتبار و تازگی. هر طراحی که زیادی مدرن می‌شد، مشتریان قدیمی را نگران می‌کرد و هر چیزی که محافظه‌کار می‌ماند، در مناقصه‌های تازه کم می‌آورد.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>تایپوگرافی را مدرن کردیم و پالت را محدود، ولی فرم نشانه را از نقشه‌های فنی خودشان بیرون کشیدیم. چیزی که تازه است ولی از جای آشنایی آمده.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>هویتی که در اسناد فنی و در شبکه‌های اجتماعی هر دو کار می‌کند — دو جایی که قبلاً دو برند متفاوت به نظر می‌رسیدند.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 2,
+        "row": 1,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 3,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc0028lrofvudnhz56",
+        "slug": "niloofar",
+        "title": "اپلیکیشن نیلوفر",
+        "category": "محصول دیجیتال",
+        "year": "۱۴۰۳",
+        "tags": [
+          "اپ",
+          "UX"
+        ],
+        "color": "#d2621f",
+        "client": "نیلوفر",
+        "role": "تجربه‌ی کاربری، رابط",
+        "summary": "اپلیکیشن سلامت زنان، با محدودیتی که بیشتر پروژه‌ها ندارند: کاربر باید در کمترین زمان و بیشترین حریم خصوصی کار را تمام کند.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>بخش زیادی از کاربران در فضای مشترک از اپ استفاده می‌کردند. هر چیزی که روی صفحه بماند یا در نوتیفیکیشن ظاهر شود، یک ریسک بود.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>پیش‌فرض را بر پنهان‌بودن گذاشتیم: اطلاعات حساس فقط با یک اقدام آگاهانه نمایش داده می‌شود، و هیچ‌چیز در پیش‌نمایش بیرون نمی‌زند.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>یک رابط که سریع است چون کم می‌پرسد، و قابل اعتماد است چون چیزی را لو نمی‌دهد. بازخورد کاربران دقیقاً روی همین دو نکته بود.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 0,
+        "row": 2,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 4,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc0029lroffrjg1k5r",
+        "slug": "zaferankadeh",
+        "title": "زعفران‌کده",
+        "category": "بسته‌بندی",
+        "year": "۱۴۰۱",
+        "tags": [
+          "بسته‌بندی",
+          "چاپ"
+        ],
+        "color": "#8b5cf6",
+        "client": "زعفران‌کده",
+        "role": "بسته‌بندی، هویت",
+        "summary": "بسته‌بندی زعفران صادراتی، جایی که محصول گران است ولی جعبه‌اش این را نمی‌گفت.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>در قفسه‌ی فروشگاه خارجی، محصول کنار برندهایی می‌نشست که ده برابر روی بسته‌بندی خرج کرده بودند. تفاوت کیفیت داخل جعبه از بیرون دیده نمی‌شد.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>به‌جای اضافه‌کردن تزئین، همه‌چیز را کم کردیم و روی جنس و یک جزئیات چاپی سرمایه‌گذاری کردیم که فقط از نزدیک دیده می‌شود — همان لحظه‌ای که مشتری جعبه را برمی‌دارد.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>بسته‌بندی‌ای که در عکس ساده به نظر می‌رسد و در دست گران. سفارش‌های صادراتی سال بعد بیش از دو برابر شد.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 2,
+        "row": 2,
+        "w": 2,
+        "h": 2,
+        "imageId": null,
+        "filmId": null,
+        "order": 5,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc002alrofj9ltrfsv",
+        "slug": "rahnama",
+        "title": "وب‌سایت رهنما",
+        "category": "وب",
+        "year": "۱۴۰۴",
+        "tags": [
+          "وب"
+        ],
+        "color": "#1587c4",
+        "client": "رهنما",
+        "role": "طراحی و توسعه",
+        "summary": "سایت یک مؤسسه‌ی حقوقی که باید هم‌زمان معتبر و قابل فهم می‌بود — دو چیزی که معمولاً یکدیگر را خراب می‌کنند.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>محتوای موجود با زبان حقوقی نوشته شده بود. کاربرها وارد می‌شدند، چند خط می‌خواندند و می‌رفتند سراغ تماس تلفنی، که ظرفیت تیم را پر کرده بود.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>ساختار سایت را بر اساس سؤال‌های واقعی مراجعان چیدیم، نه بر اساس چارت سازمانی مؤسسه. هر صفحه به یک سؤال جواب می‌دهد.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>تماس‌های تکراری کم شد و تماس‌هایی که می‌آمد، از افرادی بود که می‌دانستند دقیقاً چه می‌خواهند.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 4,
+        "row": 2,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 6,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc002blrof474am8xa",
+        "slug": "nowruz",
+        "title": "کمپین نوروز",
+        "category": "کمپین",
+        "year": "۱۴۰۳",
+        "tags": [
+          "کمپین",
+          "سوشال"
+        ],
+        "color": "#d1275a",
+        "client": "یک برند خرده‌فروشی",
+        "role": "ایده، تولید محتوا",
+        "summary": "کمپین نوروزی که قرار نبود درباره‌ی تخفیف باشد — در فصلی که همه فقط درباره‌ی تخفیف حرف می‌زنند.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>برند سال‌ها نوروز را با تخفیف جشن گرفته بود و حاشیه‌ی سودش هر سال نازک‌تر می‌شد. تغییر مسیر ریسک فروش داشت.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>کمپین را حول یک رسم آشنا ساختیم و محصول را در حاشیه گذاشتیم. پیام درباره‌ی خرید نبود، ولی همه‌ی نقاط تماس به خرید ختم می‌شد.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>فروش نوروز حفظ شد بدون تخفیف عمیق، و برای اولین بار محتوای کمپین بعد از پایان فصل هم بازنشر می‌شد.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 0,
+        "row": 3,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 7,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunc002clrofqt2l8s18",
+        "slug": "arian",
+        "title": "کتابچه‌ی آرین",
+        "category": "هویت برند",
+        "year": "۱۴۰۱",
+        "tags": [
+          "برندینگ"
+        ],
+        "color": "#6b9d20",
+        "client": "آرین",
+        "role": "کتابچه‌ی برند",
+        "summary": "برندی که هویت داشت ولی هر تیمی جور دیگری از آن استفاده می‌کرد. مشکل، نبودِ طراحی نبود؛ نبودِ قاعده بود.",
+        "sections": [
+          {
+            "h": "چالش",
+            "p": "<p>فایل‌های هویت در چند نسخه بین تیم‌ها می‌چرخید و هیچ‌کس نمی‌دانست کدام تازه‌تر است. نتیجه، خروجی‌هایی بود که کنار هم نمی‌نشستند.</p>"
+          },
+          {
+            "h": "رویکرد",
+            "p": "<p>کتابچه را به‌جای یک PDF بلند، به مجموعه‌ای از تصمیم‌های کوتاه تبدیل کردیم: در هر موقعیت چه کاری درست است و چه کاری نه، با مثال واقعی از خود برند.</p>"
+          },
+          {
+            "h": "نتیجه",
+            "p": "<p>تیم‌ها بدون واسطه‌ی ما هم خروجی یکدست می‌دادند، و بازبینی‌های رفت‌وبرگشتی تقریباً حذف شد.</p>"
+          }
+        ],
+        "faqs": [],
+        "col": 4,
+        "row": 3,
+        "w": 2,
+        "h": 1,
+        "imageId": null,
+        "filmId": null,
+        "order": 8,
+        "visible": true
+      }
+    ],
+    "projectImage": [],
+    "serviceImage": [],
+    "projectService": [
+      {
+        "projectId": "cmsrtnunc0024lrof501oeiwx",
+        "serviceId": "cmsrtnumr001hlrofot1mwwj9",
+        "order": 3
+      },
+      {
+        "projectId": "cmsrtnunc0025lrof7xwgcfd3",
+        "serviceId": "cmsrtnumr001ilrofs2vvuk7w",
+        "order": 0
+      },
+      {
+        "projectId": "cmsrtnunc0026lrofbgtijvty",
+        "serviceId": "cmsrtnumr001jlrofwgsoy68v",
+        "order": 0
+      },
+      {
+        "projectId": "cmsrtnunc0027lrof1a3oja2x",
+        "serviceId": "cmsrtnumr001hlrofot1mwwj9",
+        "order": 0
+      },
+      {
+        "projectId": "cmsrtnunc0027lrof1a3oja2x",
+        "serviceId": "cmsrtnumr001klrofqp03wo85",
+        "order": 0
+      },
+      {
+        "projectId": "cmsrtnunc0028lrofvudnhz56",
+        "serviceId": "cmsrtnumr001ilrofs2vvuk7w",
+        "order": 1
+      },
+      {
+        "projectId": "cmsrtnunc0029lroffrjg1k5r",
+        "serviceId": "cmsrtnumr001hlrofot1mwwj9",
+        "order": 1
+      },
+      {
+        "projectId": "cmsrtnunc002alrofj9ltrfsv",
+        "serviceId": "cmsrtnumr001ilrofs2vvuk7w",
+        "order": 2
+      },
+      {
+        "projectId": "cmsrtnunc002blrof474am8xa",
+        "serviceId": "cmsrtnumr001jlrofwgsoy68v",
+        "order": 1
+      },
+      {
+        "projectId": "cmsrtnunc002blrof474am8xa",
+        "serviceId": "cmsrtnumr001klrofqp03wo85",
+        "order": 1
+      },
+      {
+        "projectId": "cmsrtnunc002clrofqt2l8s18",
+        "serviceId": "cmsrtnumr001hlrofot1mwwj9",
+        "order": 2
+      }
+    ],
+    "post": [
+      {
+        "id": "cmsu9wfhs001gr5ofwbmyvvsx",
+        "slug": "brand-is-not-a-logo",
+        "title": "برند یعنی چه، وقتی لوگو نیست",
+        "excerpt": "بیشتر پروژه‌هایی که با «یک لوگوی تازه می‌خواهیم» شروع می‌شوند، مسئله‌شان لوگو نیست. مسئله این است که مجموعه نمی‌داند چه چیزی را باید ثابت نگه دارد.",
+        "body": "<p><span style=\"color:rgb(194, 65, 12)\">هر بار که کسی با درخواست «فقط یک لوگوی تازه» سراغ‌مان می‌آید، اولین سؤال‌مان این نیست که چه شکلی دوست دارید. می‌پرسیم در شش ماه گذشته چند نفر داخل مجموعه چیزی طراحی کرده‌اند و بر چه اساسی تصمیم گرفته‌اند.</span></p><p>جوابْ تقریباً همیشه یکی است: چند نفر، هرکدام بر اساس سلیقه‌ی خودشان. نتیجه این می‌شود که مخاطب بیرونی، ده تا خروجی می‌بیند که هیچ‌کدام شبیه هم نیستند، و به‌جای یک برند، ده تا برند نصفه‌نیمه به یاد می‌آورد.</p><p>لوگوی تازه این را درست نمی‌کند. چیزی که درستش می‌کند، مجموعه‌ای از قاعده‌های کوتاه است: چه چیزی هرگز تغییر نمی‌کند، چه چیزی اجازه دارد تغییر کند، و وقتی کسی شک کرد باید از چه کسی بپرسد.</p><p>به همین دلیل است که کتابچه‌های برندی که ما تحویل می‌دهیم، به‌جای چهل صفحه توضیح فلسفی، فهرستی از تصمیم‌های مشخص با مثال واقعی‌اند. کتابچه‌ای که خوانده نشود، هیچ برندی را نجات نمی‌دهد.</p>",
+        "category": "یادداشت",
+        "tags": [
+          "برندینگ",
+          "استراتژی"
+        ],
+        "accent": "#f6b506",
+        "readMinutes": 1,
+        "coverId": "cmsua6vaw0000j1ofgm739si1",
+        "faqs": [
+          {
+            "a": "فهرست کاری که در یک سال گذشته تولید شده و اینکه هرکدام را چه کسی تأیید کرده. تا این را نبینیم، هر پیشنهادی حدس است.",
+            "q": "برای شروع بازطراحی برند، اول چه چیزی لازم است؟"
+          },
+          {
+            "a": "بسته به تعداد زیرمجموعه‌ها، معمولاً شش تا ده هفته. بخش زیادی از این زمان صرف نوشتن قاعده‌ها می‌شود، نه طراحی.",
+            "q": "کتابچه‌ی برند چقدر طول می‌کشد؟"
+          }
+        ],
+        "publishedAt": "2026-08-06T11:08:50.272Z",
+        "visible": true,
+        "createdAt": "2026-08-15T11:08:50.416Z",
+        "updatedAt": "2026-08-15T12:19:25.055Z"
+      },
+      {
+        "id": "cmsu9wfhw001hr5of3qrbjyxp",
+        "slug": "designing-for-the-shared-screen",
+        "title": "طراحی برای صفحه‌ای که تنها نیست",
+        "excerpt": "وقتی کاربر گوشی‌اش را در فضای مشترک باز می‌کند، هر چیزی که روی صفحه می‌ماند یک ریسک است. این محدودیت، طراحی را ساده‌تر می‌کند نه سخت‌تر.",
+        "body": "<p>در پروژه‌ی نیلوفر با محدودیتی روبه‌رو شدیم که بیشتر اپلیکیشن‌ها ندارند: بخش زیادی از کاربران، اپ را جایی باز می‌کردند که کس دیگری هم می‌توانست صفحه را ببیند.</p><p>اولین واکنش تیم این بود که قفل و رمز اضافه کنیم. ولی قفل، مسئله‌ی «چه چیزی روی صفحه دیده می‌شود» را حل نمی‌کند؛ فقط یک قدم به اولش اضافه می‌کند.</p><p>چیزی که جواب داد، عوض‌کردن پیش‌فرض بود: هیچ اطلاعات حساسی به‌خودی‌خود نمایش داده نمی‌شود. کاربر باید یک اقدام آگاهانه انجام دهد تا ببیند، و همان اقدام یعنی خودش می‌داند الان جای امنی است.</p><p>جالب اینکه این محدودیت، رابط را سریع‌تر هم کرد. وقتی مجبوری پیش‌فرض را خالی بگذاری، ناچار می‌شوی تصمیم بگیری واقعاً چه چیزی مهم است — و بیشتر چیزهایی که فکر می‌کردیم مهم‌اند، نبودند.</p>",
+        "category": "تجربه‌ی کاربری",
+        "tags": [
+          "UX",
+          "حریم خصوصی"
+        ],
+        "accent": "#d2621f",
+        "readMinutes": 1,
+        "coverId": null,
+        "faqs": [
+          {
+            "a": "نه. وقتی پیش‌فرض را خالی می‌گذاری، مجبور می‌شوی تصمیم بگیری چه چیزی واقعاً لازم است — و نتیجه معمولاً ساده‌تر از قبل درمی‌آید.",
+            "q": "طراحی حریم‌محور یعنی رابط باید پیچیده‌تر شود؟"
+          },
+          {
+            "a": "برای هر جایی که کاربر ممکن است صفحه را در فضای مشترک باز کند، بله. برای ابزارهای کاملاً شخصی، هزینه‌ی یک کلیک اضافه ارزشش را ندارد.",
+            "q": "این رویکرد برای هر اپلیکیشنی جواب می‌دهد؟"
+          }
+        ],
+        "publishedAt": "2026-07-22T11:08:50.272Z",
+        "visible": true,
+        "createdAt": "2026-08-15T11:08:50.420Z",
+        "updatedAt": "2026-08-15T12:19:25.061Z"
+      },
+      {
+        "id": "cmsu9wfhy001ir5of02b9p546",
+        "slug": "campaign-without-discount",
+        "title": "کمپین نوروزی بدون تخفیف",
+        "excerpt": "در فصلی که همه فقط درباره‌ی تخفیف حرف می‌زنند، ساکت‌ماندن درباره‌ی قیمت خودش یک موضع است — به شرطی که چیز دیگری برای گفتن داشته باشی.",
+        "body": "<p>برند سال‌ها نوروز را با تخفیف جشن گرفته بود. هر سال درصد بیشتر می‌شد و حاشیه‌ی سود نازک‌تر، و هیچ‌کس دیگر یادش نمی‌آمد کمپین پارسال درباره‌ی چه بود.</p><p>پیشنهاد ما این بود که امسال اصلاً درباره‌ی قیمت حرف نزنیم. ریسکش واضح بود و تیم فروش هم همین را گفت: اگر فروش بیفتد، جوابش با کیست.</p><p>کاری که کردیم این بود که کمپین را حول یک رسم آشنای نوروزی ساختیم و محصول را در حاشیه‌ی قاب گذاشتیم. پیام درباره‌ی خرید نبود، ولی هر نقطه‌ی تماس، مسیری به خرید داشت.</p><p>فروش حفظ شد، بدون تخفیف عمیق. ولی چیزی که برای‌مان مهم‌تر بود این بود که برای اولین بار، محتوای کمپین بعد از تمام‌شدن فصل هم بازنشر می‌شد — چیزی که یک بنر تخفیف هرگز نمی‌شود.</p>",
+        "category": "کمپین",
+        "tags": [
+          "کمپین",
+          "سوشال"
+        ],
+        "accent": "#d1275a",
+        "readMinutes": 1,
+        "coverId": null,
+        "faqs": [
+          {
+            "a": "نه. اگر مخاطب فقط به‌خاطر قیمت سراغ برند می‌آید، حذف تخفیف یعنی حذف دلیل خرید. این کار وقتی جواب می‌دهد که چیز دیگری برای گفتن داشته باشی.",
+            "q": "کمپین بدون تخفیف برای هر برندی جواب می‌دهد؟"
+          },
+          {
+            "a": "کمپین را روی یک بازه‌ی محدود تست کردیم و شاخص فروش را هفتگی دیدیم، با این توافق که اگر افت از حد مشخصی بیشتر شد به پیام قبلی برگردیم.",
+            "q": "ریسک افت فروش را چطور مدیریت کردید؟"
+          }
+        ],
+        "publishedAt": "2026-06-28T11:08:50.272Z",
+        "visible": true,
+        "createdAt": "2026-08-15T11:08:50.422Z",
+        "updatedAt": "2026-08-15T12:19:25.063Z"
+      }
+    ],
+    "dockLink": [
+      {
+        "id": "cmsrtnung002dlrof7ite0rv3",
+        "label": "خانه",
+        "href": "/",
+        "txLabel": "خانه",
+        "txColor": "#1c1c22",
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnung002elrof1pzc1rj3",
+        "label": "پروژه‌ها",
+        "href": "/projects",
+        "txLabel": "پروژه‌ها",
+        "txColor": "#ef4444",
+        "order": 1,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnung002flrofmjer3zfz",
+        "label": "مجله",
+        "href": "/magazine",
+        "txLabel": "مجله",
+        "txColor": "#000000",
+        "order": 3,
+        "visible": true
+      },
+      {
+        "id": "cmsufcx3b0034yxofq4bqj9ji",
+        "label": "خدمات",
+        "href": "/services",
+        "txLabel": "خدمات",
+        "txColor": "#0f766e",
+        "order": 2,
+        "visible": true
+      },
+      {
+        "id": "cmsuqbamg003wsmof8493jd44",
+        "label": "تیم",
+        "href": "/team",
+        "txLabel": "تیم",
+        "txColor": "#c2410c",
+        "order": 4,
+        "visible": true
+      }
+    ],
+    "railLink": [
+      {
+        "id": "cmsrtnunk002hlrofuzlvl9id",
+        "label": "پروژه‌ها",
+        "caption": "کارهایی که ساخته‌ایم",
+        "indexLabel": "۰۱",
+        "href": "/projects",
+        "side": "START",
+        "accent": "#ef4444",
+        "order": 0,
+        "visible": true
+      },
+      {
+        "id": "cmsrtnunk002ilrofqcv6omld",
+        "label": "آثار",
+        "caption": "گالری تصویرسازی",
+        "indexLabel": "۰۲",
+        "href": "/artworks",
+        "side": "END",
+        "accent": "#1d4ed8",
+        "order": 1,
+        "visible": true
+      }
+    ],
+    "bootWord": [
+      {
+        "id": "cmsrtnuno002jlrof1cmv76mg",
+        "text": "ایده",
+        "order": 0
+      },
+      {
+        "id": "cmsrtnuno002klrofgyxyqb1l",
+        "text": "طراحی",
+        "order": 1
+      },
+      {
+        "id": "cmsrtnuno002llrof9ijs14eu",
+        "text": "برند",
+        "order": 2
+      },
+      {
+        "id": "cmsrtnuno002mlrofmv8wzi99",
+        "text": "استراتژی",
+        "order": 3
+      },
+      {
+        "id": "cmsrtnuno002nlrofjlqqltt5",
+        "text": "خلاقیت",
+        "order": 4
+      },
+      {
+        "id": "cmsrtnuno002olrof18oynw4i",
+        "text": "هنر",
+        "order": 5
+      },
+      {
+        "id": "cmsrtnuno002plrofjro0w8u7",
+        "text": "دیجیتال",
+        "order": 6
+      },
+      {
+        "id": "cmsrtnuno002qlrofhuxxeynv",
+        "text": "تجربه",
+        "order": 7
+      },
+      {
+        "id": "cmsrtnuno002rlrof182iogan",
+        "text": "رشد",
+        "order": 8
+      },
+      {
+        "id": "cmsrtnuno002slrofwkri4wf9",
+        "text": "کسب‌و‌کار",
+        "order": 9
+      },
+      {
+        "id": "cmsrtnuno002tlrofvdlkeapw",
+        "text": "با",
+        "order": 10
+      }
+    ]
+  }
+}

@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import ProjectsCanvas from "@/components/ProjectsCanvas";
 import BrandHeader from "@/components/BrandHeader";
 import BottomNav from "@/components/BottomNav";
-import { getProjectsContent, getStrings, pick } from "@rahyad/core";
+import { getProjectsContent, pick } from "@rahyad/core";
+import { pageMetadata, seoStrings } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getStrings();
-  return {
+  const s = await seoStrings();
+  return pageMetadata({
+    path: "/projects",
     title: pick(s, "seo.projects.title", "پروژه‌ها | رهیــــاد"),
     description: pick(s, "seo.projects.description", "پروژه‌های رهیاد"),
-  };
+  });
 }
 
 export default async function ProjectsPage() {

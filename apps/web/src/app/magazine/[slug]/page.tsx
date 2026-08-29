@@ -18,6 +18,7 @@ import {
   getStrings,
   pick,
 } from "@rahyad/core";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const posts = await getPosts();
@@ -32,17 +33,16 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "مجله | رهیــــاد" };
-  return {
+  return pageMetadata({
+    path: `/magazine/${post.slug}`,
     title: `${post.title} | مجله‌ی رهیــــاد`,
     description: post.excerpt,
     openGraph: {
       type: "article",
-      title: post.title,
-      description: post.excerpt,
       publishedTime: post.publishedAt ?? undefined,
       images: post.cover ? [{ url: post.cover.url, alt: post.cover.alt }] : undefined,
     },
-  };
+  });
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {

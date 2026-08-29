@@ -17,6 +17,10 @@
 #   docker compose up -d db
 #   docker compose run --rm migrate
 #   docker compose up -d app
+#
+# `migrate` applies pending schema migrations *and* imports the content
+# snapshot committed alongside the code, so pushing content is how it reaches
+# this server (see docs/DEPLOYMENT.md).
 
 services:
   db:
@@ -36,6 +40,9 @@ services:
       retries: 20
 
   # One-off: `docker compose run --rm migrate`. Not part of `up`.
+  # Schema migrations, then the committed content snapshot. Content tables are
+  # rewritten from the snapshot; accounts, reader comments and the contact
+  # inbox are left untouched.
   migrate:
     image: rahyad-migrate:latest
     build:
