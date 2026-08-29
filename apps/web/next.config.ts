@@ -1,4 +1,5 @@
 import path from "node:path";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 // Next runs with the app directory as the working directory, so the repo root
@@ -22,4 +23,16 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: repoRoot,
 };
 
-export default nextConfig;
+// Wires the SDK into the build: instruments the server bundle and rewrites
+// stack frames so they point at source rather than compiled output.
+//
+// Source map *upload* is off because it targets Sentry's release API, which
+// Bugsink does not implement — leaving it on makes every build spend time on
+// an upload that ends in a warning. Server-side stack traces stay readable
+// regardless; only minified browser traces lose their original line numbers.
+export default withSentryConfig(nextConfig, {
+  sourcemaps: { disable: true },
+  // The build must not fail because the error collector is unreachable — that
+  // link is far less reliable than the rest of the build (see Dockerfile).
+  silent: true,
+});
