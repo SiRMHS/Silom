@@ -14,9 +14,9 @@
 #
 # `next build` runs generateStaticParams / page-level data fetching against
 # the real database (see apps/web/src/app/page.tsx, [slug] routes), so the
-# builder stage needs a reachable Postgres — pass DATABASE_URL as a build arg
-# pointing at a database already migrated to the current schema. See
-# docker-compose.yml for how the `db` service is wired up for this.
+# builder stage needs a reachable Postgres — pass DATABASE_URL as a build arg.
+# The builder applies pending migrations itself before building, so the
+# database only has to be reachable, not already up to date.
 
 FROM node:22-alpine AS base
 # https://nextjs.org/docs/app/getting-started/deploying#docker (glibc shims for alpine)
@@ -57,6 +57,11 @@ COPY . .
 ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 RUN npm run db:generate
+# `next build` below reads the database, so the schema has to be current before
+# it runs — otherwise adding a migration breaks the build until someone applies
+# it by hand. Same command the `migrator` stage runs; `npm run -w` puts the cwd
+# on packages/db, which is where prisma.config.ts resolves its paths from.
+RUN npm run migrate:deploy -w @rahyad/db
 RUN npm run build
 
 # ---- runner: minimal production image, no node_modules/source beyond what was traced
