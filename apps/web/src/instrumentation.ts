@@ -1,5 +1,12 @@
 // Next.js calls register() once per runtime as the server boots.
 //
+// This file, instrumentation-client.ts and sentry.server.config.ts must sit in
+// src/, not in apps/web/ — Next.js looks for instrumentation next to the app
+// directory, and this project's app directory is src/app. In the wrong place
+// they are simply never loaded: the build emits no instrumentation chunk, the
+// SDK never initializes, and errors are logged to stdout and dropped without
+// any warning that reporting is off.
+//
 // The import is dynamic and inside the runtime check so the Sentry server SDK
 // is never pulled into a runtime it does not support. There is no edge branch
 // here because this app has no middleware and no route exports
