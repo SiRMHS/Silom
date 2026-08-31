@@ -75,13 +75,18 @@ RUN npm run db:generate
 # it by hand. Same command the `migrator` stage runs; `npm run -w` puts the cwd
 # on packages/db, which is where prisma.config.ts resolves its paths from.
 RUN npm run migrate:deploy -w @rahyad/db
-# Every public page is prerendered by `next build` against this database, so
-# whatever is in it at this moment is the content the image ships with. On CI
-# that database is a throwaway created seconds ago and is otherwise empty —
-# without this the image would be built from blank pages. Same snapshot the
-# server imports (see the `migrator` stage), so the pages baked in here and the
-# rows the running site edits start out identical.
-RUN npm run db:import
+# Deliberately no `db:import` here. Every public page is prerendered by
+# `next build` against this database, and the snapshot exists so a build against
+# an empty CI database still produces real pages rather than blank ones. But on
+# Coolify DATABASE_URL points at the production Postgres, where the content
+# already is — and the import treats the snapshot as authoritative, deleting any
+# row it doesn't contain (see packages/db/prisma/import-content.ts). Running it
+# here wiped every media item and edit the admin panel had added since the
+# snapshot was last exported, on every single deploy.
+#
+# The server is the source of truth for content; `db:export` is how it comes
+# back into git. Restore this line only for a build whose DATABASE_URL is a
+# throwaway database.
 # The one place that has both the script and a live connection. The runtime
 # image is the traced standalone output — no tsx, no Prisma CLI, no
 # packages/db source — so this cannot be done by exec'ing into the running

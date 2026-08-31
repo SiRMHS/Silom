@@ -3,11 +3,14 @@
  *
  *   npm run db:import
  *
- * Run in two places, both from the same committed snapshot, so the pages baked
- * into the image and the database the running site edits never disagree:
+ * This is a seeding tool, not a deploy step. It is for bringing a database that
+ * has no content of its own up to the committed snapshot: a fresh local
+ * Postgres, or a throwaway one a CI build prerenders against.
  *
- *   - inside the Docker build, before `next build` prerenders the pages
- *   - on the server, right after `prisma migrate deploy`
+ * It is deliberately NOT part of the deploy on Coolify, where the build talks
+ * to the production database — see the `builder` stage in the Dockerfile. The
+ * server is the source of truth for content; `db:export` is how it comes back
+ * into git.
  *
  * The snapshot is the source of truth for the tables it covers: a row missing
  * from it is deleted, so content removed on a laptop is removed live too. It
@@ -15,8 +18,8 @@
  * those are written on the server and a laptop's copy would destroy them.
  *
  * Anything edited through the live admin panel *is* in scope and will be
- * overwritten on the next import. Export before you import if the server holds
- * edits worth keeping.
+ * destroyed by an import. Run `db:export` first if the database you are
+ * pointing at holds edits worth keeping.
  */
 
 import { config as loadEnv } from "dotenv";
