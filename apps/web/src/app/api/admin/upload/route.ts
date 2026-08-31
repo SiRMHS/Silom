@@ -9,10 +9,13 @@ import { readImageSize } from "@rahyad/core";
 /**
  * Media uploads for the admin panel.
  *
- * Files land in public/uploads and are served straight off the filesystem by
- * Next's static handler, which is why the stored name is generated rather than
- * taken from the client — an attacker-chosen name is the whole path-traversal
- * class of bug, and a predictable one lets uploads clobber each other.
+ * Files land in public/uploads and are read back by app/uploads/[...path], not
+ * by Next's static handler — that one enumerates public/ once at startup, so it
+ * only ever serves uploads that predate the running container.
+ *
+ * The stored name is generated rather than taken from the client — an
+ * attacker-chosen name is the whole path-traversal class of bug, and a
+ * predictable one lets uploads clobber each other.
  */
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
