@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "rahyad": {
+      "type": "http",
+      "url": "http://localhost:3001/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MCP_TOKEN}"
+      }
+    }
+  }
+}
