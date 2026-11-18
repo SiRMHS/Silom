@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { db } from "@rahyad/db";
@@ -71,6 +71,9 @@ export async function currentSessionTokenHash(): Promise<string | null> {
  * layout, a page and an action still costs one query.
  */
 export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
+  const viaToken = await mcpUser();
+  if (viaToken) return viaToken;
+
   const store = await cookies();
   const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
@@ -89,6 +92,26 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
   const { id, email, name, role } = session.user;
   return { id, email, name, role };
 });
+
+/**
+ * The MCP route signs in with a bearer token instead of a cookie, so an agent
+ * writing case studies goes through the same actions and checks the panel does.
+ * Off unless MCP_TOKEN is set to something long enough to be a secret.
+ */
+async function mcpUser(): Promise<SessionUser | null> {
+  const secret = process.env.MCP_TOKEN ?? "";
+  if (secret.length < 32) return null;
+
+  const sent = (await headers()).get("authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  if (!sent || !safeEqual(sent, secret)) return null;
+
+  const user = await db.user.findFirst({
+    where: { role: "ADMIN", isActive: true },
+    orderBy: { createdAt: "asc" },
+    select: { id: true, email: true, name: true, role: true },
+  });
+  return user;
+}
 
 /** Guard for admin-only server code. Redirects rather than throwing. */
 export async function requireAdmin(): Promise<SessionUser> {

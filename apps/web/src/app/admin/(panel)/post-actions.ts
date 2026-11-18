@@ -140,8 +140,8 @@ export async function savePost(id: string, formData: FormData): Promise<PostResu
   return { ok: true, id };
 }
 
-/** Creates a blank post and drops the admin straight into its editor. */
-export async function createPost() {
+/** The blank row itself — shared by the panel's button and the MCP route. */
+export async function newPost(): Promise<string> {
   await requireAdmin();
 
   const post = await db.post.create({
@@ -163,7 +163,12 @@ export async function createPost() {
   });
 
   revalidateAll();
-  redirect(`/admin/posts/${post.id}`);
+  return post.id;
+}
+
+/** Creates a blank post and drops the admin straight into its editor. */
+export async function createPost() {
+  redirect(`/admin/posts/${await newPost()}`);
 }
 
 export async function deletePost(id: string): Promise<PostResult> {

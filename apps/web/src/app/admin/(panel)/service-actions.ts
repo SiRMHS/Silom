@@ -110,8 +110,8 @@ export async function saveService(id: string, formData: FormData): Promise<Servi
   return { ok: true, id };
 }
 
-/** Creates a blank service and drops the admin straight into its editor. */
-export async function createService() {
+/** The blank row itself — shared by the panel's button and the MCP route. */
+export async function newService(): Promise<string> {
   await requireAdmin();
 
   const max = await db.service.aggregate({ _max: { order: true } });
@@ -138,7 +138,12 @@ export async function createService() {
   });
 
   revalidateAll();
-  redirect(`/admin/services/${service.id}`);
+  return service.id;
+}
+
+/** Creates a blank service and drops the admin straight into its editor. */
+export async function createService() {
+  redirect(`/admin/services/${await newService()}`);
 }
 
 export async function duplicateService(id: string): Promise<ServiceResult> {

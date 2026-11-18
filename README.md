@@ -88,3 +88,22 @@ ADMIN_EMAIL=you@rahyad.ir ADMIN_PASSWORD='…' npm run db:create-admin
 
 اجرای دوباره حساب موجود را دست نمی‌زند. برای عوض کردن رمزِ فراموش‌شده،
 `ADMIN_RESET=1` را هم بگذار.
+
+## MCP
+
+`POST /api/mcp` یک سرور MCP روی همان اکشن‌های پنل است: ساخت و ویرایش
+کیس‌استادی (`project`)، نوشته‌ی مجله (`post`)، خدمت (`service`) و بقیه‌ی
+مجموعه‌های پنل. ابزارها: `list`، `get`، `create`، `update`، `delete` — همگی با
+آرگومان `kind`.
+
+روشن‌کردنش فقط گذاشتن `MCP_TOKEN` در `.env` است (حداقل ۳۲ نویسه؛ خالی یعنی
+خاموش). درخواست با `Authorization: Bearer <token>` به‌عنوان نخستین ادمین
+فعال وارد می‌شود، پس هر چیزی که پنل اجازه دارد، این هم اجازه دارد.
+
+```bash
+claude mcp add --transport http rahyad https://example.com/api/mcp \
+  --header "Authorization: Bearer $MCP_TOKEN"
+```
+
+نکته: `update` کل ردیف را بازنویسی می‌کند — اول `get` بگیر، بعد همان فیلدها
+را کامل بفرست.

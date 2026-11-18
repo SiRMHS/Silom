@@ -141,8 +141,8 @@ export async function saveProject(id: string, formData: FormData): Promise<Proje
   return { ok: true, id };
 }
 
-/** Creates a blank project and drops the admin straight into its editor. */
-export async function createProject() {
+/** The blank row itself — shared by the panel's button and the MCP route. */
+export async function newProject(): Promise<string> {
   await requireAdmin();
 
   const max = await db.project.aggregate({ _max: { order: true } });
@@ -172,7 +172,12 @@ export async function createProject() {
   });
 
   revalidateAll();
-  redirect(`/admin/projects/${project.id}`);
+  return project.id;
+}
+
+/** Creates a blank project and drops the admin straight into its editor. */
+export async function createProject() {
+  redirect(`/admin/projects/${await newProject()}`);
 }
 
 export async function duplicateProject(id: string): Promise<ProjectResult> {
